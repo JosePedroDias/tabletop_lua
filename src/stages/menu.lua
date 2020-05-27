@@ -24,7 +24,17 @@ M.onKey = function(key)
 end
 
 M.load = function()
-  arcmenu.setCallbacks({})
+  local cbs = {
+    function()
+      print(1)
+    end, function()
+      print(2)
+    end, function()
+      print(3)
+    end
+  }
+  local lbls = {"one", "two", "three"}
+  arcmenu.setup(false, cbs, lbls, 400, 300)
 end
 
 M.focus = function(isFocused)

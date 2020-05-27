@@ -1,76 +1,86 @@
 --[[ this is an optional overlay to be used on mobile devices ]] --
 local utils = require "src.core.utils"
+local shape = require "src.core.shape"
 
 local M = {}
 
 local G = love.graphics
 
-local REPEAT_MS = 0.2
-
-local size = 70
-local dist = 4
-local pos = {7.75 * size, 5 * size}
-
-local buttons
-local isDown
+local buttons = {}
+local labels = {}
 local callbacks = {}
-local callbackNames = {"up", "left", "right", "down", "a", "b"}
 
-local function fireKey(i)
-  local cb = callbacks[callbackNames[i]]
+local r1 = 60
+local r2 = 160
+
+local function fireButton(i)
+  local cb = callbacks[i]
   if cb ~= nil then cb() end
 end
 
 local function pressingButton(x, y)
-  for i, b in ipairs(buttons) do
-    if x >= b[1] and x <= b[1] + size and y > b[2] and y <= b[2] + size then
-      return i
+end
+
+local function computeGeometry(x, y, numOpts, dismissableFirst)
+  local pi2 = math.pi * 2
+  if dismissableFirst then numOpts = numOpts - 1 end
+  local arcAngle = pi2 / numOpts;
+  local stepsPerArc = math.ceil(32 / numOpts);
+  -- const midRadius = innerRadius + (radius - innerRadius) / 2;
+  buttons = {}
+  local center = {x, y}
+  local stepsD = stepsPerArc * numOpts;
+
+  print("d" .. tostring(dismissableFirst) .. " no" .. tostring(numOpts))
+
+  -- inner circle
+  if dismissableFirst then
+    local poly = {}
+    for i = 1, stepsD + 1 do
+      local p = utils.polarMove(center, r2, (i / stepsD) * pi2)
+      table.insert(poly, p[1])
+      table.insert(poly, p[2])
     end
+    table.insert(buttons, poly)
+  end
+
+  -- arc segments
+  for i = 0, numOpts - 1 do
+    local angle0 = arcAngle * i
+    local poly = {}
+    for j = 0, stepsPerArc do
+      -- for j = stepsPerArc, 0, -1 do
+      local p = utils.polarMove(center, r1, angle0 + (j / stepsD) * pi2)
+      table.insert(poly, p[1])
+      table.insert(poly, p[2])
+    end
+    for j = stepsPerArc, 0, -1 do
+      local p = utils.polarMove(center, r2, angle0 + (j / stepsD) * pi2)
+      table.insert(poly, p[1])
+      table.insert(poly, p[2])
+    end
+    table.insert(buttons, poly)
   end
 end
 
-local function computeGeometry()
-  local p1 = pos[1]
-  local p2 = pos[2]
-  local sz = size + dist
-  local sz2 = sz * 2
-
-  buttons = {}
-  table.insert(buttons, {p1 + sz, p2})
-  table.insert(buttons, {p1, p2 + sz})
-  table.insert(buttons, {p1 + sz2, p2 + sz})
-  table.insert(buttons, {p1 + sz, p2 + sz2})
-  table.insert(buttons, {p1 - sz * 5 - sz, p2 + sz2})
-  table.insert(buttons, {p1 - sz * 5, p2 + sz2})
-
-  isDown = utils.times(#buttons, function()
-    return false
-  end)
-end
-
-computeGeometry()
-
-M.setCallbacks = function(cbs)
+M.setup = function(dismissableFirst, cbs, lbls, x, y)
   callbacks = cbs
+  labels = lbls
+  computeGeometry(x, y, #lbls, dismissableFirst)
 end
 
 M.update = function(dt)
-  for i = 1, #buttons do
-    if isDown[i] then
-      isDown[i] = isDown[i] + dt
-
-      if isDown[i] > REPEAT_MS then
-        isDown[i] = isDown[i] - REPEAT_MS
-        fireKey(i)
-      end
-    end
-  end
 end
 
 M.draw = function()
-  G.setColor(1, 1, 1, 0.75)
+  local colors = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}}
+  -- G.setColor(1, 1, 1, 0.75)
   for i, p in ipairs(buttons) do
-    G.rectangle(isDown[i] and "fill" or "line", p[1], p[2], size, size)
+    if i == 1 then
+      pcall(G.setColor, colors[i])
+      G.polygon("fill", p)
+    end
+
   end
 end
 
@@ -78,15 +88,10 @@ M.onPointer = function(x, y)
   local i = pressingButton(x, y)
   if not i then return end
 
-  isDown[i] = 0
-
-  fireKey(i)
+  fireButton(i)
 end
 
 M.onPointerUp = function(x, y)
-  isDown = utils.map(isDown, function()
-    return false
-  end)
 end
 
 return M

@@ -1,8 +1,13 @@
+for a = 1, 5 do
+end
+-- 1,2,3,4,5
+
 for a = 1, 10, 2 do
 end
+-- 1,3,5,7,9
 
 for key, value in pairs(hello) do -- iterate over table keys
-for key, value in ipairs(hello) do -- iterate over table keys, numberical order?
+for key, value in ipairs(hello) do -- iterate over table keys, numerical order
 
 #tbl => table length (for numeric keys)
 

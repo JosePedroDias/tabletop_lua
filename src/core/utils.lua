@@ -184,29 +184,13 @@ M.deepEqual = function(t1, t2)
   return true
 end
 
+-- https://github.com/JosePedroDias/scorespace8/blob/master/src/utils.ts
+
+M.polarMove = function(pos, r, angle)
+  return {pos[1] + math.cos(angle) * r, pos[2] + math.sin(angle) * r}
+end
+
 -----
-
-M.minus = function(v, minV, maxV, dontLoop)
-  if v == minV then
-    if dontLoop then
-      return v
-    else
-      return maxV
-    end
-  end
-  return v - 1
-end
-
-M.plus = function(v, minV, maxV, dontLoop)
-  if v == maxV then
-    if dontLoop then
-      return v
-    else
-      return minV
-    end
-  end
-  return v + 1
-end
 
 M.isMobile = function()
   local os = love.system.getOS()
