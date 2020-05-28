@@ -1,17 +1,22 @@
 -- [[ basic asset loading ]] --
 local M = {fonts = {}, sfx = {}, music = {}, gfx = {}}
 
+local fontDir = "assets/font/"
+local gfxDir = "assets/gfx"
+local sfxDir = "assets/sfx"
+
 M.load = function()
-  local mainF = love.graphics.newFont("assets/font/NotoSans-Regular.ttf", 20)
+  -- local f = love.filesystem.getDirectoryItems("assets")
+  -- for i, n in ipairs(f) do print(n) end
+
+  local mainF = love.graphics.newFont(fontDir .. "/NotoSans-Regular.ttf", 20)
   love.graphics.setFont(mainF)
   M.fonts["main"] = mainF
 
-  local cardJokerGfx = love.graphics.newImage("assets/gfx/cards/joker.png");
-  M.gfx["cardJoker"] = cardJokerGfx
+  M.gfx["cards_joker"] = love.graphics.newImage(gfxDir .. "/cards/joker.png");
 
-  local cardsPlace1Sfx = love.audio.newSource("assets/sfx/cards/place1.ogg",
-                                              "static")
-  M.sfx["cardsPlace1"] = cardsPlace1Sfx
+  M.sfx["cards_place1"] = love.audio.newSource(sfxDir .. "/cards/place1.ogg",
+                                               "static")
 
   -- local swingjedingMusic = love.audio.newSource("sounds/swingjeding.ogg", "stream")
   -- M.music["swingjeding"] = swingjedingMusic
