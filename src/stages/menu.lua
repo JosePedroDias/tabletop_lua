@@ -1,56 +1,49 @@
 -- [[ game screen handling ]] --
-local arcmenu = require "src.ui.arcmenu"
+require "src.ui.arcmenu"
 
 local M = {}
 
-local G = love.graphics
-
 local state = {t = 0}
+
+M.load = function()
+end
 
 M.unload = function()
 end
 
 M.update = function(dt)
-  arcmenu.update(dt)
-
   state.t = state.t + dt
 end
 
 M.draw = function()
-  arcmenu.draw()
+  if state.menu then state.menu:draw() end
 end
 
 M.onKey = function(key)
   if key == "escape" then love.event.quit() end
 end
 
-M.load = function()
-  local cbs = {
-    function()
-      print(1)
-    end, function()
-      print(2)
-    end, function()
-      print(3)
-    end, function()
-      print(4)
-    end, function()
-      print(5)
-    end
-  }
-  local lbls = {"one", "two", "three", "four", "five"}
-  arcmenu.setup(false, cbs, lbls, 400, 300)
-end
-
 M.focus = function(isFocused)
 end
 
 M.onPointer = function(x, y)
-  arcmenu.onPointer(x, y)
+  if state.menu then
+    state.menu:onPointer(x, y)
+  else
+    state.menu = ArcMenu:new({
+      x = x,
+      y = y,
+      -- dismissableFirst = true,
+      labels = {"one", "two", "three", "four", "five"},
+      callback = function(n)
+        print("got", n)
+        state.menu = nil
+      end
+    })
+  end
 end
 
 M.onPointerUp = function(x, y)
-  arcmenu.onPointerUp(x, y)
 end
 
 return M
