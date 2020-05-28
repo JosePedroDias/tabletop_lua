@@ -7,8 +7,22 @@ local settings = require "src.core.settings"
 
 local menu = require "src.stages.menu"
 
+require("src.ext.json")
+local noobhub = require("src.ext.noobhub")
+local hub
+
 function love.load()
   -- settings.load()
+
+  --[[ hub = noobhub.new({server = "acor.sl.pt", port = 1337});
+  hub:subscribe({
+    channel = "ch1",
+    callback = function(message)
+      print("message received  = " .. json.encode(message));
+
+      -- hub:publish({message = {from = "love2d", data = "amazing stuffz"}})
+    end
+  }) ]]
 
   love.keyboard.setKeyRepeat(true)
 
@@ -32,6 +46,7 @@ function love.focus(f)
 end
 
 function love.update(dt)
+  if hub then hub:enterFrame() end
   stages.currentStage.update(dt)
 end
 
