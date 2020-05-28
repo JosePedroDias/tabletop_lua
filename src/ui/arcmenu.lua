@@ -24,6 +24,12 @@ local function fireButton(i)
 end
 
 local function pressingButton(x, y)
+  for i, p in ipairs(buttons2) do
+    local p2 = {}
+    for j = 1, #p - 1, 2 do table.insert(p2, {x = p[j], y = p[j + 1]}) end
+    local res = shape.pointWithinShape(p2, x, y)
+    if res then return i end
+  end
 end
 
 local function computeGeometry(x, y, numOpts)
