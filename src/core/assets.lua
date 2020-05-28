@@ -2,7 +2,7 @@
 local M = {fonts = {}, sfx = {}, music = {}, gfx = {}}
 
 M.load = function()
-  local mainF = love.graphics.newFont("assets/font/NotoSans-Regular.ttf", 40)
+  local mainF = love.graphics.newFont("assets/font/NotoSans-Regular.ttf", 20)
   love.graphics.setFont(mainF)
   M.fonts["main"] = mainF
 

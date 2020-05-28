@@ -184,10 +184,17 @@ M.deepEqual = function(t1, t2)
   return true
 end
 
+M.round = function(n)
+  return math.floor(n + 0.5)
+end
+
 -- https://github.com/JosePedroDias/scorespace8/blob/master/src/utils.ts
 
 M.polarMove = function(pos, r, angle)
-  return {pos[1] + math.cos(angle) * r, pos[2] + math.sin(angle) * r}
+  -- return {pos[1] + math.cos(angle) * r, pos[2] + math.sin(angle) * r}
+  return {
+    M.round(pos[1] + math.cos(angle) * r), M.round(pos[2] + math.sin(angle) * r)
+  }
 end
 
 -----

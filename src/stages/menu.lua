@@ -21,6 +21,7 @@ M.draw = function()
 end
 
 M.onKey = function(key)
+  if key == "escape" then love.event.quit() end
 end
 
 M.load = function()
@@ -31,9 +32,13 @@ M.load = function()
       print(2)
     end, function()
       print(3)
+    end, function()
+      print(4)
+    end, function()
+      print(5)
     end
   }
-  local lbls = {"one", "two", "three"}
+  local lbls = {"one", "two", "three", "four", "five"}
   arcmenu.setup(false, cbs, lbls, 400, 300)
 end
 
