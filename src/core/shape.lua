@@ -10,7 +10,7 @@ end
 
 local function colinear(line, x, y, e)
   e = e or 0.1
-  m = (line[2].y - line[1].y) / (line[2].x - line[1].x)
+  local m = (line[2].y - line[1].y) / (line[2].x - line[1].x)
   local function f(x)
     return line[1].y + m * (x - line[1].x)
   end

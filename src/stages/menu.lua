@@ -1,11 +1,37 @@
 -- [[ game screen handling ]] --
 require "src.ui.arcmenu"
+require "src.ui.console"
+require "src.ui.input"
 
 local M = {}
 
 local state = {t = 0}
 
 M.load = function()
+  state.console = Console:new({
+    x = 800 - 200,
+    y = 0,
+    width = 200,
+    height = 600 - 30,
+    maxLines = 12
+  })
+  state.console:addLine("Welcome!")
+
+  state.input = Input:new({
+    x = 800 - 200,
+    y = 600 - 30,
+    width = 200,
+    height = 20 + 10,
+    focused = true,
+    onChange = function(v)
+      print("change", v)
+    end,
+    onSubmit = function(v)
+      print("submit", v)
+      state.console:addLine(v)
+      state.input:clear()
+    end
+  })
 end
 
 M.unload = function()
@@ -17,13 +43,17 @@ end
 
 M.draw = function()
   if state.menu then state.menu:draw() end
+  state.console:draw()
+  state.input:draw()
 end
 
 M.onKey = function(key)
+  state.input:onKey(key)
   if key == "escape" then love.event.quit() end
 end
 
-M.focus = function(isFocused)
+M.onTextInput = function(text)
+  state.input:onTextInput(text)
 end
 
 M.onPointer = function(x, y)
@@ -41,9 +71,6 @@ M.onPointer = function(x, y)
       end
     })
   end
-end
-
-M.onPointerUp = function(x, y)
 end
 
 return M

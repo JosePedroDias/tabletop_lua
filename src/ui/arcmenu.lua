@@ -1,4 +1,4 @@
---[[ arc menu ui component ]] --
+--[[ arc menu ui component - allows picking an option out of a set of choices ]] --
 local consts = require "src.core.consts"
 local shape = require "src.core.shape"
 local utils = require "src.core.utils"
@@ -10,7 +10,7 @@ ArcMenu = {r1 = 60, r2 = 160}
 function ArcMenu:new(o)
   o = o or {}
   setmetatable(o, self)
-  self.__index = self -- why?
+  self.__index = self
   o:computeGeometry()
   o.canvas = G.newCanvas(o.r2 * 2, o.r2 * 2)
   o:redraw()
