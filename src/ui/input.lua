@@ -39,10 +39,8 @@ end
 
 function Input:redraw()
   G.setCanvas(self.canvas)
-  G.clear(0, 0, 0, 0)
 
   pcall(G.clear, self.background)
-  G.rectangle("fill", 0, 0, self.width, self.height)
 
   pcall(G.setColor, self.color)
   local suffix = ""
@@ -77,10 +75,10 @@ function Input:onPointer(x, y)
 
   if self.focused and not isHit then
     self.focused = false
+    self:redraw()
   elseif not self.focused and isHit then
     self.focused = true
-  else
-    return
+    self:redraw()
+    return true
   end
-  self:redraw()
 end

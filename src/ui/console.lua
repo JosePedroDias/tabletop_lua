@@ -18,7 +18,7 @@ end
 
 function Console:addLine(line)
   table.insert(self.lines, line)
-  if #self.lines > self.maxLines then return table.remove(self.lines, 1) end
+  if #self.lines > self.maxLines then table.remove(self.lines, 1) end
   self:redraw()
 end
 
@@ -34,10 +34,8 @@ end
 
 function Console:redraw()
   G.setCanvas(self.canvas)
-  G.clear(0, 0, 0, 0)
 
-  pcall(G.setColor, self.background)
-  G.rectangle("fill", 0, 0, self.width, self.height)
+  pcall(G.clear, self.background)
 
   pcall(G.setColor, self.color)
   local f = self.font

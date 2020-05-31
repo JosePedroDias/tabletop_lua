@@ -28,10 +28,8 @@ end
 
 function Board:redraw()
   G.setCanvas(self.canvas)
-  G.clear(0, 0, 0, 0)
 
-  pcall(G.setColor, self.background)
-  G.rectangle("fill", 0, 0, self.width, self.height)
+  pcall(G.clear, self.background)
 
   G.setColor(1, 1, 1, 1)
   G.draw(assets.gfx["cards_d2"], 20, 20)

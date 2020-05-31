@@ -5,24 +5,11 @@ local screen = require "src.core.screen"
 local stages = require "src.core.stages"
 local settings = require "src.core.settings"
 
-local menu = require "src.stages.menu"
-
-require("src.ext.json")
-local noobhub = require("src.ext.noobhub")
-local hub
+local lobby = require "src.stages.lobby"
+local game = require "src.stages.game"
 
 function love.load()
-  -- settings.load()
-
-  --[[ hub = noobhub.new({server = "acor.sl.pt", port = 1337});
-  hub:subscribe({
-    channel = "ch1",
-    callback = function(message)
-      print("message received  = " .. json.encode(message));
-
-      -- hub:publish({message = {from = "love2d", data = "amazing stuffz"}})
-    end
-  }) ]]
+  settings.load()
 
   love.keyboard.setKeyRepeat(true)
 
@@ -34,9 +21,10 @@ function love.load()
   -- load resources
   assets.load()
 
-  stages.setStage("menu", menu)
+  stages.setStage("lobby", lobby)
+  stages.setStage("game", game)
 
-  stages.toStage("menu")
+  stages.toStage("lobby")
 
   settings.load()
 end
@@ -46,7 +34,6 @@ function love.focus(f)
 end
 
 function love.update(dt)
-  if hub then hub:enterFrame() end
   stages.currentStage.update(dt)
 end
 
