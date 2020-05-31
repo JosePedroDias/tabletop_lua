@@ -91,9 +91,13 @@ M.onPointer = function(x, y)
   if ui.input:onPointer(x, y) then return end
 
   if ui.menu then
-    ui.menu:onPointer(x, y)
+    if ui.menu:onPointer(x, y) then return end
+
+    ui.board:onPointer(x, y)
   else
-    ui.menu = ArcMenu:new({
+    if ui.board:onPointer(x, y) then return end
+
+    --[[ ui.menu = ArcMenu:new({
       x = x,
       y = y,
       -- dismissableFirst = true,
@@ -102,7 +106,7 @@ M.onPointer = function(x, y)
         print("got", n)
         ui.menu = nil
       end
-    })
+    }) ]]
   end
 end
 

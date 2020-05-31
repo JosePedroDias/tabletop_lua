@@ -4,6 +4,8 @@ require "src.items.item"
 local assets = require "src.core.assets"
 local utils = require "src.core.utils"
 
+local Item = require "src.items.item"
+
 local G = love.graphics
 
 local D2R = math.pi / 180
@@ -19,25 +21,29 @@ local w2 = W / 2
 local h2 = H / 2
 local S = 0.5
 
+W = W * S
+H = H * S
+
 local VALUES = {1, 2, 3, 4, 5, 6}
 
 -- value - 1 2 3 4 5 6
 -- color - red white
-local Dice = {x = 0, y = 0, rotation = 0}
+local Dice = Item:new()
 
 function Dice:new(o)
-  o = o or {}
+  o = o or Item:new(o)
   setmetatable(o, self)
   self.__index = self
 
   o.color = o.color or "white"
-  if not utils.has(VALUES, o.value) then
-    return print("dice created with unsupported value: " .. o.value)
-  end
+  assert(utils.has(VALUES, o.value),
+         "dice created with unsupported value: " .. o.value)
 
   o.asset = assets.gfx[electAsset(o)]
   o.width = W
   o.height = H
+
+  o.id = "dice_" .. o:genId()
 
   return o
 end

@@ -1,5 +1,5 @@
 --[[ manages the ui board ]] --
-local assets = require "src.core.assets"
+local utils = require "src.core.utils"
 
 local Dice = require "src.items.dice"
 local Card = require "src.items.card"
@@ -10,7 +10,7 @@ local Board = {
   rotation = 0,
   width = 600,
   height = 600,
-  x = 100,
+  x = 0,
   y = 0,
   background = {0.33, 0.66, 0.33, 1}
 }
@@ -60,6 +60,22 @@ function Board:redraw()
   for _, it in ipairs(self.items) do it:draw() end
 
   G.setCanvas()
+end
+
+function Board:onPointer(x, y)
+  for _, it in ipairs(self.items) do
+    local res = it:isHit(x, y)
+    -- print("isHit(" .. tostring(utils.round(x)) .. "," .. tostring(utils.round(y)) .. ")", res, it.id)
+    if res then
+      if it.id:sub(1, 1) == "c" then
+        it:turn()
+      else
+        it:roll()
+      end
+      self:redraw()
+      return res
+    end
+  end
 end
 
 return Board

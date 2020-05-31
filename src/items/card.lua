@@ -25,6 +25,9 @@ local w2 = W / 2
 local h2 = H / 2
 local S = 0.5
 
+W = W * S
+H = H * S
+
 local SUITS = {"c", "h", "s", "d"}
 local VALUES = {
   "2", "3", "4", "5", "6", "7", "8", "9", "10", "j", "q", "k", "a"
@@ -34,10 +37,10 @@ local VALUES = {
 -- value - 2 3 4 5 6 7 8 9 10 J Q K A
 -- back - blue green red
 -- isJoker
-local Card = {x = 0, y = 0, rotation = 0}
+local Card = Item:new()
 
 function Card:new(o)
-  o = o or {}
+  o = o or Item:new(o)
   setmetatable(o, self)
   self.__index = self
 
@@ -45,16 +48,18 @@ function Card:new(o)
   o.isTurned = o.isTurned or false
   o.isJoker = o.isJoker or false
   if not o.isJoker then
-    if not utils.has(VALUES, o.value) then
-      return print("card created with unsupported value: " .. o.value)
-    elseif not utils.has(SUITS, o.suit) then
-      return print("card created with unsupported suit: " .. o.suit)
-    end
+    assert(utils.has(VALUES, o.value),
+           "card created with unsupported value: " .. o.value)
+    assert(utils.has(SUITS, o.suit),
+           "card created with unsupported suit: " .. o.suit)
+
   end
 
   o.asset = assets.gfx[electAsset(o)]
   o.width = W
   o.height = H
+
+  o.id = "card_" .. o:genId()
 
   return o
 end

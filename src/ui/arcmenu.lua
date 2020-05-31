@@ -28,6 +28,7 @@ function ArcMenu:onPointer(x, y)
   if not hit then return end
   local cb = self.callbacks[hit] or self.callback
   if cb then cb(hit) end
+  return true
 end
 
 function ArcMenu:redraw()
