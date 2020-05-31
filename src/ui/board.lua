@@ -32,7 +32,8 @@ function Board:redraw()
   pcall(G.clear, self.background)
 
   G.setColor(1, 1, 1, 1)
-  G.draw(assets.gfx["cards_d2"], 20, 20)
+  -- ( drawable, x, y, r, sx, sy, ox, oy, kx, ky )
+  G.draw(assets.gfx["cards_d2"], 300, 300, math.pi / 180 * 90, 0.5, 0.5, 70, 95) -- 140x190
 
   G.setCanvas()
 end
