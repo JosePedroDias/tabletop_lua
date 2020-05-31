@@ -41,7 +41,7 @@ function Input:redraw()
   G.setCanvas(self.canvas)
   G.clear(0, 0, 0, 0)
 
-  pcall(G.setColor, self.background)
+  pcall(G.clear, self.background)
   G.rectangle("fill", 0, 0, self.width, self.height)
 
   pcall(G.setColor, self.color)

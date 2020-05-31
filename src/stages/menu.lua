@@ -2,6 +2,7 @@
 require "src.ui.arcmenu"
 require "src.ui.console"
 require "src.ui.input"
+require "src.ui.board"
 
 local M = {}
 
@@ -32,6 +33,8 @@ M.load = function()
       state.input:clear()
     end
   })
+
+  state.board = Board:new({})
 end
 
 M.unload = function()
@@ -42,8 +45,8 @@ M.update = function(dt)
 end
 
 M.draw = function()
+  state.board:draw()
   if state.menu then state.menu:draw() end
-
   state.console:draw()
   state.input:draw()
 end

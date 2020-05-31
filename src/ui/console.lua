@@ -28,6 +28,7 @@ function Console:clear()
 end
 
 function Console:draw()
+  G.setColor(1, 1, 1, 1)
   G.draw(self.canvas, self.x, self.y)
 end
 
