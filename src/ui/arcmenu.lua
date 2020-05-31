@@ -18,11 +18,13 @@ function ArcMenu:new(o)
 end
 
 function ArcMenu:draw()
+  G.setColor(1, 1, 1, 1)
   G.draw(self.canvas, self.x - self.r2, self.y - self.r2)
 end
 
 function ArcMenu:onPointer(x, y)
   local hit = self:isHittingButton(x - self.x + self.r2, y - self.y + self.r2)
+  print(x, y, hit)
   if not hit then return end
   local cb = self.callbacks[hit] or self.callback
   if cb then cb(hit) end
@@ -154,8 +156,4 @@ function ArcMenu:isHittingButton(x, y)
     local res = shape.pointWithinShape(p, x, y)
     if res then return i end
   end
-end
-
-function ArcMenu:__gc()
-  print("about to destroy ")
 end

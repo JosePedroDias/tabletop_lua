@@ -4,8 +4,8 @@ local G = love.graphics
 Input = {
   x = 0,
   y = 0,
-  width = 400,
-  height = 300,
+  width = 100,
+  height = 30,
   padding = 5,
   value = "",
   focused = false
@@ -33,6 +33,7 @@ function Input:clear()
 end
 
 function Input:draw()
+  G.setColor(1, 1, 1, 1)
   G.draw(self.canvas, self.x, self.y)
 end
 
@@ -44,7 +45,6 @@ function Input:redraw()
   G.rectangle("fill", 0, 0, self.width, self.height)
 
   pcall(G.setColor, self.color)
-
   local suffix = ""
   if self.focused then suffix = "|" end
   local text = self.value .. suffix
@@ -67,5 +67,20 @@ end
 function Input:onTextInput(text)
   self.value = self.value .. text
   if self.onChange then self.onChange(self.value, self) end
+  self:redraw()
+end
+
+function Input:onPointer(x, y)
+  local isHit = false
+  if x >= self.x and x <= self.x + self.width and y >= self.y and y <= self.y +
+    self.height then isHit = true end
+
+  if self.focused and not isHit then
+    self.focused = false
+  elseif not self.focused and isHit then
+    self.focused = true
+  else
+    return
+  end
   self:redraw()
 end

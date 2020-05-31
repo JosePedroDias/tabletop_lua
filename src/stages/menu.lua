@@ -15,13 +15,13 @@ M.load = function()
     height = 600 - 30,
     maxLines = 12
   })
-  state.console:addLine("Welcome!")
+  -- state.console:addLine("Welcome!")
 
   state.input = Input:new({
     x = 800 - 200,
-    y = 600 - 30,
+    y = 600 - 40,
     width = 200,
-    height = 20 + 10,
+    height = 20 + 20,
     focused = true,
     onChange = function(v)
       print("change", v)
@@ -43,6 +43,7 @@ end
 
 M.draw = function()
   if state.menu then state.menu:draw() end
+
   state.console:draw()
   state.input:draw()
 end
@@ -71,6 +72,8 @@ M.onPointer = function(x, y)
       end
     })
   end
+
+  state.input:onPointer(x, y)
 end
 
 return M

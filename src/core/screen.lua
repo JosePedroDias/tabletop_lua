@@ -72,7 +72,8 @@ end
 
 M.startDraw = function()
   G.setCanvas(canvas)
-  G.clear(0, 0, 0, 1)
+  G.clear(0, 0, 0, 0)
+  -- G.setColor(1, 1, 1, 1)
 end
 
 M.endDraw = function()
