@@ -1,6 +1,7 @@
 --[[ manages the ui board ]] --
 local assets = require "src.core.assets"
 
+require "src.items.dice"
 require "src.items.card"
 
 local G = love.graphics
@@ -23,13 +24,23 @@ function Board:new(o)
   o.items = {}
 
   table.insert(o.items, Card:new({suit = "s", value = "5", x = 200, y = 300}))
-  table.insert(o.items, Card:new({isJoker = true, x = 300, y = 300}))
+  table.insert(o.items,
+               Card:new({isJoker = true, x = 300, y = 300, rotation = 90}))
   table.insert(o.items, Card:new({
     suit = "s",
     value = "5",
     isTurned = true,
     x = 400,
     y = 300
+  }))
+
+  table.insert(o.items, Dice:new({value = 6, x = 200, y = 500}))
+  table.insert(o.items, Dice:new({
+    color = "red",
+    value = 2,
+    x = 300,
+    y = 500,
+    rotation = 45
   }))
 
   o:redraw()

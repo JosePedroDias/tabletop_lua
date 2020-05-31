@@ -53,8 +53,8 @@ function Card:new(o)
   end
 
   o.asset = assets.gfx[electAsset(o)]
-  o.width = 140
-  o.height = 190
+  o.width = W
+  o.height = H
 
   return o
 end

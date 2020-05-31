@@ -197,6 +197,17 @@ M.polarMove = function(pos, r, angle)
   }
 end
 
+local randomChars =
+  "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+M.randomString = function(numChars, rndFun)
+  local s = ""
+  for i = 1, numChars do
+    local l = rndFun(1, #randomChars)
+    s = s .. string.sub(randomChars, l, l)
+  end
+  return s
+end
+
 -----
 
 M.isMobile = function()
