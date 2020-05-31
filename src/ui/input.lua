@@ -1,7 +1,7 @@
 --[[ input - allows for editing and submitting text ]] --
 local G = love.graphics
 
-Input = {
+local Input = {
   x = 0,
   y = 0,
   width = 100,
@@ -82,3 +82,5 @@ function Input:onPointer(x, y)
     return true
   end
 end
+
+return Input

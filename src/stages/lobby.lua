@@ -3,7 +3,7 @@ local consts = require "src.core.consts"
 local stages = require "src.core.stages"
 local settings = require "src.core.settings"
 
-require "src.ui.input"
+local Input = require "src.ui.input"
 
 local M = {}
 

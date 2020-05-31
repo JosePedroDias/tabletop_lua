@@ -1,12 +1,12 @@
 --[[ manages the ui board ]] --
 local assets = require "src.core.assets"
 
-require "src.items.dice"
-require "src.items.card"
+local Dice = require "src.items.dice"
+local Card = require "src.items.card"
 
 local G = love.graphics
 
-Board = {
+local Board = {
   rotation = 0,
   width = 600,
   height = 600,
@@ -61,3 +61,5 @@ function Board:redraw()
 
   G.setCanvas()
 end
+
+return Board

@@ -1,7 +1,14 @@
 --[[ console ui component - outputs lines in a translucent overlay ]] --
 local G = love.graphics
 
-Console = {x = 0, y = 0, width = 400, height = 300, maxLines = 4, padding = 10}
+local Console = {
+  x = 0,
+  y = 0,
+  width = 400,
+  height = 300,
+  maxLines = 4,
+  padding = 10
+}
 
 function Console:new(o)
   o = o or {}
@@ -48,3 +55,5 @@ function Console:redraw()
 
   G.setCanvas()
 end
+
+return Console

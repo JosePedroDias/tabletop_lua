@@ -2,10 +2,10 @@
 require("src.ext.json")
 local noobhub = require("src.ext.noobhub")
 
-require "src.ui.arcmenu"
-require "src.ui.console"
-require "src.ui.input"
-require "src.ui.board"
+local ArcMenu = require "src.ui.arcmenu"
+local Console = require "src.ui.console"
+local Input = require "src.ui.input"
+local Board = require "src.ui.board"
 
 local consts = require "src.core.consts"
 local settings = require "src.core.settings"

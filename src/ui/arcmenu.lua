@@ -5,7 +5,7 @@ local utils = require "src.core.utils"
 
 local G = love.graphics
 
-ArcMenu = {r1 = 60, r2 = 160}
+local ArcMenu = {r1 = 60, r2 = 160}
 
 function ArcMenu:new(o)
   o = o or {}
@@ -157,3 +157,5 @@ function ArcMenu:isHittingButton(x, y)
     if res then return i end
   end
 end
+
+return ArcMenu

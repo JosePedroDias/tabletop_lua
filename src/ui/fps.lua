@@ -1,7 +1,7 @@
 --[[ input - allows for editing and submitting text ]] --
 local G = love.graphics
 
-FPS = {x = 0, y = 0}
+local FPS = {x = 0, y = 0}
 
 function FPS:new(o)
   o = o or {}
@@ -21,3 +21,5 @@ function FPS:draw()
   pcall(G.setColor, self.color)
   G.print("" .. self.i, self.x, self.y)
 end
+
+return FPS
