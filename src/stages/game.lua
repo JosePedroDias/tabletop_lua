@@ -12,13 +12,14 @@ local settings = require "src.core.settings"
 local M = {}
 
 local hub
+
+local server
 local username
 
 local state = {t = 0}
 local ui = {}
 
 local function say(msg)
-  username = settings.get()[2]
   hub:publish({message = {from = username, action = "say", data = msg}})
 end
 
@@ -31,7 +32,10 @@ local function parseHubEvent(ev)
 end
 
 M.load = function()
-  hub = noobhub.new({server = "acor.sl.pt", port = 1337});
+  server = settings.get()[1]
+  username = settings.get()[2]
+
+  hub = noobhub.new({server = server, port = 1337});
   hub:subscribe({channel = "ch1", callback = parseHubEvent})
 
   ui.console = Console:new({
