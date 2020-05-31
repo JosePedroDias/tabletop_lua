@@ -1,8 +1,8 @@
 -- [[ set of constants for the game ]] --
 local M = {}
 
-M.W = 800
-M.H = 600
+M.W = 1000
+M.H = 1000
 
 M.x0 = 0
 M.y0 = 0

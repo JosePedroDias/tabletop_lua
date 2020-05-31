@@ -16,7 +16,8 @@ function love.load()
   -- image resolution fix
   local sW, sH = screen.getCurrentResolution()
   -- screen.setSize(sW, sH, consts.W, consts.H, true)
-  screen.setSize(800, 600, consts.W, consts.H, false)
+  screen.setSize(sW, sH, consts.W, consts.H, false)
+  -- screen.setSize(800, 600, consts.W, consts.H, false)
 
   -- load resources
   assets.load()

@@ -1,5 +1,7 @@
---[[  ]] --
+--[[ manages the ui board ]] --
 local assets = require "src.core.assets"
+
+require "src.items.card"
 
 local G = love.graphics
 
@@ -17,6 +19,19 @@ function Board:new(o)
   setmetatable(o, self)
   self.__index = self
   o.canvas = G.newCanvas(o.width, o.height)
+
+  o.items = {}
+
+  table.insert(o.items, Card:new({suit = "s", value = "5", x = 200, y = 300}))
+  table.insert(o.items, Card:new({isJoker = true, x = 300, y = 300}))
+  table.insert(o.items, Card:new({
+    suit = "s",
+    value = "5",
+    isTurned = true,
+    x = 400,
+    y = 300
+  }))
+
   o:redraw()
   return o
 end
@@ -31,9 +46,7 @@ function Board:redraw()
 
   pcall(G.clear, self.background)
 
-  G.setColor(1, 1, 1, 1)
-  -- ( drawable, x, y, r, sx, sy, ox, oy, kx, ky )
-  G.draw(assets.gfx["cards_d2"], 300, 300, math.pi / 180 * 90, 0.5, 0.5, 70, 95) -- 140x190
+  for _, it in ipairs(self.items) do it:draw() end
 
   G.setCanvas()
 end

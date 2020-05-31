@@ -7,6 +7,7 @@ require "src.ui.console"
 require "src.ui.input"
 require "src.ui.board"
 
+local consts = require "src.core.consts"
 local settings = require "src.core.settings"
 
 local M = {}
@@ -39,21 +40,19 @@ M.load = function()
   hub:subscribe({channel = "ch1", callback = parseHubEvent})
 
   ui.console = Console:new({
-    x = 800 - 200,
+    x = consts.W - 200,
     y = 0,
     width = 200,
-    height = 600 - 30,
+    height = consts.H - 30,
     maxLines = 20
   })
 
   ui.input = Input:new({
-    x = 800 - 200,
-    y = 600 - 40,
+    x = consts.W - 200,
+    y = consts.H - 40,
     width = 200,
     height = 20 + 20,
     focused = true,
-    onChange = function(v)
-    end,
     onSubmit = function(v)
       ui.console:addLine(v)
       say(v)
@@ -61,7 +60,7 @@ M.load = function()
     end
   })
 
-  ui.board = Board:new({})
+  ui.board = Board:new({width = consts.W, height = consts.H})
 end
 
 M.unload = function()

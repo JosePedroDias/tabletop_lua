@@ -1,4 +1,5 @@
 -- [[ screen to capture user name ]] --
+local consts = require "src.core.consts"
 local stages = require "src.core.stages"
 local settings = require "src.core.settings"
 
@@ -14,8 +15,8 @@ M.load = function()
   local initialValues = settings.get()
 
   ui.input = Input:new({
-    x = (800 - 200) / 2,
-    y = (600 - 40) / 2,
+    x = (consts.W - 200) / 2,
+    y = (consts.H - 40) / 2,
     width = 200,
     height = 40,
     focused = true,
@@ -28,11 +29,17 @@ M.load = function()
 end
 
 M.draw = function()
+  local rw = 300
+  local rh = 100
+
+  local x = (consts.W - rw) / 2
+  local y = (consts.H - rh) / 2 - 20
+
   G.setColor(0.75, 0.75, 0.75, 1)
-  G.rectangle("fill", 250, 230, 300, 100)
+  G.rectangle("fill", x, y, rw, rh)
 
   G.setColor(0, 0, 0, 1)
-  G.print("what is your name?", 260, 240)
+  G.print("what is your name?", x + 10, y + 10)
 
   ui.input:draw()
 end
