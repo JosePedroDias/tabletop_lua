@@ -79,8 +79,9 @@ function Input:onPointer(x, y)
   elseif not self.focused and isHit then
     self.focused = true
     self:redraw()
-    return true
   end
+
+  return isHit
 end
 
 return Input

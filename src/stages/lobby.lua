@@ -4,6 +4,7 @@ local stages = require "src.core.stages"
 local settings = require "src.core.settings"
 
 local Input = require "src.ui.input"
+local Whiteboard = require "src.ui.whiteboard"
 
 local M = {}
 
@@ -26,6 +27,8 @@ M.load = function()
       stages.toStage("game")
     end
   })
+
+  ui.whiteboard = Whiteboard:new({width = 600, height = 400})
 end
 
 M.draw = function()
@@ -42,6 +45,8 @@ M.draw = function()
   G.print("what is your name?", x + 10, y + 10)
 
   ui.input:draw()
+
+  ui.whiteboard:draw()
 end
 
 M.onKey = function(key)
@@ -55,6 +60,15 @@ end
 
 M.onPointer = function(x, y)
   if ui.input:onPointer(x, y) then return end
+  ui.whiteboard:onPointer(x, y)
+end
+
+M.onPointerMove = function(x, y)
+  ui.whiteboard:onPointerMove(x, y)
+end
+
+M.onPointerUp = function(x, y)
+  ui.whiteboard:onPointerUp(x, y)
 end
 
 return M

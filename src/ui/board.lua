@@ -1,6 +1,5 @@
 --[[ manages the ui board ]] --
-local utils = require "src.core.utils"
-
+-- local utils = require "src.core.utils"
 local Dice = require "src.items.dice"
 local Card = require "src.items.card"
 
