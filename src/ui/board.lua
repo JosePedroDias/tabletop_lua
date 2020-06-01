@@ -34,13 +34,7 @@ function Board:new(o)
   }))
 
   table.insert(o.items, Dice:new({value = 6, x = 200, y = 500}))
-  table.insert(o.items, Dice:new({
-    color = "red",
-    value = 2,
-    x = 300,
-    y = 500,
-    rotation = 45
-  }))
+  table.insert(o.items, Dice:new({color = "red", value = 2, x = 300, y = 500}))
 
   o:redraw()
   return o

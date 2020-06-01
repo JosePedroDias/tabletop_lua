@@ -22,10 +22,9 @@ function Whiteboard:new(o)
   o.buttons = {}
   local y = o.height
   local x = 0
-  local dx = 32
+  local dx = 30
 
   local function onR(v)
-    print(v)
     o:setPenRadius(v)
   end
 
@@ -42,10 +41,9 @@ function Whiteboard:new(o)
   end
 
   x = 0
-  y = y + 32
+  y = y + dx
 
   local function onC(v)
-    print(v)
     o:setPenColorIndex(v)
   end
 
@@ -105,12 +103,13 @@ function Whiteboard:dot(x, y)
   G.setCanvas()
 end
 
-function Whiteboard:lineSegment(x1, y1, x2, y2)
+function Whiteboard:lineSegment(line)
   G.setCanvas(self.canvas)
 
   G.setLineWidth(self.radius * 2)
+  -- G.setLineStyle("smooth")
   pcall(G.setColor, self.color)
-  G.line(x1, y1, x2, y2)
+  G.line(line)
 
   G.setCanvas()
 end
@@ -131,11 +130,18 @@ function Whiteboard:onPointerMove(x, y)
   if self.isDown and x >= self.x and x <= self.x + self.width and y >= self.y and
     y <= self.y + self.height then
     if self.lastPoint then
-      self:lineSegment(self.lastPoint[1], self.lastPoint[2], x, y)
+      table.insert(self.lastPoint, x)
+      table.insert(self.lastPoint, y)
+      if #self.lastPoint > 6 then
+        table.remove(self.lastPoint, 1)
+        table.remove(self.lastPoint, 1)
+      end
+      self:lineSegment(self.lastPoint)
     else
       self:dot(x, y)
+      self.lastPoint = {x, y}
     end
-    self.lastPoint = {x, y}
+
   end
 end
 
