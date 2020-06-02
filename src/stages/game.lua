@@ -2,7 +2,6 @@
 require("src.ext.json")
 local noobhub = require("src.ext.noobhub")
 
-local ArcMenu = require "src.ui.arcmenu"
 local Console = require "src.ui.console"
 local Input = require "src.ui.input"
 local Board = require "src.ui.board"
@@ -73,7 +72,6 @@ end
 
 M.draw = function()
   ui.board:draw()
-  if ui.menu then ui.menu:draw() end
   ui.console:draw()
   ui.input:draw()
 end
@@ -89,25 +87,7 @@ end
 
 M.onPointer = function(x, y)
   if ui.input:onPointer(x, y) then return end
-
-  if ui.menu then
-    if ui.menu:onPointer(x, y) then return end
-
-    ui.board:onPointer(x, y)
-  else
-    if ui.board:onPointer(x, y) then return end
-
-    --[[ ui.menu = ArcMenu:new({
-      x = x,
-      y = y,
-      -- dismissableFirst = true,
-      labels = {"one", "two", "three", "four", "five"},
-      callback = function(n)
-        print("got", n)
-        ui.menu = nil
-      end
-    }) ]]
-  end
+  ui.board:onPointer(x, y)
 end
 
 M.onPointerMove = function(x, y)

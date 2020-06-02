@@ -24,10 +24,10 @@ end
 
 function ArcMenu:onPointer(x, y)
   local hit = self:isHittingButton(x - self.x + self.r2, y - self.y + self.r2)
-  print(x, y, hit)
+  -- print(x, y, hit)
   if not hit then return end
   local cb = self.callbacks[hit] or self.callback
-  if cb then cb(hit) end
+  if cb then cb(hit, self.labels[hit]) end
   return true
 end
 

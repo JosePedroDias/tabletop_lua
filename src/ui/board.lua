@@ -1,5 +1,8 @@
 --[[ manages the ui board ]] --
 local utils = require "src.core.utils"
+
+local ArcMenu = require "src.ui.arcmenu"
+
 local Dice = require "src.items.dice"
 local Card = require "src.items.card"
 
@@ -40,9 +43,29 @@ function Board:new(o)
   return o
 end
 
+function Board:showMenu(x, y, options)
+  self.uiMenu = ArcMenu:new({
+    x = x,
+    y = y,
+    dismissableFirst = true,
+    labels = {"cancel", "spades", "diamonds", "clubs", "hearts"},
+    callback = function(idx, label)
+      print("got", idx, label)
+      self.uiMenu = nil
+      if idx > 1 then
+        table.insert(self.items, Card:new(
+                       {suit = label:sub(1, 1), value = "a", x = x, y = y}))
+        self:redraw()
+      end
+    end
+  })
+end
+
 function Board:draw()
   G.setColor(1, 1, 1, 1)
   G.draw(self.canvas, self.x, self.y)
+
+  if self.uiMenu then self.uiMenu:draw() end
 end
 
 function Board:redraw()
@@ -63,6 +86,8 @@ function Board:bringToFront(it, idx)
 end
 
 function Board:onPointer(x, y)
+  if self.uiMenu and self.uiMenu:onPointer(x, y) then return end
+
   -- for idx, it in ipairs(self.items) do
   for idx = #self.items, 1, -1 do
     local it = self.items[idx]
@@ -88,6 +113,8 @@ function Board:onPointer(x, y)
       return res
     end ]]
   end
+
+  self:showMenu(x, y)
 end
 
 function Board:onPointerMove(x, y)
