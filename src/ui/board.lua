@@ -1,5 +1,5 @@
 --[[ manages the ui board ]] --
--- local utils = require "src.core.utils"
+local utils = require "src.core.utils"
 local Dice = require "src.items.dice"
 local Card = require "src.items.card"
 
@@ -55,11 +55,30 @@ function Board:redraw()
   G.setCanvas()
 end
 
+function Board:bringToFront(it, idx)
+  if not idx then idx = utils.indexOf(self.items, it) end
+  table.remove(self.items, idx)
+  table.insert(self.items, it)
+  -- table.insert(self.items, 1, it)
+end
+
 function Board:onPointer(x, y)
-  for _, it in ipairs(self.items) do
+  -- for idx, it in ipairs(self.items) do
+  for idx = #self.items, 1, -1 do
+    local it = self.items[idx]
+
     local res = it:isHit(x, y)
     -- print("isHit(" .. tostring(utils.round(x)) .. "," .. tostring(utils.round(y)) .. ")", res, it.id)
+
     if res then
+      self:bringToFront(it, idx)
+      self.selectedItem = it
+      self.selectedDelta = {x - it.x, y - it.y}
+      self:redraw()
+      return
+    end
+
+    --[[ if res then
       if it.id:sub(1, 1) == "c" then
         it:turn()
       else
@@ -67,8 +86,21 @@ function Board:onPointer(x, y)
       end
       self:redraw()
       return res
-    end
+    end ]]
   end
+end
+
+function Board:onPointerMove(x, y)
+  local it = self.selectedItem
+  if it then
+    it.x = x - self.selectedDelta[1]
+    it.y = y - self.selectedDelta[2]
+  end
+  self:redraw()
+end
+
+function Board:onPointerUp(x, y)
+  self.selectedItem = nil
 end
 
 return Board

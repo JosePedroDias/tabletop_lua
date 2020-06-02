@@ -110,4 +110,12 @@ M.onPointer = function(x, y)
   end
 end
 
+M.onPointerMove = function(x, y)
+  ui.board:onPointerMove(x, y)
+end
+
+M.onPointerUp = function(x, y)
+  ui.board:onPointerUp(x, y)
+end
+
 return M

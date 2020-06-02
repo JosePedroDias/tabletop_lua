@@ -9,6 +9,11 @@ end
 for key, value in pairs(hello) do -- iterate over table keys
 for key, value in ipairs(hello) do -- iterate over table keys, numerical order
 
+iterate reverse
+for idx = #self.items, 1, -1 do
+    local it = self.items[idx]
+
+
 #tbl => table length (for numeric keys)
 
 
