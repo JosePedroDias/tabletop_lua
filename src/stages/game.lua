@@ -68,7 +68,6 @@ end
 M.update = function(dt)
   state.t = state.t + dt
   if hub then hub:enterFrame() end
-  ui.board:update(dt)
 end
 
 M.draw = function()

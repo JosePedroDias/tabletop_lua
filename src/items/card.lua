@@ -58,7 +58,8 @@ end
 
 function Card.parameterize()
   return coroutine.create(function()
-    local back = coroutine.yield(BACKS)
+    -- local back = coroutine.yield(BACKS)
+    local back = "blue"
     local joker = coroutine.yield({"joker", "other"})
     if joker == "joker" then return Card:new({back = back, isJoker = true}) end
     local value = coroutine.yield(VALUES)

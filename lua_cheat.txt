@@ -108,3 +108,7 @@ co = coroutine.create(fn)
 end
 
 ok, arg1', arg2'.. = coroutine.resume(co, arg...)
+
+
+
+if instance attribute not found, check you're not calling the metaclass instead of instance in a function body!

@@ -46,7 +46,8 @@ end
 
 function Dice.parameterize()
   return coroutine.create(function()
-    local color = coroutine.yield(COLORS)
+    -- local color = coroutine.yield(COLORS)
+    local color = "white"
     local value = coroutine.yield(VALUES)
     return Dice:new({color = color, value = value})
   end)

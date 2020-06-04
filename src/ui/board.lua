@@ -99,6 +99,7 @@ end
 
 function Board:affectItem(x, y, item)
   local labels = utils.shallowCopy(item.affect())
+  table.insert(labels, 1, "delete")
   table.insert(labels, 1, "cancel")
   self.uiMenu = ArcMenu:new({
     x = x,
@@ -107,20 +108,17 @@ function Board:affectItem(x, y, item)
     labels = labels,
     callback = function(idx, value)
       self.uiMenu = nil
-      if idx ~= 1 then
-        self.dirty = true
+      if idx == 1 then
+        return
+      elseif idx == 2 then
+        local itemIdx = utils.indexOf(self.items, item)
+        table.remove(self.items, itemIdx)
+      else
         item[value](item)
-        -- self:redraw() -- TODO FAILS?!
       end
+      self:redraw()
     end
   })
-end
-
-function Board:update()
-  if self.dirty then
-    self.dirty = nil
-    self:redraw()
-  end
 end
 
 function Board:draw()
@@ -178,7 +176,7 @@ end
 
 function Board:onPointerUp(x, y)
   if self.selectedItem and self.moveFrames == 0 then
-    Board:affectItem(x, y, self.selectedItem)
+    self:affectItem(x, y, self.selectedItem)
   end
   self.selectedItem = nil
 end

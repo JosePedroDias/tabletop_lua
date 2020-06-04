@@ -6,7 +6,6 @@
 - visibility areas (own hand, etc.)
 - items: chips, pieces (simple)
 - items: counter
-- arc menu actions per items (create and change)
 - visually represent remaining clients around board
 - example judge to enforce/aid in adhering to rules of a game... war? go fish?
 
