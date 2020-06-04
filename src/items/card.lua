@@ -10,7 +10,7 @@ local D2R = math.pi / 180
 
 local function electAsset(o)
   if o.isTurned then
-    return "cards_back_" .. o.deckColor
+    return "cards_back_" .. o.back
   elseif o.isJoker then
     return "cards_joker"
   else
@@ -32,6 +32,7 @@ local SUITS = {"c", "h", "s", "d"}
 local VALUES = {
   "2", "3", "4", "5", "6", "7", "8", "9", "10", "j", "q", "k", "a"
 }
+local BACKS = {"blue", "green", "red"}
 
 -- suit - CHSD Clubs Hearts Spades Diamonds
 -- value - 2 3 4 5 6 7 8 9 10 J Q K A
@@ -39,12 +40,45 @@ local VALUES = {
 -- isJoker
 local Card = Item:new()
 
+-------
+
+Card.name = "Card"
+
+function Card.backs()
+  return BACKS
+end
+
+function Card.suits()
+  return SUITS
+end
+
+function Card.values()
+  return VALUES
+end
+
+function Card.parameterize()
+  return coroutine.create(function()
+    local back = coroutine.yield(BACKS)
+    local joker = coroutine.yield({"joker", "other"})
+    if joker == "joker" then return Card:new({back = back, isJoker = true}) end
+    local value = coroutine.yield(VALUES)
+    local suit = coroutine.yield(SUITS)
+    return Card:new({back = back, value = value, suit = suit})
+  end)
+end
+
+function Card.affect()
+  return {"turn", "rotate90"}
+end
+
+-------
+
 function Card:new(o)
   o = o or Item:new(o)
   setmetatable(o, self)
   self.__index = self
 
-  o.deckColor = o.deckColor or "blue"
+  o.back = o.back or "blue"
   o.isTurned = o.isTurned or false
   o.isJoker = o.isJoker or false
   if not o.isJoker then
@@ -73,6 +107,14 @@ end
 function Card:turn()
   self.isTurned = not self.isTurned
   self.asset = assets.gfx[electAsset(self)]
+end
+
+function Card:rotate90()
+  if self.rotation == 90 then
+    self.rotation = 0
+  else
+    self.rotation = 90
+  end
 end
 
 return Card

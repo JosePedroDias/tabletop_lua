@@ -25,7 +25,7 @@ function Board:new(o)
 
   o.items = {}
 
-  table.insert(o.items, Card:new({suit = "s", value = "5", x = 200, y = 300}))
+  --[[ table.insert(o.items, Card:new({suit = "s", value = "5", x = 200, y = 300}))
   table.insert(o.items,
                Card:new({isJoker = true, x = 300, y = 300, rotation = 90}))
   table.insert(o.items, Card:new({
@@ -37,28 +37,90 @@ function Board:new(o)
   }))
 
   table.insert(o.items, Dice:new({value = 6, x = 200, y = 500}))
-  table.insert(o.items, Dice:new({color = "red", value = 2, x = 300, y = 500}))
+  table.insert(o.items, Dice:new({color = "red", value = 2, x = 300, y = 500})) ]]
 
   o:redraw()
   return o
 end
 
-function Board:showMenu(x, y, options)
+function Board:showCreateMenu(x, y)
   self.uiMenu = ArcMenu:new({
     x = x,
     y = y,
     dismissableFirst = true,
-    labels = {"cancel", "spades", "diamonds", "clubs", "hearts"},
-    callback = function(idx, label)
-      print("got", idx, label)
-      self.uiMenu = nil
-      if idx > 1 then
-        table.insert(self.items, Card:new(
-                       {suit = label:sub(1, 1), value = "a", x = x, y = y}))
+    labels = {"cancel", "add card", "add dice"},
+    callback = function(idx)
+      if idx == 1 then
+        self.uiMenu = nil
         self:redraw()
+        return
+      end
+      local it = Card
+      if idx == 3 then it = Dice end
+      self:showCreateMenu2(x, y, it)
+    end
+  })
+end
+
+function Board:showCreateMenu2(x, y, itemType)
+  local co = itemType.parameterize()
+
+  local function step(idx, label)
+    if (idx == 1) then
+      self.uiMenu = nil
+      self:redraw()
+      return
+    end
+
+    local _, options = coroutine.resume(co, label)
+    local st = coroutine.status(co)
+
+    if st == "dead" then
+      self.uiMenu = nil
+      options.x = x
+      options.y = y
+      table.insert(self.items, options)
+      self:redraw()
+    else
+      local labels = utils.shallowCopy(options)
+      table.insert(labels, 1, "cancel")
+      self.uiMenu = ArcMenu:new({
+        x = x,
+        y = y,
+        dismissableFirst = true,
+        labels = labels,
+        callback = step
+      })
+    end
+  end
+
+  step(0)
+end
+
+function Board:affectItem(x, y, item)
+  local labels = utils.shallowCopy(item.affect())
+  table.insert(labels, 1, "cancel")
+  self.uiMenu = ArcMenu:new({
+    x = x,
+    y = y,
+    dismissableFirst = true,
+    labels = labels,
+    callback = function(idx, value)
+      self.uiMenu = nil
+      if idx ~= 1 then
+        self.dirty = true
+        item[value](item)
+        -- self:redraw() -- TODO FAILS?!
       end
     end
   })
+end
+
+function Board:update()
+  if self.dirty then
+    self.dirty = nil
+    self:redraw()
+  end
 end
 
 function Board:draw()
@@ -82,51 +144,42 @@ function Board:bringToFront(it, idx)
   if not idx then idx = utils.indexOf(self.items, it) end
   table.remove(self.items, idx)
   table.insert(self.items, it)
-  -- table.insert(self.items, 1, it)
 end
 
 function Board:onPointer(x, y)
   if self.uiMenu and self.uiMenu:onPointer(x, y) then return end
 
-  -- for idx, it in ipairs(self.items) do
   for idx = #self.items, 1, -1 do
     local it = self.items[idx]
-
     local res = it:isHit(x, y)
-    -- print("isHit(" .. tostring(utils.round(x)) .. "," .. tostring(utils.round(y)) .. ")", res, it.id)
 
     if res then
       self:bringToFront(it, idx)
       self.selectedItem = it
+      self.moveFrames = 0
       self.selectedDelta = {x - it.x, y - it.y}
       self:redraw()
       return
     end
-
-    --[[ if res then
-      if it.id:sub(1, 1) == "c" then
-        it:turn()
-      else
-        it:roll()
-      end
-      self:redraw()
-      return res
-    end ]]
   end
 
-  self:showMenu(x, y)
+  self:showCreateMenu(x, y)
 end
 
 function Board:onPointerMove(x, y)
   local it = self.selectedItem
   if it then
+    self.moveFrames = self.moveFrames + 1
     it.x = x - self.selectedDelta[1]
     it.y = y - self.selectedDelta[2]
+    self:redraw()
   end
-  self:redraw()
 end
 
 function Board:onPointerUp(x, y)
+  if self.selectedItem and self.moveFrames == 0 then
+    Board:affectItem(x, y, self.selectedItem)
+  end
   self.selectedItem = nil
 end
 

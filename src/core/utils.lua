@@ -145,6 +145,12 @@ M.map = function(tbl, cb)
   return res
 end
 
+M.shallowCopy = function(tbl)
+  local tbl2 = {}
+  for k, v in pairs(tbl) do tbl2[k] = v end
+  return tbl2
+end
+
 M.join = function(tbl, sep)
   sep = sep or ""
   return table.concat(tbl, sep)

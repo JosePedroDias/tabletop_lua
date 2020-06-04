@@ -46,6 +46,15 @@ type()
 'table'
 
 
+function Dice.build(...)
+  print("called with", #arg)
+end
+
+function Dice.build(a, ...)
+  print("called with", a, "and", #arg)
+end
+
+
 local i, v = next(t)
 while i do
   new_t[i] = v
@@ -62,3 +71,40 @@ local everywhere...
 
 
 last return on a module is get back if you require()
+
+
+function t:foo(bar) end  
+function t.foo(self, bar) end
+using : is the same as supplying the left t as the 1st arg, bound as self
+
+
+
+overloading operators
+
+__add
+__sub
+__mul
+__div
+__pow
+__lt
+__le
+__eq
+__call
+__unm
+__tostring
+__len
+
+
+__finalize <- called in inheritance chain prior to GC collection
+
+
+
+coroutines
+
+https://www.tutorialspoint.com/lua/lua_coroutines.htm
+
+co = coroutine.create(fn)
+  ... coroutine.yield(arg1, arg2...)
+end
+
+ok, arg1', arg2'.. = coroutine.resume(co, arg...)

@@ -26,9 +26,37 @@ H = H * S
 
 local VALUES = {1, 2, 3, 4, 5, 6}
 
+local COLORS = {"red", "white"}
+
 -- value - 1 2 3 4 5 6
 -- color - red white
 local Dice = Item:new()
+
+-------
+
+Dice.name = "Dice"
+
+function Dice.colors()
+  return COLORS
+end
+
+function Dice.values()
+  return VALUES
+end
+
+function Dice.parameterize()
+  return coroutine.create(function()
+    local color = coroutine.yield(COLORS)
+    local value = coroutine.yield(VALUES)
+    return Dice:new({color = color, value = value})
+  end)
+end
+
+function Dice.affect()
+  return {"roll"}
+end
+
+-------
 
 function Dice:new(o)
   o = o or Item:new(o)
