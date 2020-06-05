@@ -25,13 +25,17 @@ function Item:isHit(x_, y_)
   x = x_ + (w / 2)
   y = y_ + (h / 2)
 
-  -- print(x, y, self.x, self.y, self.width, self.height)
-
   return x >= self.x and x <= self.x + w and y >= self.y and y <= self.y + h
 end
 
 function Item:genId()
   return utils.randomString(6, love.math.random)
+end
+
+function Item:move(x, y)
+  self.x = x
+  self.y = y
+  SendEvent("update", {id = self.id, x = self.x, y = self.y})
 end
 
 return Item

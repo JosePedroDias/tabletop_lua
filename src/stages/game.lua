@@ -23,10 +23,15 @@ local function say(msg)
   hub:publish({message = {from = username, action = "say", data = msg}})
 end
 
+function SendEvent(action, data)
+  hub:publish({message = {from = username, action = action, data = data}})
+end
+
 local function parseHubEvent(ev)
   if ev.action == "say" then
     ui.console:addLine(ev.from .. ": " .. ev.data)
   else
+    ui.board:onEvent(ev)
     -- print(json.encode(ev))
   end
 end

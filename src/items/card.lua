@@ -90,11 +90,19 @@ function Card:new(o)
 
   end
 
-  o.asset = assets.gfx[electAsset(o)]
   o.width = W
   o.height = H
 
-  o.id = "card_" .. o:genId()
+  local isLocal = not o.id
+  o.id = o.id or ("card_" .. o:genId())
+
+  if isLocal then
+    local o2 = utils.shallowCopy(o)
+    o2.asset = nil
+    SendEvent("new card", o2)
+  end
+
+  o:redraw()
 
   return o
 end
@@ -105,9 +113,15 @@ function Card:draw()
   G.draw(self.asset, self.x, self.y, D2R * self.rotation, S, S, w2, h2)
 end
 
+function Card:redraw()
+  self.asset = assets.gfx[electAsset(self)]
+end
+
 function Card:turn()
   self.isTurned = not self.isTurned
-  self.asset = assets.gfx[electAsset(self)]
+  self:redraw()
+
+  SendEvent("update", {id = self.id, isTurned = self.isTurned})
 end
 
 function Card:rotate90()
@@ -116,6 +130,8 @@ function Card:rotate90()
   else
     self.rotation = 90
   end
+
+  SendEvent("update", {id = self.id, rotation = self.rotation})
 end
 
 return Card

@@ -2,7 +2,6 @@
 
 ## TODO
 
-- stream item changes via noobhub
 - visibility areas (own hand, etc.)
 - items: chips, pieces (simple)
 - items: counter

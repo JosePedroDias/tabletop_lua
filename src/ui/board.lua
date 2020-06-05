@@ -5,6 +5,7 @@ local ArcMenu = require "src.ui.arcmenu"
 
 local Dice = require "src.items.dice"
 local Card = require "src.items.card"
+local Zone = require "src.items.zone"
 
 local G = love.graphics
 
@@ -24,6 +25,23 @@ function Board:new(o)
   o.canvas = G.newCanvas(o.width, o.height)
 
   o.items = {}
+
+  --[[ table.insert(o.items, Zone:new({
+    x = 100,
+    y = 0,
+    width = 600,
+    height = 200,
+    owner = "player2",
+    color = {1, 0, 0, 0.25}
+  }))
+  table.insert(o.items, Zone:new({
+    x = 100,
+    y = 800,
+    width = 600,
+    height = 200,
+    owner = "player1",
+    color = {1, 1, 1, 0.25}
+  })) ]]
 
   --[[ table.insert(o.items, Card:new({suit = "s", value = "5", x = 200, y = 300}))
   table.insert(o.items,
@@ -77,8 +95,7 @@ function Board:showCreateMenu2(x, y, itemType)
 
     if st == "dead" then
       self.uiMenu = nil
-      options.x = x
-      options.y = y
+      options:move(x, y)
       table.insert(self.items, options)
       self:redraw()
     else
@@ -113,6 +130,7 @@ function Board:affectItem(x, y, item)
       elseif idx == 2 then
         local itemIdx = utils.indexOf(self.items, item)
         table.remove(self.items, itemIdx)
+        SendEvent("delete", {id = item.id})
       else
         item[value](item)
       end
@@ -138,10 +156,11 @@ function Board:redraw()
   G.setCanvas()
 end
 
-function Board:bringToFront(it, idx)
+function Board:bringToFront(it, idx, isRemote)
   if not idx then idx = utils.indexOf(self.items, it) end
   table.remove(self.items, idx)
   table.insert(self.items, it)
+  if not isRemote then SendEvent("toFront", {id = it.id}) end
 end
 
 function Board:onPointer(x, y)
@@ -168,8 +187,7 @@ function Board:onPointerMove(x, y)
   local it = self.selectedItem
   if it then
     self.moveFrames = self.moveFrames + 1
-    it.x = x - self.selectedDelta[1]
-    it.y = y - self.selectedDelta[2]
+    it:move(x - self.selectedDelta[1], y - self.selectedDelta[2])
     self:redraw()
   end
 end
@@ -179,6 +197,34 @@ function Board:onPointerUp(x, y)
     self:affectItem(x, y, self.selectedItem)
   end
   self.selectedItem = nil
+end
+
+function Board:getItemFromId(id)
+  return utils.findByAttribute(self.items, "id", id)
+end
+
+function Board:onEvent(ev)
+  -- print("received event", utils.tableToString(ev))
+  local action = ev.action
+
+  if action == "new dice" then
+    table.insert(self.items, Dice:new(ev.data))
+  elseif action == "new card" then
+    table.insert(self.items, Card:new(ev.data))
+  elseif action == "update" then
+    local item = self:getItemFromId(ev.data.id)
+    for k, v in pairs(ev.data) do item[k] = v end
+    if ev.data.isTurned ~= nil or ev.data.value then item:redraw() end
+  elseif action == "toFront" then
+    local item, itemIdx = self:getItemFromId(ev.data.id)
+    self:bringToFront(item, itemIdx, true)
+  elseif action == "delete" then
+    local _, itemIdx = self:getItemFromId(ev.data.id)
+    table.remove(self.items, itemIdx)
+  else
+    print("unsupported action", action)
+  end
+  self:redraw()
 end
 
 return Board

@@ -68,11 +68,19 @@ function Dice:new(o)
   assert(utils.has(VALUES, o.value),
          "dice created with unsupported value: " .. o.value)
 
-  o.asset = assets.gfx[electAsset(o)]
   o.width = W
   o.height = H
 
-  o.id = "dice_" .. o:genId()
+  local isLocal = not o.id
+  o.id = o.id or ("dice_" .. o:genId())
+
+  if isLocal then
+    local o2 = utils.shallowCopy(o)
+    o2.asset = nil
+    SendEvent("new dice", o2)
+  end
+
+  o:redraw()
 
   return o
 end
@@ -82,9 +90,15 @@ function Dice:draw()
   G.draw(self.asset, self.x, self.y, D2R * self.rotation, S, S, w2, h2)
 end
 
+function Dice:redraw()
+  self.asset = assets.gfx[electAsset(self)]
+end
+
 function Dice:roll()
   self.value = love.math.random(6)
   self.asset = assets.gfx[electAsset(self)]
+
+  SendEvent("update", {id = self.id, value = self.value})
 end
 
 return Dice
