@@ -7,6 +7,7 @@ local Dice = require "src.items.dice"
 local Card = require "src.items.card"
 local Piece = require "src.items.piece"
 local Chip = require "src.items.chip"
+local Counter = require "src.items.counter"
 local Zone = require "src.items.zone"
 
 local G = love.graphics
@@ -74,7 +75,9 @@ function Board:showCreateMenu(x, y)
     x = x,
     y = y,
     dismissableFirst = true,
-    labels = {"cancel", "add card", "add dice", "add piece", "add chip"},
+    labels = {
+      "cancel", "add card", "add dice", "add piece", "add chip", "add counter"
+    },
     callback = function(idx)
       if idx == 1 then
         self.uiMenu = nil
@@ -88,6 +91,8 @@ function Board:showCreateMenu(x, y)
         it = Piece
       elseif idx == 5 then
         it = Chip
+      elseif idx == 6 then
+        it = Counter
       end
       self:showCreateMenu2(x, y, it)
     end
@@ -217,8 +222,8 @@ function Board:onPointerUp(x, y)
   self.selectedItem = nil
 
   for i, zone in ipairs(self.zones) do
-    local hit = zone:isHit(x, y)
-    print(i, hit)
+    -- local hit = zone:isHit(x, y)
+    -- print(i, hit)
   end
 end
 
@@ -230,10 +235,21 @@ function Board:onEvent(ev)
   -- print("received event", utils.tableToString(ev))
   local action = ev.action
 
-  if action == "new dice" then
-    table.insert(self.items, Dice:new(ev.data))
-  elseif action == "new card" then
-    table.insert(self.items, Card:new(ev.data))
+  if action:sub(1, 4) == "new " then
+    local cls = Card
+    if action == "new chip" then
+      cls = Chip
+    elseif action == "new counter" then
+      cls = Counter
+    elseif action == "new dice" then
+      cls = Dice
+    elseif action == "new piece" then
+      cls = Piece
+    else
+      print("unsupported action")
+      return
+    end
+    table.insert(self.items, cls:new(ev.data))
   elseif action == "update" then
     local item = self:getItemFromId(ev.data.id)
     for k, v in pairs(ev.data) do item[k] = v end
@@ -246,6 +262,7 @@ function Board:onEvent(ev)
     self:delete(item, itemIdx, true)
   else
     print("unsupported action", action)
+    return
   end
   self:redraw()
 end

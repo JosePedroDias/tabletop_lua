@@ -19,6 +19,7 @@ end
 
 function FPS:draw()
   pcall(G.setColor, self.color)
+  G.setFont(self.font)
   G.print("" .. self.i, self.x, self.y)
 end
 

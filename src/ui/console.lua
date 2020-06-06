@@ -67,9 +67,10 @@ function Console:redraw()
   G.setCanvas(self.canvas)
 
   pcall(G.clear, self.background)
-
   pcall(G.setColor, self.color)
   local f = self.font
+  G.setFont(f)
+
   local dy = math.floor(f:getHeight())
 
   for i, line in ipairs(self.lines) do

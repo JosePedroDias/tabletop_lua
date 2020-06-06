@@ -43,6 +43,7 @@ function Input:redraw()
   pcall(G.clear, self.background)
 
   pcall(G.setColor, self.color)
+  G.setFont(self.font)
   local suffix = ""
   if self.focused then suffix = "|" end
   local text = self.value .. suffix
