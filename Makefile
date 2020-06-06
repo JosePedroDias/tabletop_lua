@@ -24,8 +24,9 @@ srcd = "$(rootd)/src"
 #srcd = c:\users\josep\Work\tabletop_lua\src
 gamename = tabletop.love
 
+# env a1=x a2=y make run-src
 run-src:
-	@$(love) $(srcd)
+	@$(love) $(srcd) $(a1) $(a2)
 
 symbolics:
 	@mkdir src/assets

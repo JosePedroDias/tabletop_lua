@@ -34,6 +34,8 @@ M.load = function()
   server = settings.get()[1]
   username = settings.get()[2]
 
+  love.window.setTitle("tabletop - " .. username)
+
   hub = noobhub.new({server = server, port = 1337});
   hub:subscribe({channel = "ch1", callback = parseHubEvent})
 

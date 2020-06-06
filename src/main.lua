@@ -8,7 +8,13 @@ local settings = require "src.core.settings"
 local lobby = require "src.stages.lobby"
 local game = require "src.stages.game"
 
-function love.load()
+function love.load(arg)
+  -- stores command line arguments to consts.arg. useful for automation maybe
+  -- 1=username
+  -- print("command line args #:", #arg)  
+  -- for i, v in ipairs(arg) do print(i, "->", v) end
+  consts.arg = arg
+
   settings.load()
 
   love.keyboard.setKeyRepeat(true)
@@ -24,9 +30,14 @@ function love.load()
   stages.setStage("lobby", lobby)
   stages.setStage("game", game)
 
-  stages.toStage("lobby")
+  local initialValues = settings.load()
 
-  settings.load()
+  if #consts.arg > 0 then
+    settings.save(initialValues[1], consts.arg[1])
+    stages.toStage("game")
+  else
+    stages.toStage("lobby")
+  end
 end
 
 function love.focus(f)

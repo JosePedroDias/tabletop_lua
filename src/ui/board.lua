@@ -3,11 +3,11 @@ local utils = require "src.core.utils"
 
 local ArcMenu = require "src.ui.arcmenu"
 
-local Dice = require "src.items.dice"
 local Card = require "src.items.card"
-local Piece = require "src.items.piece"
 local Chip = require "src.items.chip"
 local Counter = require "src.items.counter"
+local Dice = require "src.items.dice"
+local Piece = require "src.items.piece"
 local Zone = require "src.items.zone"
 
 local G = love.graphics
@@ -236,8 +236,10 @@ function Board:onEvent(ev)
   local action = ev.action
 
   if action:sub(1, 4) == "new " then
-    local cls = Card
-    if action == "new chip" then
+    local cls
+    if action == "new card" then
+      cls = Card
+    elseif action == "new chip" then
       cls = Chip
     elseif action == "new counter" then
       cls = Counter
@@ -246,7 +248,7 @@ function Board:onEvent(ev)
     elseif action == "new piece" then
       cls = Piece
     else
-      print("unsupported action")
+      print("unsupported action", action)
       return
     end
     table.insert(self.items, cls:new(ev.data))
