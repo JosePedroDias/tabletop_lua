@@ -2,7 +2,6 @@
 
 ## TODO
 
-- review networking for piece, chip, counter
 - visibility areas (own hand, etc.)
 - visually represent remaining clients around board
 - example judge to enforce/aid in adhering to rules of a game... war? go fish?

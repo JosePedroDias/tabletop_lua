@@ -90,6 +90,8 @@ end
 function Counter:setValue(v)
   self.value = v
   self:redraw()
+
+  SendEvent("update", {id = self.id, value = self.value})
 end
 
 function Counter:reset()

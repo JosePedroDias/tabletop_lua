@@ -69,7 +69,7 @@ function Chip:new(o)
   if isLocal then
     local o2 = utils.shallowCopy(o)
     o2.asset = nil
-    SendEvent("new piece", o2)
+    SendEvent("new chip", o2)
   end
 
   o:redraw()

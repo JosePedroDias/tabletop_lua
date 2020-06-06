@@ -30,41 +30,43 @@ function Board:new(o)
   o.items = {}
   o.zones = {}
 
-  local z1 = Zone:new({
-    x = 200,
-    y = 0 + 20,
-    width = 600,
-    height = 100,
-    owner = "player2",
-    color = {1, 0, 0, 0.25}
-  })
-  table.insert(o.items, z1)
-  table.insert(o.zones, z1)
+  if false then
+    local z1 = Zone:new({
+      x = 200,
+      y = 0 + 20,
+      width = 600,
+      height = 100,
+      owner = "player2",
+      color = {1, 0, 0, 0.25}
+    })
+    table.insert(o.items, z1)
+    table.insert(o.zones, z1)
 
-  local z2 = Zone:new({
-    x = 200,
-    y = 1000 - 100 - 20,
-    width = 600,
-    height = 100,
-    owner = "player1",
-    color = {1, 1, 1, 0.25}
-  })
-  table.insert(o.items, z2)
-  table.insert(o.zones, z2)
+    local z2 = Zone:new({
+      x = 200,
+      y = 1000 - 100 - 20,
+      width = 600,
+      height = 100,
+      owner = "player1",
+      color = {1, 1, 1, 0.25}
+    })
+    table.insert(o.items, z2)
+    table.insert(o.zones, z2)
 
-  table.insert(o.items, Card:new({suit = "s", value = "5", x = 200, y = 300}))
-  table.insert(o.items,
-               Card:new({isJoker = true, x = 300, y = 300, rotation = 90}))
-  table.insert(o.items, Card:new({
-    suit = "s",
-    value = "5",
-    isTurned = true,
-    x = 400,
-    y = 300
-  }))
+    table.insert(o.items, Card:new({suit = "s", value = "5", x = 200, y = 300}))
+    table.insert(o.items,
+                 Card:new({isJoker = true, x = 300, y = 300, rotation = 90}))
+    table.insert(o.items, Card:new({
+      suit = "s",
+      value = "5",
+      isTurned = true,
+      x = 400,
+      y = 300
+    }))
 
-  --[[ table.insert(o.items, Dice:new({value = 6, x = 200, y = 500}))
+    --[[ table.insert(o.items, Dice:new({value = 6, x = 200, y = 500}))
   table.insert(o.items, Dice:new({color = "red", value = 2, x = 300, y = 500})) ]]
+  end
 
   o:redraw()
   return o
