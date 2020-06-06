@@ -26,24 +26,24 @@ function Board:new(o)
 
   o.items = {}
 
-  --[[ table.insert(o.items, Zone:new({
-    x = 100,
-    y = 0,
+  table.insert(o.items, Zone:new({
+    x = 200,
+    y = 0 + 20,
     width = 600,
-    height = 200,
+    height = 100,
     owner = "player2",
     color = {1, 0, 0, 0.25}
   }))
   table.insert(o.items, Zone:new({
-    x = 100,
-    y = 800,
+    x = 200,
+    y = 1000 - 100 - 20,
     width = 600,
-    height = 200,
+    height = 100,
     owner = "player1",
     color = {1, 1, 1, 0.25}
-  })) ]]
+  }))
 
-  --[[ table.insert(o.items, Card:new({suit = "s", value = "5", x = 200, y = 300}))
+  table.insert(o.items, Card:new({suit = "s", value = "5", x = 200, y = 300}))
   table.insert(o.items,
                Card:new({isJoker = true, x = 300, y = 300, rotation = 90}))
   table.insert(o.items, Card:new({
@@ -54,7 +54,7 @@ function Board:new(o)
     y = 300
   }))
 
-  table.insert(o.items, Dice:new({value = 6, x = 200, y = 500}))
+  --[[ table.insert(o.items, Dice:new({value = 6, x = 200, y = 500}))
   table.insert(o.items, Dice:new({color = "red", value = 2, x = 300, y = 500})) ]]
 
   o:redraw()

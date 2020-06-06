@@ -1,9 +1,8 @@
 -- [[ game screen handling ]] --
-require("src.ext.json")
 local noobhub = require("src.ext.noobhub")
 
 local Console = require "src.ui.console"
-local Input = require "src.ui.input"
+
 local Board = require "src.ui.board"
 
 local consts = require "src.core.consts"
@@ -19,10 +18,6 @@ local username
 local state = {t = 0}
 local ui = {}
 
-local function say(msg)
-  hub:publish({message = {from = username, action = "say", data = msg}})
-end
-
 function SendEvent(action, data)
   hub:publish({message = {from = username, action = action, data = data}})
 end
@@ -32,7 +27,6 @@ local function parseHubEvent(ev)
     ui.console:addLine(ev.from .. ": " .. ev.data)
   else
     ui.board:onEvent(ev)
-    -- print(json.encode(ev))
   end
 end
 
@@ -43,25 +37,14 @@ M.load = function()
   hub = noobhub.new({server = server, port = 1337});
   hub:subscribe({channel = "ch1", callback = parseHubEvent})
 
+  SendEvent("say", "hello")
+
   ui.console = Console:new({
     x = consts.W - 200,
     y = 0,
     width = 200,
-    height = consts.H - 30,
+    height = consts.H,
     maxLines = 20
-  })
-
-  ui.input = Input:new({
-    x = consts.W - 200,
-    y = consts.H - 40,
-    width = 200,
-    height = 20 + 20,
-    focused = true,
-    onSubmit = function(v)
-      ui.console:addLine(v)
-      say(v)
-      ui.input:clear()
-    end
   })
 
   ui.board = Board:new({width = consts.W, height = consts.H})
@@ -78,20 +61,22 @@ end
 M.draw = function()
   ui.board:draw()
   ui.console:draw()
-  ui.input:draw()
 end
 
 M.onKey = function(key)
-  ui.input:onKey(key)
-  if key == "escape" then love.event.quit() end
+  if key == "escape" then
+    SendEvent("say", "leaving...")
+    love.event.quit()
+  end
+  ui.console:onKey(key)
 end
 
 M.onTextInput = function(text)
-  ui.input:onTextInput(text)
+  ui.console:onTextInput(text)
 end
 
 M.onPointer = function(x, y)
-  if ui.input:onPointer(x, y) then return end
+  if ui.console:onPointer(x, y) then return end
   ui.board:onPointer(x, y)
 end
 
