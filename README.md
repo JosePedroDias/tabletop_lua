@@ -3,7 +3,6 @@
 ## TODO
 
 - visibility areas (own hand, etc.)
-- items: chips, pieces (simple)
 - items: counter
 - visually represent remaining clients around board
 - example judge to enforce/aid in adhering to rules of a game... war? go fish?

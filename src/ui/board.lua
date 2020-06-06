@@ -5,6 +5,8 @@ local ArcMenu = require "src.ui.arcmenu"
 
 local Dice = require "src.items.dice"
 local Card = require "src.items.card"
+local Piece = require "src.items.piece"
+local Chip = require "src.items.chip"
 local Zone = require "src.items.zone"
 
 local G = love.graphics
@@ -25,23 +27,29 @@ function Board:new(o)
   o.canvas = G.newCanvas(o.width, o.height)
 
   o.items = {}
+  o.zones = {}
 
-  table.insert(o.items, Zone:new({
+  local z1 = Zone:new({
     x = 200,
     y = 0 + 20,
     width = 600,
     height = 100,
     owner = "player2",
     color = {1, 0, 0, 0.25}
-  }))
-  table.insert(o.items, Zone:new({
+  })
+  table.insert(o.items, z1)
+  table.insert(o.zones, z1)
+
+  local z2 = Zone:new({
     x = 200,
     y = 1000 - 100 - 20,
     width = 600,
     height = 100,
     owner = "player1",
     color = {1, 1, 1, 0.25}
-  }))
+  })
+  table.insert(o.items, z2)
+  table.insert(o.zones, z2)
 
   table.insert(o.items, Card:new({suit = "s", value = "5", x = 200, y = 300}))
   table.insert(o.items,
@@ -66,7 +74,7 @@ function Board:showCreateMenu(x, y)
     x = x,
     y = y,
     dismissableFirst = true,
-    labels = {"cancel", "add card", "add dice"},
+    labels = {"cancel", "add card", "add dice", "add piece", "add chip"},
     callback = function(idx)
       if idx == 1 then
         self.uiMenu = nil
@@ -74,7 +82,13 @@ function Board:showCreateMenu(x, y)
         return
       end
       local it = Card
-      if idx == 3 then it = Dice end
+      if idx == 3 then
+        it = Dice
+      elseif idx == 4 then
+        it = Piece
+      elseif idx == 5 then
+        it = Chip
+      end
       self:showCreateMenu2(x, y, it)
     end
   })
@@ -128,9 +142,7 @@ function Board:affectItem(x, y, item)
       if idx == 1 then
         return
       elseif idx == 2 then
-        local itemIdx = utils.indexOf(self.items, item)
-        table.remove(self.items, itemIdx)
-        SendEvent("delete", {id = item.id})
+        self:delete(item)
       else
         item[value](item)
       end
@@ -154,6 +166,12 @@ function Board:redraw()
   for _, it in ipairs(self.items) do it:draw() end
 
   G.setCanvas()
+end
+
+function Board:delete(it, idx, isRemote)
+  if not idx then idx = utils.indexOf(self.items, it) end
+  table.remove(self.items, idx)
+  if not isRemote then SendEvent("delete", {id = it.id}) end
 end
 
 function Board:bringToFront(it, idx, isRemote)
@@ -197,6 +215,11 @@ function Board:onPointerUp(x, y)
     self:affectItem(x, y, self.selectedItem)
   end
   self.selectedItem = nil
+
+  for i, zone in ipairs(self.zones) do
+    local hit = zone:isHit(x, y)
+    print(i, hit)
+  end
 end
 
 function Board:getItemFromId(id)
@@ -219,8 +242,8 @@ function Board:onEvent(ev)
     local item, itemIdx = self:getItemFromId(ev.data.id)
     self:bringToFront(item, itemIdx, true)
   elseif action == "delete" then
-    local _, itemIdx = self:getItemFromId(ev.data.id)
-    table.remove(self.items, itemIdx)
+    local item, itemIdx = self:getItemFromId(ev.data.id)
+    self:delete(item, itemIdx, true)
   else
     print("unsupported action", action)
   end

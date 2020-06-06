@@ -34,9 +34,6 @@ local VALUES = {
 }
 local BACKS = {"blue", "green", "red"}
 
--- suit - CHSD Clubs Hearts Spades Diamonds
--- value - 2 3 4 5 6 7 8 9 10 J Q K A
--- back - blue green red
 -- isJoker
 local Card = Item:new()
 
@@ -80,6 +77,9 @@ function Card:new(o)
   self.__index = self
 
   o.back = o.back or "blue"
+  assert(utils.has(BACKS, o.back),
+         "card created with unsupported back: " .. o.back)
+
   o.isTurned = o.isTurned or false
   o.isJoker = o.isJoker or false
   if not o.isJoker then

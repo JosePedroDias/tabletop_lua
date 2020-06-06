@@ -102,12 +102,13 @@ M.slice = function(arr, start, stop)
   return res
 end
 
-M.times = function(n, fn)
+M.times = function(n, first, fn)
+  first = first or 1
   fn = fn or function(i)
     return i
   end
   local arr = {}
-  for i = 1, n do table.insert(arr, fn(i)) end
+  for i = first, n + first - 1 do table.insert(arr, fn(i)) end
   return arr
 end
 

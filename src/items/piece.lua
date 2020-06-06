@@ -1,4 +1,4 @@
---[[ playing dice ]] --
+--[[ piece ]] --
 require "src.items.item"
 
 local assets = require "src.core.assets"
@@ -11,7 +11,7 @@ local G = love.graphics
 local D2R = math.pi / 180
 
 local function electAsset(o)
-  return "dices_" .. o.color .. "_" .. o.value
+  return "pieces_" .. o.color .. "_" .. o.value
 end
 
 local W = 64
@@ -24,60 +24,62 @@ local S = 0.5
 W = W * S
 H = H * S
 
-local VALUES = {1, 2, 3, 4, 5, 6}
+local VALUES = utils.map(utils.times(19, 0), function(v)
+  v = tostring(v)
+  if v:len() == 1 then v = "0" .. v end
+  return v
+end)
 
-local COLORS = {"red", "white"}
+local COLORS = {"black", "blue", "green", "purple", "red", "white", "yellow"}
 
-local Dice = Item:new()
+local Piece = Item:new()
 
 -------
 
-Dice.name = "Dice"
+Piece.name = "Piece"
 
-function Dice.colors()
+function Piece.colors()
   return COLORS
 end
 
-function Dice.values()
+function Piece.values()
   return VALUES
 end
 
-function Dice.parameterize()
+function Piece.parameterize()
   return coroutine.create(function()
-    -- local color = coroutine.yield(COLORS)
-    local color = "white"
+    local color = coroutine.yield(COLORS)
     local value = coroutine.yield(VALUES)
-    return Dice:new({color = color, value = value})
+    return Piece:new({color = color, value = value})
   end)
 end
 
-function Dice.affect()
-  return {"roll"}
+function Piece.affect()
+  return {}
 end
 
 -------
 
-function Dice:new(o)
+function Piece:new(o)
   o = o or Item:new(o)
   setmetatable(o, self)
   self.__index = self
 
-  o.color = o.color or "white"
   assert(utils.has(COLORS, o.color),
-         "dice created with unsupported color: " .. o.color)
+         "piece created with unsupported color: " .. o.color)
   assert(utils.has(VALUES, o.value),
-         "dice created with unsupported value: " .. o.value)
+         "piece created with unsupported value: " .. o.value)
 
   o.width = W
   o.height = H
 
   local isLocal = not o.id
-  o.id = o.id or ("dice_" .. o:genId())
+  o.id = o.id or ("piece_" .. o:genId())
 
   if isLocal then
     local o2 = utils.shallowCopy(o)
     o2.asset = nil
-    SendEvent("new dice", o2)
+    SendEvent("new piece", o2)
   end
 
   o:redraw()
@@ -85,20 +87,13 @@ function Dice:new(o)
   return o
 end
 
-function Dice:draw()
+function Piece:draw()
   G.setColor(1, 1, 1, 1)
   G.draw(self.asset, self.x, self.y, D2R * self.rotation, S, S, w2, h2)
 end
 
-function Dice:redraw()
+function Piece:redraw()
   self.asset = assets.gfx[electAsset(self)]
 end
 
-function Dice:roll()
-  self.value = love.math.random(6)
-  self.asset = assets.gfx[electAsset(self)]
-
-  SendEvent("update", {id = self.id, value = self.value})
-end
-
-return Dice
+return Piece

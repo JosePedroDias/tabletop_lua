@@ -44,7 +44,8 @@ M.load = function()
     y = 0,
     width = 200,
     height = consts.H,
-    maxLines = 20
+    maxLines = 20,
+    dismissed = true
   })
 
   ui.board = Board:new({width = consts.W, height = consts.H})
