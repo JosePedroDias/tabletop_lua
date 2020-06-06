@@ -1,4 +1,5 @@
 --[[ manages the ui board ]] --
+local consts = require "src.core.consts"
 local utils = require "src.core.utils"
 
 local ArcMenu = require "src.ui.arcmenu"
@@ -30,28 +31,38 @@ function Board:new(o)
   o.items = {}
   o.zones = {}
 
-  if false then
+  if consts.arg[2] then
     local z1 = Zone:new({
-      x = 200,
-      y = 0 + 20,
+      x = consts.W / 2,
+      y = 80,
       width = 600,
-      height = 100,
-      owner = "player2",
+      height = 120,
+      owner = "p1",
       color = {1, 0, 0, 0.25}
     })
     table.insert(o.items, z1)
     table.insert(o.zones, z1)
 
     local z2 = Zone:new({
-      x = 200,
-      y = 1000 - 100 - 20,
+      x = consts.W / 2,
+      y = consts.H - 80,
       width = 600,
       height = 100,
-      owner = "player1",
-      color = {1, 1, 1, 0.25}
+      owner = "p2",
+      color = {0, 0, 1, 0.25}
     })
     table.insert(o.items, z2)
     table.insert(o.zones, z2)
+
+    local z3 = Zone:new({
+      x = consts.W / 2,
+      y = consts.H / 2,
+      width = 120,
+      height = 120,
+      color = {1, 1, 1, 0.25}
+    })
+    table.insert(o.items, z3)
+    table.insert(o.zones, z3)
 
     table.insert(o.items, Card:new({suit = "s", value = "5", x = 200, y = 300}))
     table.insert(o.items,
@@ -193,15 +204,18 @@ function Board:onPointer(x, y)
 
   for idx = #self.items, 1, -1 do
     local it = self.items[idx]
-    local res = it:isHit(x, y)
 
-    if res then
-      self:bringToFront(it, idx)
-      self.selectedItem = it
-      self.moveFrames = 0
-      self.selectedDelta = {x - it.x, y - it.y}
-      self:redraw()
-      return
+    if it.name ~= "Zone" then
+      local res = it:isHit(x, y)
+
+      if res then
+        self:bringToFront(it, idx)
+        self.selectedItem = it
+        self.moveFrames = 0
+        self.selectedDelta = {x - it.x, y - it.y}
+        self:redraw()
+        return
+      end
     end
   end
 
@@ -218,14 +232,23 @@ function Board:onPointerMove(x, y)
 end
 
 function Board:onPointerUp(x, y)
+  if not self.selectedItem then return end
+
   if self.selectedItem and self.moveFrames == 0 then
     self:affectItem(x, y, self.selectedItem)
   end
+  local it = self.selectedItem
   self.selectedItem = nil
 
-  for i, zone in ipairs(self.zones) do
-    -- local hit = zone:isHit(x, y)
-    -- print(i, hit)
+  -- print(x, y)
+  for _, zone in ipairs(self.zones) do
+    local hit = zone:isHit(x, y)
+    -- print(i, hit, zone.x, zone.y, zone.width, zone.height)
+    if hit then
+      it:move(zone.x, zone.y)
+      self:redraw()
+      return
+    end
   end
 end
 
@@ -249,17 +272,29 @@ function Board:onEvent(ev)
       cls = Dice
     elseif action == "new piece" then
       cls = Piece
+    elseif action == "new zone" then
+      cls = Zone
     else
       print("unsupported action", action)
       return
     end
-    table.insert(self.items, cls:new(ev.data))
+    local it = cls:new(ev.data)
+    table.insert(self.items, it)
+    if it.name == "Zone" then table.insert(self.zones, it) end
   elseif action == "update" then
     local item = self:getItemFromId(ev.data.id)
+    if not item then
+      print("unknown item", ev.data.id)
+      return
+    end
     for k, v in pairs(ev.data) do item[k] = v end
     if ev.data.isTurned ~= nil or ev.data.value then item:redraw() end
   elseif action == "toFront" then
     local item, itemIdx = self:getItemFromId(ev.data.id)
+    if not item then
+      print("unknown item", ev.data.id)
+      return
+    end
     self:bringToFront(item, itemIdx, true)
   elseif action == "delete" then
     local item, itemIdx = self:getItemFromId(ev.data.id)

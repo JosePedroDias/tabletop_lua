@@ -2,7 +2,11 @@
 
 ## TODO
 
-- visibility areas (own hand, etc.)
+- visibility areas
+  - assign item to at most 1 zone
+  - zone layouts = centered, distribute-x, distribute-y
+  - assign isTurned according to owner... network challenge
+- create deck utils
 - visually represent remaining clients around board
 - example judge to enforce/aid in adhering to rules of a game... war? go fish?
 

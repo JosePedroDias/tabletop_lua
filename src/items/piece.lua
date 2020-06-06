@@ -1,6 +1,4 @@
 --[[ piece ]] --
-require "src.items.item"
-
 local assets = require "src.core.assets"
 local utils = require "src.core.utils"
 

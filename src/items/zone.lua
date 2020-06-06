@@ -1,5 +1,5 @@
 --[[ zone - changes visibility of items and lays them out ]] --
-require "src.items.item"
+local utils = require "src.core.utils"
 
 local Item = require "src.items.item"
 
@@ -25,14 +25,22 @@ function Zone:new(o)
   o.width = o.width or 300
   o.height = o.height or 50
 
+  local isLocal = not o.id
   o.id = "zone_" .. o:genId()
+
+  if isLocal then
+    local o2 = utils.shallowCopy(o)
+    o2.asset = nil
+    SendEvent("new zone", o2)
+  end
 
   return o
 end
 
 function Zone:draw()
   pcall(G.setColor, self.color)
-  G.rectangle("fill", self.x, self.y, self.width, self.height)
+  G.rectangle("fill", self.x - self.width / 2, self.y - self.height / 2,
+              self.width, self.height)
 end
 
 return Zone

@@ -11,6 +11,7 @@ local game = require "src.stages.game"
 function love.load(arg)
   -- stores command line arguments to consts.arg. useful for automation maybe
   -- 1=username
+  -- 2=host
   -- print("command line args #:", #arg)  
   -- for i, v in ipairs(arg) do print(i, "->", v) end
   consts.arg = arg

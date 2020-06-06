@@ -1,6 +1,4 @@
---[[ playing dice ]] --
-require "src.items.item"
-
+--[[ playing dice ]] -- "
 local assets = require "src.core.assets"
 local utils = require "src.core.utils"
 

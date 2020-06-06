@@ -1,6 +1,4 @@
 --[[ counter ]] --
-require "src.items.item"
-
 local utils = require "src.core.utils"
 
 local Item = require "src.items.item"
