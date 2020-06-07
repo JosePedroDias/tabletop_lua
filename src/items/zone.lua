@@ -84,17 +84,24 @@ function Zone:add(it)
   return true
 end
 
-function Zone:doLayout()
+function Zone:doLayout(board)
+  assert(board and type(board.bringToFront) == "function",
+         "zone:doLayout must be passed the board instance")
+
   local n = #self.items
   if n == 0 then return end
 
   if self.layout == "center" then
-    for _, it in ipairs(self.items) do it:move(self.x, self.y) end
+    for _, it in ipairs(self.items) do
+      it:move(self.x, self.y)
+      board:bringToFront(it)
+    end
     return
   end
 
   if n == 1 then
     self.items[1]:move(self.x, self.y)
+    board:bringToFront(self.items[1])
     return
   end
 
@@ -124,6 +131,7 @@ function Zone:doLayout()
 
   for _, it in ipairs(self.items) do
     it:move(x, y)
+    board:bringToFront(it)
     x = x + dx
     y = y + dy
   end

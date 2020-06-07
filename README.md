@@ -26,9 +26,17 @@ https://github.com/stackmachine/lovetest
 
 - visibility areas
   - check networking works?
-- create deck utils
 - visually represent remaining clients around board
-- example judge to enforce/aid in adhering to rules of a game... war? go fish?
+- create 8x8 grid for checkers and chess
+- create hex grid for abalone (maybe push sideways as well)
+- create two sided pieces for reversi
+- jogo da glória / snakes and ladders
+- example judge to enforce/aid in adhering to rules of a game...
+  - war?
+  - go fish?
+  - sueca?
+  - blackjack
+  - poker texas hold'em?
 
 ## Concept ideas:
 

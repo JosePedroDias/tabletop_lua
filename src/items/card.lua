@@ -65,6 +65,28 @@ function Card.parameterize()
   end)
 end
 
+function Card.several(backs, addTwoJokersPerDeck, values, suits)
+  backs = backs or BACKS
+  addTwoJokersPerDeck = addTwoJokersPerDeck or false
+  values = values or VALUES
+  suits = suits or SUITS
+
+  local items = {}
+  for _, b in ipairs(backs) do
+    if addTwoJokersPerDeck then
+      table.insert(items, Card:new({back = b, isJoker = true}))
+    end
+
+    for _, s in ipairs(suits) do
+      for _, v in ipairs(values) do
+        table.insert(items, Card:new({back = b, suit = s, value = v}))
+      end
+    end
+  end
+
+  return items
+end
+
 function Card.affect()
   return {"turn", "rotate90"}
 end

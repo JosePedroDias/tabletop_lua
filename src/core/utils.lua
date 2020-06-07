@@ -204,6 +204,17 @@ M.round = function(n)
   return math.floor(n + 0.5)
 end
 
+-- https://gist.github.com/Uradamus/10323382
+function M.shuffle(t)
+  local tbl = {}
+  for i = 1, #t do tbl[i] = t[i] end
+  for i = #tbl, 2, -1 do
+    local j = math.random(i)
+    tbl[i], tbl[j] = tbl[j], tbl[i]
+  end
+  return tbl
+end
+
 -- https://github.com/JosePedroDias/scorespace8/blob/master/src/utils.ts
 
 M.polarMove = function(pos, r, angle)
