@@ -37,7 +37,8 @@ function Board:new(o)
       y = 80,
       width = 600,
       height = 120,
-      owner = "p1",
+      owner = "p2",
+      layout = "x",
       color = {1, 0, 0, 0.25}
     })
     table.insert(o.items, z1)
@@ -48,7 +49,9 @@ function Board:new(o)
       y = consts.H - 80,
       width = 600,
       height = 100,
-      owner = "p2",
+      owner = "p1",
+      layout = "x",
+      -- rotation = 90,
       color = {0, 0, 1, 0.25}
     })
     table.insert(o.items, z2)
@@ -65,18 +68,9 @@ function Board:new(o)
     table.insert(o.zones, z3)
 
     table.insert(o.items, Card:new({suit = "s", value = "5", x = 200, y = 300}))
-    table.insert(o.items,
-                 Card:new({isJoker = true, x = 300, y = 300, rotation = 90}))
-    table.insert(o.items, Card:new({
-      suit = "s",
-      value = "5",
-      isTurned = true,
-      x = 400,
-      y = 300
-    }))
-
-    --[[ table.insert(o.items, Dice:new({value = 6, x = 200, y = 500}))
-  table.insert(o.items, Dice:new({color = "red", value = 2, x = 300, y = 500})) ]]
+    table.insert(o.items, Card:new({suit = "s", value = "a", x = 300, y = 300}))
+    table.insert(o.items, Card:new({suit = "h", value = "q", x = 400, y = 300}))
+    table.insert(o.items, Card:new({suit = "c", value = "3", x = 500, y = 300}))
   end
 
   o:redraw()
@@ -213,6 +207,7 @@ function Board:onPointer(x, y)
         self.selectedItem = it
         self.moveFrames = 0
         self.selectedDelta = {x - it.x, y - it.y}
+        self.initialPosition = {x, y}
         self:redraw()
         return
       end
@@ -241,13 +236,36 @@ function Board:onPointerUp(x, y)
   self.selectedItem = nil
 
   -- print(x, y)
-  for _, zone in ipairs(self.zones) do
-    local hit = zone:isHit(x, y)
-    -- print(i, hit, zone.x, zone.y, zone.width, zone.height)
-    if hit then
-      it:move(zone.x, zone.y)
-      self:redraw()
-      return
+  local hitZone
+  for i, zone in ipairs(self.zones) do
+    if not hitZone then
+      local hit = zone:isHit(x, y)
+      if hit then hitZone = i end
+    end
+  end
+
+  if hitZone then
+    for i, zone in ipairs(self.zones) do
+      if i == hitZone then
+        zone:add(it)
+        zone:doLayout()
+      else
+        zone:remove(it)
+        zone:doLayout()
+      end
+    end
+    self:redraw()
+  elseif self.initialPosition then
+    x = self.initialPosition[1]
+    y = self.initialPosition[2]
+    for _, zone in ipairs(self.zones) do
+      local hit = zone:isHit(x, y)
+      if hit then
+        zone:remove(it)
+        zone:doLayout()
+        self:redraw()
+        return
+      end
     end
   end
 end
