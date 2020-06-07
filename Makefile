@@ -19,14 +19,15 @@ else
 	open = explorer
 endif
 
+args=`arg="$(filter-out $@,$(MAKECMDGOALS))" && echo $${arg:-${1}}`
 rootd = `pwd`
 srcd = "$(rootd)/src"
 #srcd = c:\users\josep\Work\tabletop_lua\src
 gamename = tabletop.love
 
-# env a1=x a2=y make run-src
+# 1:username 2:hosts
 run-src:
-	@$(love) $(srcd) $(a1) $(a2)
+	@$(love) $(srcd) $(call args)
 
 symbolics:
 	@mkdir src/assets

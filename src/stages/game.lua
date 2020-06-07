@@ -35,6 +35,11 @@ M.load = function()
   username = settings.get()[2]
 
   love.window.setTitle("tabletop - " .. username)
+  if username == "p1" then
+    love.window.setPosition(0, 0)
+  else
+    love.window.setPosition(1024, 0)
+  end
 
   hub = noobhub.new({server = server, port = 1337});
   hub:subscribe({channel = "ch1", callback = parseHubEvent})
@@ -67,9 +72,15 @@ M.draw = function()
 end
 
 M.onKey = function(key)
+  -- print(key)
   if key == "escape" then
     SendEvent("say", "leaving...")
     love.event.quit()
+  elseif key == "f1" then
+    -- gets stored in the same folder as settings. ex: ~/Library/Application Support/LOVE/tabletop
+    local file = "shot_" .. os.date("%Y-%m-%d_%H-%M-%S") .. ".png"
+    print("saving screenshot to " .. file)
+    love.graphics.captureScreenshot(file)
   end
   ui.console:onKey(key)
 end

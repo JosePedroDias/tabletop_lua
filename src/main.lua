@@ -1,4 +1,6 @@
 -- [[ main file! ]] --
+local lovetest = require "src.ext.lovetest"
+
 local assets = require "src.core.assets"
 local consts = require "src.core.consts"
 local screen = require "src.core.screen"
@@ -12,9 +14,12 @@ function love.load(arg)
   -- stores command line arguments to consts.arg. useful for automation maybe
   -- 1=username
   -- 2=host
-  -- print("command line args #:", #arg)  
-  -- for i, v in ipairs(arg) do print(i, "->", v) end
   consts.arg = arg
+
+  if lovetest.detect(arg) then
+    -- Run the tests
+    lovetest.run()
+  end
 
   settings.load()
 

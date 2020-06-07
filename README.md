@@ -1,5 +1,27 @@
 # tabletop_lua
 
+## scripting for dev
+
+one player:
+
+    make run-src p1 hosts
+
+two players:
+
+    make run-src p1 hosts & make run-src p2 &
+
+test
+
+    make run-src -- -t
+
+## testing TODO
+
+assert
+http://olivinelabs.com/busted/
+https://github.com/norman/telescope
+https://github.com/silentbicycle/lunatest https://htmlpreview.github.io/?https://raw.githubusercontent.com/silentbicycle/lunatest/master/files/lunatest.html
+https://github.com/stackmachine/lovetest
+
 ## TODO
 
 - visibility areas
