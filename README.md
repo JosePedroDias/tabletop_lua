@@ -26,6 +26,8 @@ https://github.com/stackmachine/lovetest
 
 - visibility areas
   - check networking works?
+  - review zone assignment, could be optimized
+- console. up/down recovers previous messages
 - visually represent remaining clients around board
 - create 8x8 grid for checkers and chess
 - create hex grid for abalone (maybe push sideways as well)

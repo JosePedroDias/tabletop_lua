@@ -1,7 +1,6 @@
 --[[ manages the ui board ]] --
 local consts = require "src.core.consts"
 local utils = require "src.core.utils"
-local settings = require "src.core.settings"
 
 local ArcMenu = require "src.ui.arcmenu"
 
@@ -68,13 +67,6 @@ function Board:new(o)
     table.insert(o.items, z3)
     table.insert(o.zones, z3)
 
-    --[[ table.insert(o.items, Card:new({suit = "s", value = "5", x = 200, y = 300}))
-    table.insert(o.items, Card:new({suit = "s", value = "a", x = 300, y = 300}))
-    table.insert(o.items, Card:new({suit = "h", value = "q", x = 400, y = 300}))
-    table.insert(o.items, Card:new({suit = "c", value = "3", x = 500, y = 300})) ]]
-
-    local username = settings.get()[2]
-
     local cards = Card.several({"blue"}, false)
     cards = utils.shuffle(cards)
 
@@ -82,15 +74,14 @@ function Board:new(o)
     local cardsPerHand = 5
     local handZones = {z1, z2}
     for _, z in ipairs(handZones) do
-      local needsTurning = z.owner ~= username
-      for ci = 1, cardsPerHand do
+      local y = utils.lerp(z.y, z3.y, 0.25)
+      table.insert(o.items, Counter:new({x = z.x - 200, y = y}))
+      for _ = 1, cardsPerHand do
         local c = table.remove(cards)
         table.insert(o.items, c)
-        if needsTurning then c:turn() end
-        c:move(z.x, z.y)
-        z:add(c)
+        c:turn()
+        c:move(z.x, y)
       end
-      z:doLayout(o)
     end
 
     -- assign to center z3

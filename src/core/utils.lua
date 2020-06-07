@@ -215,6 +215,10 @@ function M.shuffle(t)
   return tbl
 end
 
+function M.lerp(a, b, i)
+  return a * (1 - i) + b * i
+end
+
 -- https://github.com/JosePedroDias/scorespace8/blob/master/src/utils.ts
 
 M.polarMove = function(pos, r, angle)
