@@ -27,7 +27,8 @@ https://github.com/stackmachine/lovetest
 - visibility areas
   - check networking works?
   - review zone assignment, could be optimized
-- console. up/down recovers previous messages
+- start game can be hosted by anyone (export the board.populate function once everyone's here)
+- card isTurned default to true
 - visually represent remaining clients around board
 - create 8x8 grid for checkers and chess
 - create hex grid for abalone (maybe push sideways as well)

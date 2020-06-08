@@ -14,6 +14,8 @@ local VERSION = "1"
 
 -- 1=server, 2=username
 local valuesInMemory = {"acor.sl.pt", "john doe"}
+M.server = valuesInMemory[1]
+M.username = valuesInMemory[2]
 
 M.get = function()
   return valuesInMemory
@@ -21,6 +23,8 @@ end
 
 M._set = function(server, username)
   valuesInMemory = {server, username}
+  M.server = server
+  M.username = username
 end
 
 M.load = function()

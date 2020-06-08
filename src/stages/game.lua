@@ -1,50 +1,61 @@
 -- [[ game screen handling ]] --
 local noobhub = require("src.ext.noobhub")
 
-local Console = require "src.ui.console"
-
-local Board = require "src.ui.board"
-
 local consts = require "src.core.consts"
 local settings = require "src.core.settings"
+local utils = require "src.core.utils"
+
+local Console = require "src.ui.console"
+local Board = require "src.ui.board"
+local cc = require "src.ui.consolecommands"
 
 local M = {}
 
 local hub
 
-local server
-local username
-
-local state = {t = 0}
+local state = {t = 0, roster = {}} -- we're not in the roster ourselves
 local ui = {}
 
+cc.shareState(state)
+
 function SendEvent(action, data)
-  hub:publish({message = {from = username, action = action, data = data}})
+  hub:publish({
+    message = {from = settings.username, action = action, data = data}
+  })
 end
 
 local function parseHubEvent(ev)
   if ev.action == "say" then
     ui.console:addLine(ev.from .. ": " .. ev.data)
+  elseif ev.action == "status" then
+    if ev.data == "in" then
+      if not utils.has(state.roster, ev.from) then
+        ui.console:addLine(ev.from .. " got in")
+        table.insert(state.roster, ev.from)
+        SendEvent("status", "in")
+      end
+    elseif ev.data == "out" then
+      ui.console:addLine(ev.from .. " left")
+      table.remove(state.roster, utils.indexOf(state.roster))
+    end
   else
     ui.board:onEvent(ev)
   end
 end
 
 M.load = function()
-  server = settings.get()[1]
-  username = settings.get()[2]
 
-  love.window.setTitle("tabletop - " .. username)
-  if username == "p1" then
+  love.window.setTitle("tabletop - " .. settings.username)
+  if settings.username == "p1" then
     love.window.setPosition(0, 0)
   else
     love.window.setPosition(1024, 0)
   end
 
-  hub = noobhub.new({server = server, port = 1337});
+  hub = noobhub.new({server = settings.server, port = 1337}); -- TODO port and channel are hardcoded for now
   hub:subscribe({channel = "ch1", callback = parseHubEvent})
 
-  SendEvent("say", "hello")
+  SendEvent("status", "in")
 
   ui.console = Console:new({
     x = consts.W - 200,
@@ -74,7 +85,7 @@ end
 M.onKey = function(key)
   -- print(key)
   if key == "escape" then
-    SendEvent("say", "leaving...")
+    SendEvent("status", "out")
     love.event.quit()
   elseif key == "f1" then
     -- gets stored in the same folder as settings. ex: ~/Library/Application Support/LOVE/tabletop

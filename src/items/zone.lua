@@ -67,12 +67,10 @@ function Zone:remove(it)
 end
 
 function Zone:add(it)
-  local username = settings.get()[2]
-
   for _, v in ipairs(self.items) do if v == it then return false end end
   table.insert(self.items, it)
   local dirty = false
-  if self.owner == username then
+  if self.owner == settings.username then
     it.isTurned = false
     dirty = true
   end

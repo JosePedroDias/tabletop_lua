@@ -1,5 +1,6 @@
 --[[ console ui component - outputs lines in a translucent overlay ]] --
 local Input = require "src.ui.input"
+local cc = require "src.ui.consolecommands"
 
 local G = love.graphics
 
@@ -9,7 +10,9 @@ local Console = {
   width = 400,
   height = 300,
   maxLines = 4,
-  padding = 10
+  padding = 10,
+  history = {}
+  -- historyIndex
 }
 
 function Console:new(o)
@@ -33,8 +36,23 @@ function Console:new(o)
     height = o.inputHeight,
     focused = true,
     onSubmit = function(msg)
+      if msg ~= self.history[#self.history] then
+        table.insert(self.history, msg)
+      end
+      if #self.history > 20 then table.remove(self.history, 1) end
       console:addLine(msg)
-      SendEvent("say", msg)
+      if msg:sub(1, 1) == "/" then
+        local out = cc.processCommand(msg:sub(2))
+        if type(out) == "string" then
+          console:addLine(out)
+        else
+          for _, line in ipairs(out) do console:addLine(line) end
+        end
+        console:addLine("")
+      else
+        SendEvent("say", msg)
+      end
+
       input:clear()
     end
   })
@@ -88,7 +106,28 @@ end
 function Console:onKey(key)
   if key == "tab" then
     self:toggle()
+  elseif key == "up" then
+    if #self.history == 0 then return end
+    if not self.historyIndex then
+      self.historyIndex = #self.history
+      self.input:setValue(self.history[self.historyIndex])
+    else
+      self.historyIndex = self.historyIndex - 1
+      if self.historyIndex == 0 then self.historyIndex = #self.history end
+      self.input:setValue(self.history[self.historyIndex])
+    end
+  elseif key == "down" then
+    if #self.history == 0 then return end
+    if not self.historyIndex then
+      self.historyIndex = 1
+      self.input:setValue(self.history[self.historyIndex])
+    else
+      self.historyIndex = self.historyIndex + 1
+      if self.historyIndex > #self.history then self.historyIndex = 1 end
+      self.input:setValue(self.history[self.historyIndex])
+    end
   else
+    self.historyIndex = nil
     self.input:onKey(key)
   end
 end

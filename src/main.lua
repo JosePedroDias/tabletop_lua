@@ -36,10 +36,10 @@ function love.load(arg)
   stages.setStage("lobby", lobby)
   stages.setStage("game", game)
 
-  local initialValues = settings.load()
+  settings.load()
 
   if #consts.arg > 0 then
-    settings.save(initialValues[1], consts.arg[1])
+    settings.save(settings.server, consts.arg[1])
     stages.toStage("game")
   else
     stages.toStage("lobby")
@@ -85,4 +85,11 @@ end
 
 function love.textinput(text)
   stages.currentStage.onTextInput(text)
+end
+
+-- custom error handling to notify server I'm leaving
+function love.errorhandler(msg)
+  print(msg)
+  pcall(SendEvent, "status", "out")
+  love.event.quit()
 end

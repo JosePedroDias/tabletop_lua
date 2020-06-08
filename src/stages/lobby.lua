@@ -13,17 +13,15 @@ local G = love.graphics
 local ui = {}
 
 M.load = function()
-  local initialValues = settings.get()
-
   ui.input = Input:new({
     x = (consts.W - 200) / 2,
     y = (consts.H - 40) / 2,
     width = 200,
     height = 40,
     focused = true,
-    value = initialValues[2],
+    value = settings.username,
     onSubmit = function(username)
-      settings.save(initialValues[1], username)
+      settings.save(settings.server, username)
       stages.toStage("game")
     end
   })
