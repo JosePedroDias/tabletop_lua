@@ -26,16 +26,16 @@ end
 
 local function parseHubEvent(ev)
   if ev.action == "say" then
-    ui.console:addLine(ev.from .. ": " .. ev.data)
+    ui.console:addLine(os.date("%H:%M ") .. ev.from .. ": " .. ev.data)
   elseif ev.action == "status" then
     if ev.data == "in" then
       if not utils.has(state.roster, ev.from) then
-        ui.console:addLine(ev.from .. " got in")
+        ui.console:addLine(os.date("%H:%M ") .. ev.from .. " got in")
         table.insert(state.roster, ev.from)
         SendEvent("status", "in")
       end
     elseif ev.data == "out" then
-      ui.console:addLine(ev.from .. " left")
+      ui.console:addLine(os.date("%H:%M ") .. ev.from .. " left")
       table.remove(state.roster, utils.indexOf(state.roster))
     end
   else
@@ -44,12 +44,11 @@ local function parseHubEvent(ev)
 end
 
 M.load = function()
-
   love.window.setTitle("tabletop - " .. settings.username)
   if settings.username == "p1" then
     love.window.setPosition(0, 0)
   else
-    love.window.setPosition(1024, 0)
+    love.window.setPosition(800, 0)
   end
 
   hub = noobhub.new({server = settings.server, port = 1337}); -- TODO port and channel are hardcoded for now
@@ -58,9 +57,9 @@ M.load = function()
   SendEvent("status", "in")
 
   ui.console = Console:new({
-    x = consts.W - 200,
+    x = consts.W - 300,
     y = 0,
-    width = 200,
+    width = 300,
     height = consts.H,
     maxLines = 20,
     dismissed = true

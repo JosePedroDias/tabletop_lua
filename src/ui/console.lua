@@ -1,4 +1,6 @@
 --[[ console ui component - outputs lines in a translucent overlay ]] --
+local settings = require "src.core.settings"
+
 local Input = require "src.ui.input"
 local cc = require "src.ui.consolecommands"
 
@@ -32,7 +34,7 @@ function Console:new(o)
   input = Input:new({
     x = 0 + o.x,
     y = o.height - o.inputHeight,
-    width = 200,
+    width = o.width,
     height = o.inputHeight,
     focused = true,
     onSubmit = function(msg)
@@ -40,16 +42,17 @@ function Console:new(o)
         table.insert(self.history, msg)
       end
       if #self.history > 20 then table.remove(self.history, 1) end
-      console:addLine(msg)
+
       if msg:sub(1, 1) == "/" then
+        console:addLine(msg)
         local out = cc.processCommand(msg:sub(2))
         if type(out) == "string" then
           console:addLine(out)
         else
           for _, line in ipairs(out) do console:addLine(line) end
         end
-        console:addLine("")
       else
+        console:addLine(os.date("%H:%M ") .. settings.username .. ": " .. msg)
         SendEvent("say", msg)
       end
 

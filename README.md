@@ -27,6 +27,7 @@ https://github.com/stackmachine/lovetest
 - visibility areas
   - check networking works?
   - review zone assignment, could be optimized
+  - zones can count cards or money
 - start game can be hosted by anyone (export the board.populate function once everyone's here)
 - card isTurned default to true
 - visually represent remaining clients around board
