@@ -28,6 +28,20 @@ function Item:isHit(x_, y_)
   return x >= self.x and x <= self.x + w and y >= self.y and y <= self.y + h
 end
 
+function Item:isHitByItem(it)
+  local x1 = self.x - self.width / 2
+  local x2 = self.x + self.width / 2
+  local y1 = self.y - self.height / 2
+  local y2 = self.y + self.height / 2
+
+  local x1_ = it.x - it.width / 2
+  local x2_ = it.x + it.width / 2
+  local y1_ = it.y - it.height / 2
+  local y2_ = it.y + it.height / 2
+
+  return x1 < x2_ and x2 > x1_ and y1 < y2_ and y2 > y1_
+end
+
 function Item:genId()
   return utils.randomString(6, love.math.random)
 end

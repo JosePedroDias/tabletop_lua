@@ -195,7 +195,7 @@ function Board:onPointer(x, y)
         self.selectedItem = it
         self.moveFrames = 0
         self.selectedDelta = {x - it.x, y - it.y}
-        self.initialPosition = {x, y}
+        self.initialZone = self:itemHitsAZone(it)
         self:redraw()
         return
       end
@@ -216,6 +216,12 @@ function Board:onPointerMove(x, y)
   end
 end
 
+function Board:itemHitsAZone(it)
+  for zi, zone in ipairs(self.zones) do
+    if zone:isHitByItem(it) then return zone, zi end
+  end
+end
+
 function Board:onPointerUp(x, y)
   local x_ = x
   local y_ = y
@@ -230,38 +236,19 @@ function Board:onPointerUp(x, y)
   local it = self.selectedItem
   self.selectedItem = nil
 
-  local hitZone
-  for i, zone in ipairs(self.zones) do
-    if not hitZone then
-      local hit = zone:isHit(x, y)
-      if hit then hitZone = i end
-    end
+  local hitZone = self:itemHitsAZone(it)
+
+  if self.initialZone then
+    self.initialZone:remove(it)
+    self.initialZone:doLayout(self)
   end
 
   if hitZone then
-    for i, zone in ipairs(self.zones) do
-      if i == hitZone then
-        zone:add(it)
-        zone:doLayout(self)
-      else
-        zone:remove(it)
-        zone:doLayout(self)
-      end
-    end
-    self:redraw()
-  elseif self.initialPosition then
-    x = self.initialPosition[1]
-    y = self.initialPosition[2]
-    for _, zone in ipairs(self.zones) do
-      local hit = zone:isHit(x, y)
-      if hit then
-        zone:remove(it)
-        zone:doLayout(self)
-        self:redraw()
-        return
-      end
-    end
+    hitZone:add(it)
+    hitZone:doLayout(self)
   end
+
+  if self.initialZone or hitZone then self:redraw() end
 end
 
 function Board:getItemFromId(id)

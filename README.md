@@ -32,26 +32,35 @@ https://github.com/stackmachine/lovetest
 
 ## TODO
 
+- axis direction on zones
+- fix when two cards get the same position in layout
 - visually represent remaining clients around board
 - add money value to chips
-- fix aabb collision hit between item(card) and zone
 - visibility areas
   - zones can count cards or money
-  - review zone assignment, could be optimized
 - card isTurned default to true
+- lobby
+  - allow choosing server settings (host, port)
+  - allow choosing channel (for multiple games to be possible at the same time)
+  - support choosing color, drag & drop avatar
 - be careful about globals
   roster, board
 - create 8x8 grid for checkers and chess
 - create hex grid for abalone (maybe push sideways as well)
 - create two sided pieces for reversi
-- jogo da glória / snakes and ladders
-- example judge to enforce/aid in adhering to rules of a game...
-  - war?
+- jogo da glória / snakes and ladders - https://www.youtube.com/watch?v=xe9pMUuVwtk
+- game setup for
   - go fish?
   - sueca?
-  - blackjack
   - poker texas hold'em?
-  - video poker
+  - pictionary - https://randomwordgenerator.com/pictionary.php https://hobbylark.com/party-games/pictionary-words
+  - checkers
+  - chess?
+- game judge for
+  - snakes and ladders
+  - go fish
+- game bot for
+  - go fish
 
 ## Concept ideas:
 
