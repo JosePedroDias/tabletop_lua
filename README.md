@@ -2,13 +2,21 @@
 
 ## scripting for dev
 
-one player:
+1 player:
 
-    make run-src p1 hosts
+    make run-src -- p1 hosts
 
-two players:
+2 players:
 
-    make run-src p1 hosts & make run-src p2 &
+    make run-src -- p1 hosts & make run-src -- p2 &
+
+3 players:
+
+    make run-src -- p1 hosts & make run-src -- p2 & make run-src -- p3 &
+
+4 players:
+
+    make run-src -- p1 hosts & make run-src -- p2 & make run-src -- p3 & make run-src -- p4 &
 
 test
 
@@ -24,6 +32,8 @@ https://github.com/stackmachine/lovetest
 
 ## TODO
 
+- be careful about globals
+  roster, board
 - visibility areas
   - check networking works?
   - review zone assignment, could be optimized
@@ -41,6 +51,7 @@ https://github.com/stackmachine/lovetest
   - sueca?
   - blackjack
   - poker texas hold'em?
+  - video poker
 
 ## Concept ideas:
 

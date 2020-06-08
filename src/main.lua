@@ -29,7 +29,7 @@ function love.load(arg)
   local sW, sH = screen.getCurrentResolution()
   -- screen.setSize(sW, sH, consts.W, consts.H, true)
   -- screen.setSize(1024, 768, consts.W, consts.H, false)
-  screen.setSize(800, 800, consts.W, consts.H, false)
+  screen.setSize(600, 600, consts.W, consts.H, false)
 
   -- load resources
   assets.load()

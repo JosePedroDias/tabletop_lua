@@ -9,14 +9,13 @@ local Console = require "src.ui.console"
 local Board = require "src.ui.board"
 local cc = require "src.ui.consolecommands"
 
+consts.roster = {} -- TODO: ugly
+
 local M = {}
 
 local hub
 
-local state = {t = 0, roster = {}} -- we're not in the roster ourselves
 local ui = {}
-
-cc.shareState(state)
 
 function SendEvent(action, data)
   hub:publish({
@@ -29,14 +28,14 @@ local function parseHubEvent(ev)
     ui.console:addLine(os.date("%H:%M ") .. ev.from .. ": " .. ev.data)
   elseif ev.action == "status" then
     if ev.data == "in" then
-      if not utils.has(state.roster, ev.from) then
+      if not utils.has(consts.roster, ev.from) then
         ui.console:addLine(os.date("%H:%M ") .. ev.from .. " got in")
-        table.insert(state.roster, ev.from)
+        table.insert(consts.roster, ev.from)
         SendEvent("status", "in")
       end
     elseif ev.data == "out" then
       ui.console:addLine(os.date("%H:%M ") .. ev.from .. " left")
-      table.remove(state.roster, utils.indexOf(state.roster))
+      table.remove(consts.roster, utils.indexOf(consts.roster))
     end
   else
     ui.board:onEvent(ev)
@@ -44,11 +43,16 @@ local function parseHubEvent(ev)
 end
 
 M.load = function()
+  local l = 600
   love.window.setTitle("tabletop - " .. settings.username)
   if settings.username == "p1" then
     love.window.setPosition(0, 0)
+  elseif settings.username == "p2" then
+    love.window.setPosition(l, 0)
+  elseif settings.username == "p3" then
+    love.window.setPosition(0, l)
   else
-    love.window.setPosition(800, 0)
+    love.window.setPosition(l, l)
   end
 
   hub = noobhub.new({server = settings.server, port = 1337}); -- TODO port and channel are hardcoded for now
@@ -66,15 +70,15 @@ M.load = function()
   })
 
   local r = 0
-  if settings.username == "p2" then r = -90 end
-  ui.board = Board:new({width = consts.W, height = consts.H, rotation = r})
+  if settings.username == "p2" then r = 180 end
+  ui.board = Board:new({width = consts.W, height = consts.H})
+  consts.board = ui.board -- TODO: ugly
 end
 
 M.unload = function()
 end
 
 M.update = function(dt)
-  state.t = state.t + dt
   if hub then hub:enterFrame() end
 end
 

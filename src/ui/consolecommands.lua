@@ -1,26 +1,29 @@
+local consts = require "src.core.consts"
 local utils = require "src.core.utils"
 
+local gamesModule = "src.games."
+
 local M = {}
-
-local state
-
-M.shareState = function(state_)
-  state = state_
-end
 
 M.processCommand = function(cmd)
   local words = utils.split(cmd, " ")
   local first = table.remove(words, 1)
 
   if first == "roster" then
-    if #state.roster == 0 then return "you are alone" end
+    if #consts.roster == 0 then return "you are alone" end
     local out = {}
-    for _, username in ipairs(state.roster) do
+    for _, username in ipairs(consts.roster) do
       table.insert(out, "- " .. username)
     end
     return out
+  elseif first == "start" then
+    local game = require(gamesModule .. words[1])
+    game.setup()
+    return "starting " .. words[1] .. "..."
+  elseif first == "games" then
+    return "supported games: go-fish"
   elseif first == "help" then
-    return "supported commands: help, roster"
+    return "supported commands: help, roster, start <game>, games"
   else
     return "unsupported command: " .. first
   end

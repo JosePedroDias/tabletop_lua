@@ -1,6 +1,7 @@
 --[[ manages the ui board ]] --
 local consts = require "src.core.consts"
 local utils = require "src.core.utils"
+local settings = require "src.core.settings"
 
 local ArcMenu = require "src.ui.arcmenu"
 
@@ -32,69 +33,6 @@ function Board:new(o)
 
   o.items = {}
   o.zones = {}
-
-  if consts.arg[2] then
-    local z1 = Zone:new({
-      x = consts.W / 2,
-      y = 80,
-      width = 600,
-      height = 120,
-      owner = "p2",
-      layout = "x",
-      color = {1, 0, 0, 0.25}
-    })
-    table.insert(o.items, z1)
-    table.insert(o.zones, z1)
-
-    local z2 = Zone:new({
-      x = consts.W / 2,
-      y = consts.H - 80,
-      width = 600,
-      height = 100,
-      owner = "p1",
-      layout = "x",
-      -- rotation = 90,
-      color = {0, 0, 1, 0.25}
-    })
-    table.insert(o.items, z2)
-    table.insert(o.zones, z2)
-
-    local z3 = Zone:new({
-      x = consts.W / 2,
-      y = consts.H / 2,
-      width = 120,
-      height = 120,
-      color = {1, 1, 1, 0.25}
-    })
-    table.insert(o.items, z3)
-    table.insert(o.zones, z3)
-
-    local cards = Card.several({"blue"}, false)
-    cards = utils.shuffle(cards)
-
-    -- assign hands
-    local cardsPerHand = 5
-    local handZones = {z1, z2}
-    for _, z in ipairs(handZones) do
-      local y = utils.lerp(z.y, z3.y, 0.25)
-      table.insert(o.items, Counter:new({x = z.x - 200, y = y}))
-      for _ = 1, cardsPerHand do
-        local c = table.remove(cards)
-        table.insert(o.items, c)
-        c:turn()
-        c:move(z.x, y)
-      end
-    end
-
-    -- assign to center z3
-    for _, c in ipairs(cards) do
-      table.insert(o.items, c)
-      c:turn()
-      c:move(z3.x, z3.y)
-      z3:add(c)
-    end
-    z3:doLayout(o)
-  end
 
   o:redraw()
   return o
@@ -373,10 +311,22 @@ function Board:onEvent(ev)
   elseif action == "delete" then
     local item, itemIdx = self:getItemFromId(ev.data.id)
     self:delete(item, itemIdx, true)
+  elseif action == "setRotation" then
+    if ev.data.to == settings.username then
+      print("i am " .. settings.username .. " and i am rotating " ..
+              tostring(ev.data.rotation))
+      self:setRotation(ev.data.rotation)
+    end
   else
     print("unsupported action", action)
     return
   end
+  self:redraw()
+end
+
+function Board:setRotation(rot)
+  assert(type(rot) == "number", "setRotation argument must be a number")
+  self.rotation = rot
   self:redraw()
 end
 
