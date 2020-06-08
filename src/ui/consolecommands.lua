@@ -17,9 +17,13 @@ M.processCommand = function(cmd)
     end
     return out
   elseif first == "start" then
-    local game = require(gamesModule .. words[1])
-    game.setup()
-    return "starting " .. words[1] .. "..."
+    local succeeded, game = pcall(require, gamesModule .. words[1])
+    if succeeded then
+      game.setup()
+      return "starting " .. words[1] .. "..."
+    else
+      return "unknown game:" .. words[1] .. "!"
+    end
   elseif first == "games" then
     return "supported games: go-fish"
   elseif first == "help" then

@@ -61,6 +61,7 @@ M.setup = function()
     height = zH,
     owner = players[2],
     layout = "x",
+    direction = -1,
     color = {1, 0, 0, 0.25}
   })
   table.insert(board.items, z2)
@@ -93,6 +94,7 @@ M.setup = function()
       height = zW,
       owner = players[4],
       layout = "y",
+      direction = -1,
       rotation = 90,
       color = {1, 1, 0, 0.25}
     })

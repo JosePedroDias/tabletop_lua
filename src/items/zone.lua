@@ -14,6 +14,7 @@ Zone.name = "Zone"
 
 -- owner (optional)
 -- layout: center, x, y -> direction sort based on actual item axis
+-- direction: 1, -1
 
 local LAYOUTS = {"center", "x", "y"}
 
@@ -33,6 +34,7 @@ function Zone:new(o)
   o.width = o.width or 300
   o.height = o.height or 50
   o.layout = o.layout or "center"
+  o.direction = o.direction or 1
   assert(utils.has(LAYOUTS, o.layout),
          "zone created with unsupported layout: " .. o.layout)
 
@@ -108,9 +110,9 @@ function Zone:doLayout(board)
   if self.layout == "x" then
     itemDim = self.items[1].width
     y = self.y
-    x = self.x - (self.width - itemDim) / 2
+    x = self.x - (self.width - itemDim) / 2 * self.direction
     span = (self.width - itemDim)
-    dx = span / (n - 1)
+    dx = span / (n - 1) * self.direction
     dy = 0
     table.sort(self.items, function(l, r)
       return l.x < r.x
@@ -118,9 +120,9 @@ function Zone:doLayout(board)
   else
     itemDim = self.items[1].height
     x = self.x
-    y = self.y - (self.height - itemDim) / 2
+    y = self.y - (self.height - itemDim) / 2 * self.direction
     span = (self.height - itemDim)
-    dy = span / (n - 1)
+    dy = span / (n - 1) * self.direction
     dx = 0
     table.sort(self.items, function(l, r)
       return l.y < r.y
