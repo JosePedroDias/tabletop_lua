@@ -32,15 +32,15 @@ https://github.com/stackmachine/lovetest
 
 ## TODO
 
+- visually represent remaining clients around board
+- add money value to chips
+- fix aabb collision hit between item(card) and zone
+- visibility areas
+  - zones can count cards or money
+  - review zone assignment, could be optimized
+- card isTurned default to true
 - be careful about globals
   roster, board
-- visibility areas
-  - check networking works?
-  - review zone assignment, could be optimized
-  - zones can count cards or money
-- start game can be hosted by anyone (export the board.populate function once everyone's here)
-- card isTurned default to true
-- visually represent remaining clients around board
 - create 8x8 grid for checkers and chess
 - create hex grid for abalone (maybe push sideways as well)
 - create two sided pieces for reversi
