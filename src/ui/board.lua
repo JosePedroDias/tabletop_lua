@@ -13,6 +13,8 @@ local Zone = require "src.items.zone"
 
 local G = love.graphics
 
+local D2R = math.pi / 180
+
 local Board = {
   rotation = 0,
   width = 600,
@@ -98,6 +100,18 @@ function Board:new(o)
   return o
 end
 
+function Board:mapCoords(x, y)
+  if self.rotation == 0 then
+    return x, y
+  elseif self.rotation == 90 then
+    return y, self.width - x
+  elseif self.rotation == 180 then
+    return self.width - x, self.height - y
+  else
+    return self.height - y, x
+  end
+end
+
 function Board:showCreateMenu(x, y)
   self.uiMenu = ArcMenu:new({
     x = x,
@@ -142,6 +156,7 @@ function Board:showCreateMenu2(x, y, itemType)
 
     if st == "dead" then
       self.uiMenu = nil
+      x, y = self:mapCoords(x, y)
       options:move(x, y)
       table.insert(self.items, options)
       self:redraw()
@@ -186,7 +201,16 @@ end
 
 function Board:draw()
   G.setColor(1, 1, 1, 1)
-  G.draw(self.canvas, self.x, self.y)
+
+  if self.rotation == 0 then
+    G.draw(self.canvas, 0, 0, 0)
+  elseif self.rotation == 90 then
+    G.draw(self.canvas, self.width, 0, D2R * 90)
+  elseif self.rotation == 180 then
+    G.draw(self.canvas, self.width, self.height, D2R * 180)
+  else
+    G.draw(self.canvas, 0, self.height, D2R * -90)
+  end
 
   if self.uiMenu then self.uiMenu:draw() end
 end
@@ -215,7 +239,12 @@ function Board:bringToFront(it, idx, isRemote)
 end
 
 function Board:onPointer(x, y)
+  local x_ = x
+  local y_ = y
+
   if self.uiMenu and self.uiMenu:onPointer(x, y) then return end
+
+  x, y = self:mapCoords(x, y)
 
   for idx = #self.items, 1, -1 do
     local it = self.items[idx]
@@ -235,10 +264,12 @@ function Board:onPointer(x, y)
     end
   end
 
-  self:showCreateMenu(x, y)
+  self:showCreateMenu(x_, y_)
 end
 
 function Board:onPointerMove(x, y)
+  x, y = self:mapCoords(x, y)
+
   local it = self.selectedItem
   if it then
     self.moveFrames = self.moveFrames + 1
@@ -248,15 +279,19 @@ function Board:onPointerMove(x, y)
 end
 
 function Board:onPointerUp(x, y)
+  local x_ = x
+  local y_ = y
+
   if not self.selectedItem then return end
 
+  x, y = self:mapCoords(x, y)
+
   if self.selectedItem and self.moveFrames == 0 then
-    self:affectItem(x, y, self.selectedItem)
+    self:affectItem(x_, y_, self.selectedItem)
   end
   local it = self.selectedItem
   self.selectedItem = nil
 
-  -- print(x, y)
   local hitZone
   for i, zone in ipairs(self.zones) do
     if not hitZone then

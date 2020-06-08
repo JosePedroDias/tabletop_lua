@@ -65,7 +65,9 @@ M.load = function()
     dismissed = true
   })
 
-  ui.board = Board:new({width = consts.W, height = consts.H})
+  local r = 0
+  if settings.username == "p2" then r = -90 end
+  ui.board = Board:new({width = consts.W, height = consts.H, rotation = r})
 end
 
 M.unload = function()
