@@ -19,8 +19,12 @@ M.processCommand = function(cmd)
   elseif first == "start" then
     local succeeded, game = pcall(require, gamesModule .. words[1])
     if succeeded then
-      game.setup()
-      return "starting " .. words[1] .. "..."
+      local didOk, err = pcall(game.setup)
+      if didOk then
+        return "starting " .. words[1] .. "..."
+      else
+        return err
+      end
     else
       return "unknown game:" .. words[1] .. "!"
     end

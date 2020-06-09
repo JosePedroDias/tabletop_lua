@@ -1,6 +1,9 @@
 --[[ 
-    sets up go fish card game to 2 to 4 players
-    each player gets 5 cards, a counter and a zone to see his/her cards
+    sets up sueca card game for 4 players
+    https://en.wikipedia.org/wiki/Sueca_(card_game)
+
+    Ace, 7, King, Jack, Queen, 6, 5, 4, 3, 2
+    each player gets 10 cards and a zone to see his/her cards
 
           p2 (180)
 p3 (-90)           p4 (90)
@@ -11,7 +14,7 @@ local utils = require "src.core.utils"
 local settings = require "src.core.settings"
 
 local Card = require "src.items.card"
-local Counter = require "src.items.counter"
+-- local Counter = require "src.items.counter"
 local Zone = require "src.items.zone"
 
 local M = {}
@@ -28,7 +31,7 @@ M.setup = function()
   local players = utils.shallowCopy(consts.roster)
   table.insert(players, 1, settings.username)
 
-  assert(#players > 1 and #players < 5, "go fish needs 2-4 players!")
+  assert(#players == 4, "sueca needs 4 players!")
 
   local zc = Zone:new({
     x = consts.W / 2,
@@ -71,57 +74,46 @@ M.setup = function()
   table.insert(handZones, z2)
   SendEvent("setRotation", {to = players[2], rotation = rotations[2]})
 
-  if #players > 2 then
-    local z3 = Zone:new({
-      x = pad,
-      y = consts.H / 2,
-      width = zH,
-      height = zW,
-      owner = players[3],
-      layout = "y",
-      rotation = 90,
-      color = {0, 1, 1, 0.25}
-    })
-    table.insert(board.items, z3)
-    table.insert(board.zones, z3)
-    table.insert(handZones, z3)
-    SendEvent("setRotation", {to = players[3], rotation = rotations[3]})
-  end
+  local z3 = Zone:new({
+    x = pad,
+    y = consts.H / 2,
+    width = zH,
+    height = zW,
+    owner = players[3],
+    layout = "y",
+    rotation = 90,
+    color = {0, 1, 1, 0.25}
+  })
+  table.insert(board.items, z3)
+  table.insert(board.zones, z3)
+  table.insert(handZones, z3)
+  SendEvent("setRotation", {to = players[3], rotation = rotations[3]})
 
-  if #players > 3 then
-    local z4 = Zone:new({
-      x = consts.W - pad,
-      y = consts.H / 2,
-      width = zH,
-      height = zW,
-      owner = players[4],
-      layout = "y",
-      direction = -1,
-      rotation = 90,
-      color = {1, 1, 0, 0.25}
-    })
-    table.insert(board.items, z4)
-    table.insert(board.zones, z4)
-    table.insert(handZones, z4)
-    SendEvent("setRotation", {to = players[4], rotation = rotations[4]})
-  end
+  local z4 = Zone:new({
+    x = consts.W - pad,
+    y = consts.H / 2,
+    width = zH,
+    height = zW,
+    owner = players[4],
+    layout = "y",
+    direction = -1,
+    rotation = 90,
+    color = {1, 1, 0, 0.25}
+  })
+  table.insert(board.items, z4)
+  table.insert(board.zones, z4)
+  table.insert(handZones, z4)
+  SendEvent("setRotation", {to = players[4], rotation = rotations[4]})
 
-  local cards = Card.several({"blue"}, false)
+  local cards = Card.several({"red"}, false,
+                             {"a", "7", "k", "j", "q", "6", "5", "4", "3", "2"})
   cards = utils.shuffle(cards)
 
   -- assign hands
-  local cardsPerHand = 5
+  local cardsPerHand = 10
   for zi, z in ipairs(handZones) do
     local x = utils.lerp(z.x, zc.x, 0.33)
     local y = utils.lerp(z.y, zc.y, 0.33)
-    local dx = 0
-    local dy = 0
-
-    if zi < 3 then
-      dx = -zW / 2
-    else
-      dy = -zW / 2
-    end
 
     for _ = 1, cardsPerHand do
       local c = table.remove(cards)
@@ -130,16 +122,6 @@ M.setup = function()
       c:turn()
       c:move(x, y)
     end
-
-    table.insert(board.items, Counter:new(
-                   {x = x + dx, y = y + dy, rotation = rotations[zi]}))
-  end
-
-  -- assign remainer deck to center
-  for _, c in ipairs(cards) do
-    table.insert(board.items, c)
-    c:turn()
-    c:move(zc.x, zc.y)
   end
 
   board:redraw()

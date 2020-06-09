@@ -23,8 +23,14 @@ W = W * S
 H = H * S
 
 local COLORS = {
-  "black_white", "blue", "blue_white", "green", "green_white", "red_white",
-  "white", "white_blue"
+  "white_blue", -- 1
+  "red_white", -- 5
+  "blue_white", -- 10
+  "green_white", -- 25
+  "black_white", -- 100
+  "white", -- dealer
+  "blue", -- small blind?
+  "green" -- big blind?
 }
 
 local Chip = Item:new()
