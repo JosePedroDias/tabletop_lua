@@ -195,6 +195,7 @@ function Board:onPointer(x, y)
         self.selectedItem = it
         self.moveFrames = 0
         self.selectedDelta = {x - it.x, y - it.y}
+        self:refreshZoneAssignments()
         self.initialZone = self:itemHitsAZone(it)
         self:redraw()
         return
@@ -253,6 +254,17 @@ end
 
 function Board:getItemFromId(id)
   return utils.findByAttribute(self.items, "id", id)
+end
+
+function Board:refreshZoneAssignments()
+  for _, zone in ipairs(self.zones) do
+    zone.items = {}
+    for _, it in ipairs(self.items) do
+      if it.name ~= "Zone" and zone:isHitByItem(it) then
+        table.insert(zone.items, it)
+      end
+    end
+  end
 end
 
 function Board:onEvent(ev)

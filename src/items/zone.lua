@@ -129,7 +129,14 @@ function Zone:doLayout(board)
     end)
   end
 
-  for _, it in ipairs(self.items) do
+  local nn = #self.items
+  for i = 1, nn do
+    local it
+    if self.direction == 1 then
+      it = self.items[i]
+    else
+      it = self.items[nn + 1 - i]
+    end
     it:move(x, y)
     board:bringToFront(it)
     x = x + dx

@@ -32,13 +32,10 @@ https://github.com/stackmachine/lovetest
 
 ## TODO
 
-- axis direction on zones
-- fix when two cards get the same position in layout
 - visually represent remaining clients around board
 - add money value to chips
 - visibility areas
   - zones can count cards or money
-- card isTurned default to true
 - lobby
   - allow choosing server settings (host, port)
   - allow choosing channel (for multiple games to be possible at the same time)

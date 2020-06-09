@@ -110,8 +110,8 @@ M.setup = function()
   -- assign hands
   local cardsPerHand = 5
   for zi, z in ipairs(handZones) do
-    local x = utils.lerp(z.x, zc.x, 0.25)
-    local y = utils.lerp(z.y, zc.y, 0.25)
+    local x = utils.lerp(z.x, zc.x, 0.33)
+    local y = utils.lerp(z.y, zc.y, 0.33)
     local dx = 0
     local dy = 0
 
