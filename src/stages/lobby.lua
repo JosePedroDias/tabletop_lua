@@ -1,9 +1,11 @@
 -- [[ screen to capture user name ]] --
+local avatars = require "src.core.avatars"
 local consts = require "src.core.consts"
-local stages = require "src.core.stages"
 local settings = require "src.core.settings"
+local stages = require "src.core.stages"
 
 local Input = require "src.ui.input"
+local SelectImage = require "src.ui.select_image"
 -- local Whiteboard = require "src.ui.whiteboard"
 
 local M = {}
@@ -13,6 +15,16 @@ local G = love.graphics
 local ui = {}
 
 M.load = function()
+  avatars.loadAvatarImages()
+
+  ui.si = SelectImage:new({
+    x = (consts.W - 200) / 2,
+    y = (consts.H - 640) / 2,
+    width = 200,
+    height = 200,
+    list = avatars.avatarImages
+  })
+
   ui.input = Input:new({
     x = (consts.W - 200) / 2,
     y = (consts.H - 40) / 2,
@@ -44,6 +56,8 @@ M.draw = function()
 
   ui.input:draw()
 
+  ui.si:draw()
+
   -- ui.whiteboard:draw()
 end
 
@@ -58,6 +72,7 @@ end
 
 M.onPointer = function(x, y)
   if ui.input:onPointer(x, y) then return end
+  if ui.si:onPointer(x, y) then return end
   -- ui.whiteboard:onPointer(x, y)
 end
 

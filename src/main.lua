@@ -2,6 +2,7 @@
 local lovetest = require "src.ext.lovetest"
 
 local assets = require "src.core.assets"
+local avatars = require "src.core.avatars"
 local consts = require "src.core.consts"
 local screen = require "src.core.screen"
 local stages = require "src.core.stages"
@@ -86,6 +87,11 @@ end
 
 function love.textinput(text)
   stages.currentStage.onTextInput(text)
+end
+
+function love.filedropped(file)
+  avatars.listAvatars()
+  avatars.onDrop(file)
 end
 
 -- custom error handling to notify server I'm leaving

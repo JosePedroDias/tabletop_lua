@@ -25,9 +25,13 @@ function Button:redraw()
 
   pcall(G.clear, self.background)
 
+  local f = self.font
+  G.setFont(f)
+  local dy = math.floor(f:getHeight())
+
   if self.label then
     pcall(G.setColor, self.color)
-    G.print(self.label, self.padding, self.padding)
+    G.print(self.label, self.padding, (self.height - dy) / 2)
   end
 
   G.setCanvas()

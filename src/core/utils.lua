@@ -149,6 +149,12 @@ M.findByAttribute = function(tbl, attrName, attrValue)
   return nil, 0
 end
 
+M.filter = function(tbl, cb)
+  local res = {}
+  for i, v in ipairs(tbl) do if cb(v, i) then table.insert(res, v) end end
+  return res
+end
+
 M.map = function(tbl, cb)
   local res = {}
   for i, v in ipairs(tbl) do table.insert(res, cb(v, i)) end

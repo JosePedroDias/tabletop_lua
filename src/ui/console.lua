@@ -2,7 +2,7 @@
 local settings = require "src.core.settings"
 
 local Input = require "src.ui.input"
-local cc = require "src.ui.consolecommands"
+local cc = require "src.ui.console_commands"
 
 local G = love.graphics
 
