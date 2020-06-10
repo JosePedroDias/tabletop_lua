@@ -24,6 +24,9 @@ function SendEvent(action, data)
 end
 
 local function parseHubEvent(ev)
+  -- ignore self messages (for vanilla noobhub servers)
+  if ev.from == settings.username then return end
+
   if ev.action == "say" then
     ui.console:addLine(os.date("%H:%M ") .. ev.from .. ": " .. ev.data)
   elseif ev.action == "status" then

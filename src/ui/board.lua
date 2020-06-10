@@ -1,5 +1,5 @@
 --[[ manages the ui board ]] --
-local consts = require "src.core.consts"
+local assets = require "src.core.assets"
 local utils = require "src.core.utils"
 local settings = require "src.core.settings"
 
@@ -13,6 +13,7 @@ local Piece = require "src.items.piece"
 local Zone = require "src.items.zone"
 
 local G = love.graphics
+local A = love.audio
 
 local D2R = math.pi / 180
 
@@ -131,6 +132,8 @@ function Board:affectItem(x, y, item)
         self:delete(item)
       else
         item[value](item)
+        if value == "roll" then self:playSound("dies_shuffle") end
+        if value == "turn" then self:playSound("cards_slide1") end
       end
       self:redraw()
     end
@@ -176,6 +179,11 @@ function Board:bringToFront(it, idx, isRemote)
   if not isRemote then SendEvent("toFront", {id = it.id}) end
 end
 
+function Board:playSound(soundName, isRemote)
+  A.play(assets.sfx[soundName])
+  if not isRemote then SendEvent("playSound", {soundName = soundName}) end
+end
+
 function Board:onPointer(x, y)
   local x_ = x
   local y_ = y
@@ -198,6 +206,9 @@ function Board:onPointer(x, y)
         self:refreshZoneAssignments()
         self.initialZone = self:itemHitsAZone(it)
         self:redraw()
+
+        -- if it.name == "Card" then self:playSound("cards_place1") end
+
         return
       end
     end
@@ -229,12 +240,20 @@ function Board:onPointerUp(x, y)
 
   if not self.selectedItem then return end
 
+  local it = self.selectedItem
+
   x, y = self:mapCoords(x, y)
 
-  if self.selectedItem and self.moveFrames == 0 then
+  if self.moveFrames == 0 then
     self:affectItem(x_, y_, self.selectedItem)
+  else
+    if it.name == "Card" then
+      self:playSound("cards_place1")
+    elseif it.name == "Chip" then
+      self:playSound("chips_collide1")
+    end
   end
-  local it = self.selectedItem
+
   self.selectedItem = nil
 
   local hitZone = self:itemHitsAZone(it)
@@ -316,6 +335,8 @@ function Board:onEvent(ev)
               tostring(ev.data.rotation))
       self:setRotation(ev.data.rotation)
     end
+  elseif action == "playSound" then
+    self:playSound(ev.data.soundName, true)
   else
     print("unsupported action", action)
     return

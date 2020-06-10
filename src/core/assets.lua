@@ -69,6 +69,7 @@ M.load = function()
   M.gfx["cards_sj"] = LG.newImage(gfxDir .. "/cards/sj.png")
   M.gfx["cards_sk"] = LG.newImage(gfxDir .. "/cards/sk.png")
   M.gfx["cards_sq"] = LG.newImage(gfxDir .. "/cards/sq.png")
+
   M.gfx["chips_black_white"] = LG.newImage(gfxDir .. "/chips/black_white.png")
   M.gfx["chips_blue"] = LG.newImage(gfxDir .. "/chips/blue.png")
   M.gfx["chips_blue_white"] = LG.newImage(gfxDir .. "/chips/blue_white.png")
@@ -77,6 +78,7 @@ M.load = function()
   M.gfx["chips_red_white"] = LG.newImage(gfxDir .. "/chips/red_white.png")
   M.gfx["chips_white"] = LG.newImage(gfxDir .. "/chips/white.png")
   M.gfx["chips_white_blue"] = LG.newImage(gfxDir .. "/chips/white_blue.png")
+
   M.gfx["dices_red_1"] = LG.newImage(gfxDir .. "/dices/red/1.png")
   M.gfx["dices_red_2"] = LG.newImage(gfxDir .. "/dices/red/2.png")
   M.gfx["dices_red_3"] = LG.newImage(gfxDir .. "/dices/red/3.png")
@@ -89,6 +91,7 @@ M.load = function()
   M.gfx["dices_white_4"] = LG.newImage(gfxDir .. "/dices/white/4.png")
   M.gfx["dices_white_5"] = LG.newImage(gfxDir .. "/dices/white/5.png")
   M.gfx["dices_white_6"] = LG.newImage(gfxDir .. "/dices/white/6.png")
+
   M.gfx["pieces_black_00"] = LG.newImage(gfxDir .. "/pieces/black/00.png")
   M.gfx["pieces_black_01"] = LG.newImage(gfxDir .. "/pieces/black/01.png")
   M.gfx["pieces_black_02"] = LG.newImage(gfxDir .. "/pieces/black/02.png")
@@ -229,12 +232,14 @@ M.load = function()
   M.sfx["cards_slide1"] = LA.newSource(sfxDir .. "/cards/slide1.ogg", "static")
   M.sfx["cards_slide2"] = LA.newSource(sfxDir .. "/cards/slide2.ogg", "static")
   M.sfx["cards_slide3"] = LA.newSource(sfxDir .. "/cards/slide3.ogg", "static")
+
   M.sfx["chips_collide1"] = LA.newSource(sfxDir .. "/chips/collide1.ogg",
                                          "static")
   M.sfx["chips_collide2"] = LA.newSource(sfxDir .. "/chips/collide2.ogg",
                                          "static")
   M.sfx["chips_collide3"] = LA.newSource(sfxDir .. "/chips/collide3.ogg",
                                          "static")
+
   M.sfx["dies_shuffle"] = LA.newSource(sfxDir .. "/dies/shuffle.ogg", "static")
   M.sfx["dies_throw1"] = LA.newSource(sfxDir .. "/dies/throw1.ogg", "static")
   M.sfx["dies_throw2"] = LA.newSource(sfxDir .. "/dies/throw2.ogg", "static")

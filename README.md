@@ -4,19 +4,19 @@
 
 1 player:
 
-    make run-src -- p1 hosts
+    make run-src -- p1
 
 2 players:
 
-    make run-src -- p1 hosts & make run-src -- p2 &
+    make run-src -- p1 & make run-src -- p2 &
 
 3 players:
 
-    make run-src -- p1 hosts & make run-src -- p2 & make run-src -- p3 &
+    make run-src -- p1 & make run-src -- p2 & make run-src -- p3 &
 
 4 players:
 
-    make run-src -- p1 hosts & make run-src -- p2 & make run-src -- p3 & make run-src -- p4 &
+    make run-src -- p1 & make run-src -- p2 & make run-src -- p3 & make run-src -- p4 &
 
 test
 
