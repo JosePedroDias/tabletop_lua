@@ -23,11 +23,9 @@ M.next = function()
 end
 
 M.updateAvatar = function(email)
-  local url = gravatar(email, 96)
-  local img = fetchRemoteImage(url)
-  M.avatar = img
+  local url = gravatar(email, 96, "monsterid")
+  M.avatar = fetchRemoteImage(url)
   M.draw()
-  -- return img
 end
 
 M.load = function()

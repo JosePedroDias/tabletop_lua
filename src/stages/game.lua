@@ -8,7 +8,12 @@ local utils = require "src.core.utils"
 local Console = require "src.ui.console"
 local Board = require "src.ui.board"
 
+local gravatar = require "src.ext.gravatar"
+local fetchRemoteImage = require "src.ui.internet_image"
+
 consts.roster = {} -- TODO: ugly
+consts.userData = {}
+consts.avatars = {}
 
 local M = {}
 
@@ -22,6 +27,13 @@ function SendEvent(action, data)
   })
 end
 
+local function obtainAvatar(username, email)
+  if consts.avatars[username] then return end
+  local url = gravatar(email, 96, "monsterid")
+  local avatar = fetchRemoteImage(url)
+  consts.avatars[username] = avatar
+end
+
 local function parseHubEvent(ev)
   -- ignore self messages (for vanilla noobhub servers)
   if ev.from == settings.username then return end
@@ -29,13 +41,19 @@ local function parseHubEvent(ev)
   if ev.action == "say" then
     ui.console:addLine(os.date("%H:%M ") .. ev.from .. ": " .. ev.data)
   elseif ev.action == "status" then
-    if ev.data == "in" then
+    if ev.data.online then
       if not utils.has(consts.roster, ev.from) then
         ui.console:addLine(os.date("%H:%M ") .. ev.from .. " got in")
         table.insert(consts.roster, ev.from)
+        consts.userData[ev.from] = {
+          email = ev.data.email,
+          color = ev.data.color
+        }
+        obtainAvatar(ev.from, ev.data.email)
+        -- ui.board:updateAvatars()
         SendEvent("status", "in")
       end
-    elseif ev.data == "out" then
+    else
       ui.console:addLine(os.date("%H:%M ") .. ev.from .. " left")
       table.remove(consts.roster, utils.indexOf(consts.roster))
     end
@@ -45,6 +63,12 @@ local function parseHubEvent(ev)
 end
 
 M.load = function()
+  consts.userData[settings.username] = {
+    color = settings.color,
+    email = settings.email
+  }
+  obtainAvatar(settings.username, settings.email)
+
   local l = 600
   love.window.setTitle("tabletop - " .. settings.username)
   if settings.username == "p1" then
@@ -60,7 +84,7 @@ M.load = function()
   hub = noobhub.new({server = settings.server, port = 1337}); -- TODO port and channel are hardcoded for now
   hub:subscribe({channel = "ch1", callback = parseHubEvent})
 
-  SendEvent("status", "in")
+  SendEvent("status", {online = true})
 
   ui.console = Console:new({
     x = consts.W - 300,
@@ -90,7 +114,7 @@ end
 M.onKey = function(key)
   -- print(key)
   if key == "escape" then
-    SendEvent("status", "out")
+    SendEvent("status", {online = false})
     love.event.quit()
   elseif key == "f1" then
     -- gets stored in the same folder as settings. ex: ~/Library/Application Support/LOVE/tabletop
