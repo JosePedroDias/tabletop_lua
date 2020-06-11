@@ -440,13 +440,9 @@ function Board:getPlayers(minAttendance, maxAttendance)
   local players = utils.shallowCopy(consts.roster)
   table.insert(players, 1, settings.username)
 
-  print(utils.arrayToString(players))
-
   local randomOrder = false
-
   if not randomOrder then
     -- to enforce an order
-    print("about to sort")
     table.sort(players, function(l, r)
       return utils.find(REFERENCE_PLAYER_ORDER, l) <
                utils.find(REFERENCE_PLAYER_ORDER, r)
@@ -455,8 +451,6 @@ function Board:getPlayers(minAttendance, maxAttendance)
     -- ..or shuffle
     players = utils.shuffle(players)
   end
-
-  print(utils.arrayToString(players))
 
   assert(#players >= minAttendance and #players <= maxAttendance,
          "game requires " .. minAttendance .. " to " .. maxAttendance ..
