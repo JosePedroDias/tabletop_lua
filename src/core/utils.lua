@@ -179,6 +179,34 @@ M.explodeString = function(st)
   return arr
 end
 
+-- ignores function values and meta
+local function eq(o1, o2)
+  if o1 == o2 then return true end
+  local o1Type = type(o1)
+  local o2Type = type(o2)
+  if o1Type ~= o2Type then return false end
+  if o1Type ~= "table" then return false end
+
+  local keySet = {}
+
+  for key1, value1 in pairs(o1) do
+    local value2 = o2[key1]
+    if type(value2) ~= "function" then
+      if value2 == nil or eq(value1, value2) == false then return false end
+      keySet[key1] = true
+    end
+  end
+
+  for key2, value3 in pairs(o2) do
+    if type(value3) ~= "function" then
+      if not keySet[key2] then return false end
+    end
+  end
+  return true
+end
+
+M.eq = eq
+
 M.trim = function(s)
   return s:gsub("^%s*(.-)%s*$", "%1")
 end

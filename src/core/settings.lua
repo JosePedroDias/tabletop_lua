@@ -1,52 +1,44 @@
 -- [[ manages loading/saving of game settings ]] --
-local utils = require "src.core.utils"
+require("src.ext.json") -- json.encode / decode
+local LF = love.filesystem
+
+-- will be stored at:
+-- C:\Users\josep\AppData\Roaming\LOVE\tabletop\settings.json
+-- ~/Library/Application Support/LOVE/tabletop/settings.json
+local SETTINGS_FILE = "settings.json"
+
+local DEFAULTS = {
+  server = "acor.sl.pt",
+  username = "john doe",
+  email = "john.doe@somewhere.com",
+  color = 1
+}
 
 local M = {}
 
-local SEP = "™"
-
--- will be stored at:
--- C:\Users\josep\AppData\Roaming\LOVE\tabletop\settings.txt
--- ~/Library/Application Support/LOVE/tabletop/settings.txt
-local SETTINGS_FILE = "settings.txt"
-
-local VERSION = "1"
-
--- 1=server, 2=username
-local valuesInMemory = {"acor.sl.pt", "john doe"}
-M.server = valuesInMemory[1]
-M.username = valuesInMemory[2]
-
-M.get = function()
-  return valuesInMemory
-end
-
-M._set = function(server, username)
-  valuesInMemory = {server, username}
-  M.server = server
-  M.username = username
-end
-
 M.load = function()
-  local data = love.filesystem.read(SETTINGS_FILE)
-  if data == nil then return M.get() end
+  -- set defaults
+  for k, v in pairs(DEFAULTS) do M[k] = v end
 
-  local status, matches = pcall(utils.split, data, SEP)
-  if not status or matches[1] ~= VERSION or #matches ~= (#valuesInMemory + 1) then
-  else
-    table.remove(matches, 1)
+  -- read raw string
+  local data = LF.read(SETTINGS_FILE)
+  if data == nil then return false end
 
-    -- pcall(M._set, matches)
-    M._set(matches[1], matches[2])
-  end
+  -- try to parse it
+  local success, o = pcall(json.decode, data)
+  if not success then return false end
 
-  return M.get()
+  -- assign its pairs to the module itself
+  for k, v in pairs(o) do M[k] = v end
+  return true
 end
 
-M.save = function(server, username)
-  M._set(server, username)
-  love.filesystem.write(SETTINGS_FILE,
-                        utils.join({VERSION, server, username}, SEP))
+M.save = function()
+  local o = M
+  local success, s = pcall(json.encode, o)
+  if not success then return false end
+  LF.write(SETTINGS_FILE, s)
+  return true
 end
 
 return M
