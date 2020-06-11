@@ -5,10 +5,24 @@ https://en.gravatar.com/site/implement/images/
 local md5 = require "src.ext.md5"
 local utils = require "src.core.utils"
 
-local function gravatarUrl(email, size)
+--[[ 
+mp: (mystery-person)
+identicon
+monsterid
+wavatar
+retro
+robohash
+ ]]
+local function gravatarUrl(email, size, default, forceDefault)
   local normalizedEmail = utils.trim(email):lower()
   local hash = md5.sumhexa(normalizedEmail)
-  return "https://www.gravatar.com/avatar/" .. hash .. "?s=" .. tostring(size)
+  local url = "https://www.gravatar.com/avatar/" .. hash .. "?s=" ..
+                tostring(size)
+
+  if default then url = url .. "&d=" .. default end
+  if forceDefault then url = url .. "&f=y" end
+
+  return url
 end
 
 return gravatarUrl
