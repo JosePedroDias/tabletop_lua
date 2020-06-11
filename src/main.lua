@@ -12,14 +12,14 @@ local lobby = require "src.stages.lobby"
 local game = require "src.stages.game"
 
 function love.load(arg)
-  -- stores command line arguments to consts.arg. useful for automation maybe
+  -- stores command line arguments to consts.arg. TODO
   -- 1=username
   -- 2=host
   consts.arg = arg
 
   if lovetest.detect(arg) then
-    -- Run the tests
     lovetest.run()
+    love.event.quit()
   end
 
   settings.load()
