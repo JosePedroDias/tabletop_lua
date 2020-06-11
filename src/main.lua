@@ -1,5 +1,6 @@
 -- [[ main file! ]] --
-local lovetest = require "src.ext.lovetest"
+-- local lovetest = require "src.ext.lovetest"
+local lu = require "src.ext.luaunit"
 
 local assets = require "src.core.assets"
 local avatars = require "src.core.avatars"
@@ -17,9 +18,21 @@ function love.load(arg)
   -- 2=host
   consts.arg = arg
 
-  if lovetest.detect(arg) then
-    lovetest.run()
-    love.event.quit()
+  local suite = {}
+  if arg[1] == "test" then
+    for _, filename in ipairs(love.filesystem.getDirectoryItems("test")) do
+      filename = filename:gsub(".lua", "")
+      _G["T" .. filename] = require("src.test." .. filename)
+      table.insert(suite, "T" .. filename)
+    end
+
+    -- local success, result = pcall(runner.runSuite, suite)
+
+    local runner = lu.LuaUnit.new()
+    -- runner:setOutputType("tap") -- tap text
+    love.event.quit(runner:runSuite("Tcore_settings", -- "Tone"
+    "Tcore_utils", "Text_gravatar", "Text_md5", -- "Tstages_game", 
+    "Tstages_lobby", "Tui_arcmenu", "Tui_input", "Tui_internet_image"))
   end
 
   settings.load()

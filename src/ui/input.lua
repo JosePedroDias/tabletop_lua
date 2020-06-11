@@ -28,6 +28,10 @@ function Input:setValue(value)
   self:redraw()
 end
 
+function Input:getValue()
+  return self.value
+end
+
 function Input:clear()
   self:setValue("")
 end
@@ -53,7 +57,7 @@ function Input:redraw()
 end
 
 function Input:onKey(key)
-  if not self.focused then return end
+  if not self.focused then return false end
   if key == "backspace" then
     self.value = string.sub(self.value, 1, #self.value - 1)
     if self.onChange then self.onChange(self.value, self) end
@@ -61,12 +65,15 @@ function Input:onKey(key)
   elseif key == "return" then
     if self.onSubmit then self.onSubmit(self.value, self) end
   end
+  return true
 end
 
 function Input:onTextInput(text)
+  if not self.focused then return false end
   self.value = self.value .. text
   if self.onChange then self.onChange(self.value, self) end
   self:redraw()
+  return true
 end
 
 function Input:onPointer(x, y)

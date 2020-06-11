@@ -1,6 +1,7 @@
-local lt = require "src.ext.lunatest"
 local ArcMenu = require "src.ui.arcmenu"
 local G = love.graphics
+
+local M = {}
 
 local canvas
 local W = 320
@@ -13,12 +14,11 @@ local function drawAndSaveImage(fnToDraw, name)
   canvas:newImageData():encode("png", name)
 end
 
-local function lsetup()
+function M:setup()
   canvas = G.newCanvas(W, H)
 end
 
-function test_arcmenu_3_w_cancel()
-  lsetup()
+function M:test3WCancel()
   local i = ArcMenu:new({
     x = 160,
     y = 160,
@@ -31,8 +31,7 @@ function test_arcmenu_3_w_cancel()
   end, "ui_arcmenu_3_w_cancel.png")
 end
 
-function test_arcmenu_3_wo_cancel()
-  lsetup()
+function M:test3WoCancel()
   local i = ArcMenu:new({
     x = 160,
     y = 160,
@@ -45,8 +44,7 @@ function test_arcmenu_3_wo_cancel()
   end, "ui_arcmenu_3_wo_cancel.png")
 end
 
-function test_arcmenu_12_wo_cancel()
-  lsetup()
+function M:test12WoCancel()
   local i = ArcMenu:new({
     x = 160,
     y = 160,
@@ -61,3 +59,5 @@ function test_arcmenu_12_wo_cancel()
     i:draw()
   end, "ui_arcmenu_12_wo_cancel.png")
 end
+
+return M

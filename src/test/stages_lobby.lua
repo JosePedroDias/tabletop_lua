@@ -2,6 +2,8 @@ local consts = require "src.core.consts"
 local lobby = require "src.stages.lobby"
 local G = love.graphics
 
+local M = {}
+
 local canvas
 local W = consts.W
 local H = consts.H
@@ -13,16 +15,16 @@ local function drawAndSaveImage(fnToDraw, name)
   canvas:newImageData():encode("png", name)
 end
 
-local function lsetup()
+function M:setUp()
   canvas = G.newCanvas(W, H)
 end
 
-function xtest_lobby()
-  lsetup()
-
+function M:texstLobby()
   lobby.load()
 
   drawAndSaveImage(function()
     lobby.draw()
   end, "stages_lobby.png")
 end
+
+return M

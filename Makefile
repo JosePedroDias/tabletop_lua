@@ -40,4 +40,4 @@ run-dist: dist
 	@$(love) dist/$(gamename)
 
 test:
-	@$(love) $(srcd) -t
+	@$(love) $(srcd) test

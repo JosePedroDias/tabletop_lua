@@ -1,6 +1,7 @@
-local lt = require "src.ext.lunatest"
 local Input = require "src.ui.input"
 local G = love.graphics
+
+local M = {}
 
 local canvas
 local W = 200
@@ -13,12 +14,11 @@ local function drawAndSaveImage(fnToDraw, name)
   canvas:newImageData():encode("png", name)
 end
 
-local function lsetup()
+function M:setup()
   canvas = G.newCanvas(W, H)
 end
 
-function test_input()
-  lsetup()
+function M:testInput()
   local i = Input:new({
     x = 0,
     y = 0,
@@ -32,3 +32,5 @@ function test_input()
     i:draw()
   end, "ui_input.png")
 end
+
+return M
