@@ -18,17 +18,19 @@
 
     make run-src -- p1 & make run-src -- p2 & make run-src -- p3 & make run-src -- p4 &
 
-test
+## tests
 
-    make run-src -- -t
+these tests do some assertions and also save images to user dir
 
-## testing TODO
+    make test
 
-assert
-http://olivinelabs.com/busted/
-https://github.com/norman/telescope
-https://github.com/silentbicycle/lunatest https://htmlpreview.github.io/?https://raw.githubusercontent.com/silentbicycle/lunatest/master/files/lunatest.html
-https://github.com/stackmachine/lovetest
+for now using [lunatest](https://github.com/silentbicycle/lunatest) which is very simple.
+[docs](https://htmlpreview.github.io/?https://raw.githubusercontent.com)
+
+moving to either:
+
+- [luaunit](https://github.com/bluebird75/luaunit) [docs](https://luaunit.readthedocs.io/en/latest/)
+- [lunit](https://github.com/mrothNET/lunit) [docs](https://mroth.net/lunit/documentation-0.4.txt)
 
 ## TODO
 
