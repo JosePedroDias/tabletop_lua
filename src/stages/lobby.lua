@@ -6,11 +6,12 @@ local stages = require "src.core.stages"
 local Button = require "src.ui.button"
 local Input = require "src.ui.input"
 
+local gravatar = require "src.ext.gravatar"
+local fetchRemoteImage = require "src.ui.internet_image"
+
 -- local Whiteboard = require "src.ui.whiteboard"
 
 local M = {}
-
-local G = love.graphics
 
 local ui = {}
 
@@ -19,6 +20,14 @@ M.next = function()
   settings.email = ui.iemail.value
   settings.save()
   stages.toStage("game")
+end
+
+M.updateAvatar = function(email)
+  local url = gravatar(email, 96)
+  local img = fetchRemoteImage(url)
+  M.avatar = img
+  M.draw()
+  -- return img
 end
 
 M.load = function()
@@ -38,17 +47,22 @@ M.load = function()
     width = 300,
     height = 40,
     value = settings.email,
+    onChange = M.updateAvatar,
     onSubmit = M.next
   })
 
   ui.bContinue = Button:new({
-    x = (consts.W - 200) / 2,
+    x = (consts.W - 300) / 2,
     y = (consts.H + 140) / 2,
-    width = 200,
+    width = 300,
     height = 40,
+    color = {1, 1, 1, 1},
+    background = {0.3, 0.6, 0.3, 1},
     label = "continue",
     onClick = M.next
   })
+
+  M.updateAvatar(settings.email)
 
   -- ui.whiteboard = Whiteboard:new({width = 600, height = 400})
 end
@@ -66,6 +80,10 @@ M.draw = function()
   G.setColor(0, 0, 0, 1)
   G.print("what is your name?", x + 10, y + 10) ]]
 
+  if M.avatar then
+    love.graphics.draw(M.avatar, (consts.W - 96) / 2, (consts.H - 400) / 2)
+  end
+
   ui.iusername:draw()
   ui.iemail:draw()
   ui.bContinue:draw()
@@ -74,9 +92,9 @@ M.draw = function()
 end
 
 M.onKey = function(key)
+  if key == "escape" then love.event.quit() end
   if ui.iusername:onKey(key) then return end
   if ui.iemail:onKey(key) then return end
-  if key == "escape" then love.event.quit() end
 end
 
 M.onTextInput = function(text)

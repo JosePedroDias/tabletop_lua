@@ -1,5 +1,4 @@
 -- [[ main file! ]] --
--- local lovetest = require "src.ext.lovetest"
 local lu = require "src.ext.luaunit"
 
 local assets = require "src.core.assets"
@@ -18,8 +17,9 @@ function love.load(arg)
   -- 2=host
   consts.arg = arg
 
-  local suite = {}
   if arg[1] == "test" then
+    local suite = {}
+    local runner = lu.LuaUnit.new()
     for _, filename in ipairs(love.filesystem.getDirectoryItems("test")) do
       filename = filename:gsub(".lua", "")
       _G["T" .. filename] = require("src.test." .. filename)
@@ -28,7 +28,6 @@ function love.load(arg)
 
     -- local success, result = pcall(runner.runSuite, suite)
 
-    local runner = lu.LuaUnit.new()
     -- runner:setOutputType("tap") -- tap text
     love.event.quit(runner:runSuite("Tcore_settings", -- "Tone"
     "Tcore_utils", "Text_gravatar", "Text_md5", -- "Tstages_game", 

@@ -18,6 +18,7 @@ function Input:new(o)
   o.font = o.font or G.getFont()
   o.color = o.color or {0, 0, 0, 1}
   o.background = o.background or {1, 1, 1, 1}
+  o.backgroundUnfocused = o.backgroundUnfocused or {0.75, 0.75, 0.75, 1}
   o.canvas = G.newCanvas(o.width, o.height)
   o:redraw()
   return o
@@ -44,7 +45,9 @@ end
 function Input:redraw()
   G.setCanvas(self.canvas)
 
-  pcall(G.clear, self.background)
+  local bg = self.backgroundUnfocused
+  if self.focused then bg = self.background end
+  pcall(G.clear, bg)
 
   pcall(G.setColor, self.color)
   G.setFont(self.font)

@@ -28,10 +28,10 @@ function Button:redraw()
   if self.label then
     local f = self.font
     G.setFont(f)
-    local dy = math.floor(f:getHeight())
     local dx = f:getWidth(self.label)
+    local dy = f:getHeight()
     pcall(G.setColor, self.color)
-    G.print(self.label, dx / 2, (self.height - dy) / 2)
+    G.print(self.label, (self.width - dx) / 2, (self.height - dy) / 2)
   end
 
   G.setCanvas()
