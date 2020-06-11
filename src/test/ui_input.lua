@@ -1,9 +1,10 @@
-local fetchRemoteImage = require "src.ui.internet_image"
+local lt = require "src.ext.lunatest"
+local Input = require "src.ui.input"
 local G = love.graphics
 
 local canvas
-local W = 64
-local H = 64
+local W = 200
+local H = 40
 
 local function drawAndSaveImage(fnToDraw, name)
   G.setCanvas(canvas)
@@ -16,13 +17,18 @@ local function lsetup()
   canvas = G.newCanvas(W, H)
 end
 
-function test_internet_image()
+function test_input()
   lsetup()
-
-  local i = fetchRemoteImage(
-              "https://www.gravatar.com/avatar/ca6f59bfc40276294269bba0aed97029?s=64")
+  local i = Input:new({
+    x = 0,
+    y = 0,
+    width = 200,
+    height = 40,
+    focused = true,
+    value = "starting"
+  })
 
   drawAndSaveImage(function()
-    G.draw(i, 0, 0)
-  end, "internet_image.png")
+    i:draw()
+  end, "ui_input.png")
 end
