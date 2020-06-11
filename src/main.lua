@@ -38,10 +38,9 @@ function love.load(arg)
   stages.setStage("lobby", lobby)
   stages.setStage("game", game)
 
-  settings.load()
-
   if #consts.arg > 0 then
-    settings.save(settings.server, consts.arg[1])
+    settings.username = consts.arg[1]
+    settings.save()
     stages.toStage("game")
   else
     stages.toStage("lobby")

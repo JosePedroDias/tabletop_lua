@@ -71,8 +71,6 @@ M.load = function()
     dismissed = true
   })
 
-  local r = 0
-  if settings.username == "p2" then r = 180 end
   ui.board = Board:new({width = consts.W, height = consts.H})
   consts.board = ui.board -- TODO: ugly
 end

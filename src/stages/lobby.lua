@@ -33,7 +33,8 @@ M.load = function()
     focused = true,
     value = settings.username,
     onSubmit = function(username)
-      settings.save(settings.server, username)
+      settings.username = username
+      settings.save()
       stages.toStage("game")
     end
   })
