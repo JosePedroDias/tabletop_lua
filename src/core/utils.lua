@@ -140,6 +140,18 @@ M.hasKey = function(tbl, key)
   return tbl[key] ~= nil
 end
 
+M.keys = function(tbl)
+  local res = {}
+  for k, _ in pairs(tbl) do table.insert(res, k) end
+  return res
+end
+
+M.countKeys = function(tbl)
+  local res = 0
+  for _, _ in pairs(tbl) do res = res + 1 end
+  return res
+end
+
 M.indexOf = function(tbl, item)
   for i, v in ipairs(tbl) do if v == item then return i end end
 end

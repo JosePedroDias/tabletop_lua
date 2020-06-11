@@ -46,10 +46,12 @@ local function parseHubEvent(ev)
       if not utils.has(consts.roster, ev.from) then
         ui.console:addLine(os.date("%H:%M ") .. ev.from .. " got in")
         table.insert(consts.roster, ev.from)
+
         consts.userData[ev.from] = {
           email = ev.data.email,
           color = ev.data.color
         }
+
         obtainAvatar(ev.from, ev.data.email)
         -- ui.board:updateAvatars()
         SendEvent("status", {
@@ -57,6 +59,8 @@ local function parseHubEvent(ev)
           email = settings.email,
           color = settings.color
         })
+
+        consts.board:redrawOverlays()
       end
     else
       ui.console:addLine(os.date("%H:%M ") .. ev.from .. " left")
@@ -74,10 +78,13 @@ M.load = function()
     color = settings.color,
     email = settings.email
   }
+
   obtainAvatar(settings.username, settings.email)
 
   local l = 600
   love.window.setTitle("tabletop - " .. settings.username)
+
+  -- TODO for dev purposes
   if settings.username == "p1" then
     love.window.setPosition(0, 0)
   elseif settings.username == "p2" then

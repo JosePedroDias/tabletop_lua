@@ -1,5 +1,6 @@
 --[[ manages the ui board ]] --
 local assets = require "src.core.assets"
+local consts = require "src.core.consts"
 local utils = require "src.core.utils"
 local settings = require "src.core.settings"
 
@@ -31,11 +32,13 @@ function Board:new(o)
   setmetatable(o, self)
   self.__index = self
   o.canvas = G.newCanvas(o.width, o.height)
+  o.canvas2 = G.newCanvas(o.width, o.height)
 
   o.items = {}
   o.zones = {}
 
   o:redraw()
+  o:redrawOverlays()
   return o
 end
 
@@ -153,6 +156,8 @@ function Board:draw()
     G.draw(self.canvas, 0, self.height, D2R * -90)
   end
 
+  G.draw(self.canvas2, 0, 0, 0)
+
   if self.uiMenu then self.uiMenu:draw() end
 end
 
@@ -162,6 +167,33 @@ function Board:redraw()
   pcall(G.clear, self.background)
 
   for _, it in ipairs(self.items) do it:draw() end
+
+  G.setCanvas()
+end
+
+function Board:redrawOverlays()
+  G.setCanvas(self.canvas2)
+
+  pcall(G.clear, {0, 0, 0, 0})
+
+  local x = 0
+  local y = 0
+  for username, ud in pairs(consts.userData) do
+    print(username, ud.email, ud.color, not not consts.avatars[username])
+
+    local color = consts.colors[ud.color]
+
+    pcall(G.setColor, color)
+    G.rectangle("fill", x, y, 100, 100)
+
+    G.setColor(1, 1, 1, 1)
+    G.draw(consts.avatars[username], x, y)
+
+    G.setColor(0, 0, 0, 1)
+    G.print(username, x, y)
+
+    y = y + 100
+  end
 
   G.setCanvas()
 end
@@ -330,11 +362,13 @@ function Board:onEvent(ev)
     local item, itemIdx = self:getItemFromId(ev.data.id)
     self:delete(item, itemIdx, true)
   elseif action == "setRotation" then
+    if consts.userData[ev.from] then
+      consts.userData[ev.from].rotation = ev.data.rotation
+    end
     if ev.data.to == settings.username then
-      print("i am " .. settings.username .. " and i am rotating " ..
-              tostring(ev.data.rotation))
       self:setRotation(ev.data.rotation)
     end
+    self:redrawOverlays()
   elseif action == "playSound" then
     self:playSound(ev.data.soundName, true)
   elseif action == "resetBoard" then
