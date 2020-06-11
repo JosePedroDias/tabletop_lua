@@ -9,6 +9,8 @@ local SETTINGS_FILE = "settings.json"
 
 local DEFAULTS = {
   server = "acor.sl.pt",
+  port = 1337,
+  channel = "ch1",
   username = "john doe",
   email = "john.doe@somewhere.com",
   color = 1

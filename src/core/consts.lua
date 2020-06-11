@@ -7,6 +7,8 @@ M.H = 1000
 M.x0 = 0
 M.y0 = 0
 
+M.version = "0.1" -- used for network compatibility
+
 -- https://en.wikipedia.org/wiki/Enhanced_Graphics_Adapter
 -- A = 0.66
 -- 5 = 0.33

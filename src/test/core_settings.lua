@@ -25,6 +25,8 @@ function M:testLoadWithoutData()
   lu.assertIsFalse(settings.load())
   lu.assertIsTrue(utils.eq(settings, {
     server = "acor.sl.pt",
+    port = 1337,
+    channel = "ch1",
     username = "john doe",
     email = "john.doe@somewhere.com",
     color = 1
@@ -37,6 +39,8 @@ function M:testLoadWithData()
   lu.assertIsTrue(settings.load())
   lu.assertIsTrue(utils.eq(settings, {
     server = "localhost",
+    port = 1337,
+    channel = "ch1",
     username = "john doe",
     email = "john.doe@somewhere.com",
     color = 2
@@ -51,7 +55,7 @@ function M:testSaveWithoutData()
   lu.assertIsTrue(settings.save())
   local raw = LF.read(FILE)
   lu.assertEquals(raw,
-                  "{\"server\":\"acor.sl.pt\",\"color\":1,\"username\":\"robin\",\"email\":\"john.doe@somewhere.com\"}")
+                  "{\"server\":\"acor.sl.pt\",\"channel\":\"ch1\",\"color\":1,\"email\":\"john.doe@somewhere.com\",\"username\":\"robin\",\"port\":1337}")
 end
 
 function M:testSaveWithData()
@@ -62,7 +66,7 @@ function M:testSaveWithData()
   lu.assertIsTrue(settings.save())
   local raw = LF.read(FILE)
   lu.assertEquals(raw,
-                  "{\"server\":\"localhost\",\"color\":2,\"username\":\"batman\",\"email\":\"john.doe@somewhere.com\"}")
+                  "{\"server\":\"localhost\",\"channel\":\"ch1\",\"color\":2,\"email\":\"john.doe@somewhere.com\",\"username\":\"batman\",\"port\":1337}")
 end
 
 return M

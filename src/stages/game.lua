@@ -14,6 +14,7 @@ local fetchRemoteImage = require "src.ui.internet_image"
 consts.roster = {} -- TODO: ugly
 consts.userData = {}
 consts.avatars = {}
+consts.ignoreFrom = {}
 
 local M = {}
 
@@ -81,8 +82,8 @@ M.load = function()
     love.window.setPosition(l, l)
   end
 
-  hub = noobhub.new({server = settings.server, port = 1337}); -- TODO port and channel are hardcoded for now
-  hub:subscribe({channel = "ch1", callback = parseHubEvent})
+  hub = noobhub.new({server = settings.server, port = settings.port});
+  hub:subscribe({channel = settings.channel, callback = parseHubEvent}) -- TODO: add server and channel input in lobby
 
   SendEvent("status", {online = true})
 
