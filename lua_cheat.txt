@@ -116,19 +116,10 @@ if instance attribute not found, check you're not calling the metaclass instead 
 
 
 
-
-http image from internet
-
-local http = require "socket.http"
-local logo = http.request("http://love2d.org/style/logo.png")
-logo = love.filesystem.newFileData(logo, "logo.png")
-logo = love.graphics.newImage(logo)
-
-
-
 https://codea.io/talk/discussion/6344/luasocket-questions
 
 
+TODO w/noobhub:
 
 SERIALIZE IMAGE
 

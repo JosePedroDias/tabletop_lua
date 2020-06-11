@@ -34,22 +34,18 @@ moving to either:
 
 ## TODO
 
-- visually represent remaining clients around board
-- add money value to chips
 - visibility areas
   - zones can count cards or money
 - lobby
-  - allow choosing server settings (host, port)
-  - allow choosing channel (for multiple games to be possible at the same time)
-  - support choosing color, drag & drop avatar
-- be careful about globals
-  roster, board
+  - support choosing color
+  - allow choosing server settings (host, port, channel)
+- be careful about globals: roster, userData, avatars, board
+
 - create 8x8 grid for checkers and chess
 - create hex grid for abalone (maybe push sideways as well)
-- create two sided pieces for reversi
+
 - jogo da glória / snakes and ladders - https://www.youtube.com/watch?v=xe9pMUuVwtk
 - game setup for
-  - go fish?
   - sueca?
   - poker texas hold'em?
   - pictionary - https://randomwordgenerator.com/pictionary.php https://hobbylark.com/party-games/pictionary-words
