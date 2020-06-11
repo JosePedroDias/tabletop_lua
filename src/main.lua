@@ -53,7 +53,10 @@ function love.load(arg)
 
   if #consts.arg > 0 then
     settings.username = consts.arg[1]
-    settings.save()
+    if consts.arg[2] then settings.email = consts.arg[2] end
+    if consts.arg[3] then settings.color = tonumber(consts.arg[3]) end
+
+    -- settings.save()
     stages.toStage("game")
   else
     stages.toStage("lobby")

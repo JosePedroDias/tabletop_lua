@@ -8,15 +8,15 @@
 
 2 players:
 
-    make run-src -- p1 & make run-src -- p2 &
+    make run-src -- p1 & make run-src -- p2 p2@a.com 2 &
 
 3 players:
 
-    make run-src -- p1 & make run-src -- p2 & make run-src -- p3 &
+    make run-src -- p1 & make run-src -- p2 p2@a.com 2 & make run-src -- p3 p3@a.com 4 &
 
 4 players:
 
-    make run-src -- p1 & make run-src -- p2 & make run-src -- p3 & make run-src -- p4 &
+    make run-src -- p1 & make run-src -- p2 p2@a.com 2 & make run-src -- p3 p3@a.com 4 & make run-src -- p4 p4@a.com 5 &
 
 ## tests
 

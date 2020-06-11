@@ -57,7 +57,7 @@ M.setup = function()
   table.insert(board.items, z1)
   table.insert(board.zones, z1)
   table.insert(handZones, z1)
-  SendEvent("setRotation", {to = players[1], rotation = rotations[1]})
+  consts.board:setRotation(players[1], rotations[1])
 
   local z2 = Zone:new({
     x = consts.W / 2,
@@ -72,7 +72,7 @@ M.setup = function()
   table.insert(board.items, z2)
   table.insert(board.zones, z2)
   table.insert(handZones, z2)
-  SendEvent("setRotation", {to = players[2], rotation = rotations[2]})
+  consts.board:setRotation(players[2], rotations[2])
 
   local z3 = Zone:new({
     x = pad,
@@ -87,7 +87,7 @@ M.setup = function()
   table.insert(board.items, z3)
   table.insert(board.zones, z3)
   table.insert(handZones, z3)
-  SendEvent("setRotation", {to = players[3], rotation = rotations[3]})
+  consts.board:setRotation(players[3], rotations[3])
 
   local z4 = Zone:new({
     x = consts.W - pad,
@@ -103,7 +103,7 @@ M.setup = function()
   table.insert(board.items, z4)
   table.insert(board.zones, z4)
   table.insert(handZones, z4)
-  SendEvent("setRotation", {to = players[4], rotation = rotations[4]})
+  consts.board:setRotation(players[4], rotations[4])
 
   local cards = Card.several({"red"}, false,
                              {"a", "7", "k", "j", "q", "6", "5", "4", "3", "2"})

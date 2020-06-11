@@ -47,9 +47,11 @@ local function parseHubEvent(ev)
         ui.console:addLine(os.date("%H:%M ") .. ev.from .. " got in")
         table.insert(consts.roster, ev.from)
 
+        -- print(settings.username .. " got info about " .. ev.from .. " - " .. ev.data.email .. ", " .. ev.data.color)
         consts.userData[ev.from] = {
           email = ev.data.email,
-          color = ev.data.color
+          color = ev.data.color,
+          rotation = 0
         }
 
         obtainAvatar(ev.from, ev.data.email)
@@ -67,6 +69,7 @@ local function parseHubEvent(ev)
       table.remove(consts.roster, utils.indexOf(consts.roster))
       consts.userData[ev.from] = nil
       consts.avatars[ev.from] = nil
+      ui.board:redrawOverlays()
     end
   else
     ui.board:onEvent(ev)
@@ -76,7 +79,8 @@ end
 M.load = function()
   consts.userData[settings.username] = {
     color = settings.color,
-    email = settings.email
+    email = settings.email,
+    rotation = 0
   }
 
   obtainAvatar(settings.username, settings.email)

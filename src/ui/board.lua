@@ -171,28 +171,49 @@ function Board:redraw()
   G.setCanvas()
 end
 
+local function getPosFromRelativeRots(myRot, otherRot)
+  assert(type(myRot) == "number", "myRot must be a number")
+  assert(type(otherRot) == "number", "otherRot must be a number")
+
+  -- print(settings.username, myRot, otherRot)
+  local W = 96 + 10
+  if myRot == 0 and otherRot == 0 then
+    return (consts.W - W) / 2, (consts.H - W)
+  else
+    return 0, 0
+  end
+end
+
 function Board:redrawOverlays()
+  -- print(settings.username .. " - redrawOverlays " .. tostring(utils.countKeys(consts.userData)))
+
   G.setCanvas(self.canvas2)
 
   pcall(G.clear, {0, 0, 0, 0})
 
+  local pad = 5
+  local W = 96
   local x = 0
   local y = 0
+
+  -- local f = self.font
+  -- G.setFont(f)
+  local f = G.getFont()
+
   for username, ud in pairs(consts.userData) do
-    print(username, ud.email, ud.color, not not consts.avatars[username])
+    x, y = getPosFromRelativeRots(self.rotation, ud.rotation)
 
     local color = consts.colors[ud.color]
 
     pcall(G.setColor, color)
-    G.rectangle("fill", x, y, 100, 100)
+    G.rectangle("fill", x, y, W + pad * 2, W + pad * 2)
 
     G.setColor(1, 1, 1, 1)
-    G.draw(consts.avatars[username], x, y)
+    G.draw(consts.avatars[username], x + pad, y + pad)
 
     G.setColor(0, 0, 0, 1)
-    G.print(username, x, y)
-
-    y = y + 100
+    local dx = f:getWidth(username)
+    G.print(username, x + pad + (W - dx) / 2, y + pad + W)
   end
 
   G.setCanvas()
@@ -362,13 +383,7 @@ function Board:onEvent(ev)
     local item, itemIdx = self:getItemFromId(ev.data.id)
     self:delete(item, itemIdx, true)
   elseif action == "setRotation" then
-    if consts.userData[ev.from] then
-      consts.userData[ev.from].rotation = ev.data.rotation
-    end
-    if ev.data.to == settings.username then
-      self:setRotation(ev.data.rotation)
-    end
-    self:redrawOverlays()
+    self:setRotation(ev.data.to, ev.data.rotation, true)
   elseif action == "playSound" then
     self:playSound(ev.data.soundName, true)
   elseif action == "resetBoard" then
@@ -380,10 +395,26 @@ function Board:onEvent(ev)
   self:redraw()
 end
 
-function Board:setRotation(rot)
-  assert(type(rot) == "number", "setRotation argument must be a number")
-  self.rotation = rot
-  self:redraw()
+function Board:setRotation(username, rot, isRemote)
+  assert(type(username) == "string", "username must be passed as string")
+  assert(type(rot) == "number", "rot must be passed as number")
+
+  if username == settings.username then
+    self.rotation = rot
+    self:redraw()
+  end
+
+  if consts.userData[username] then
+    consts.userData[username].rotation = rot
+    -- else
+    --  print(settings.username .. ": do not know data of " .. username)
+  end
+
+  if not isRemote then
+    SendEvent("setRotation", {to = username, rotation = rot})
+  end
+
+  self:redrawOverlays()
 end
 
 function Board:reset(isRemote)
