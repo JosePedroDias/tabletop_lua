@@ -11,7 +11,6 @@ p3 (-90)           p4 (90)
  ]] --
 local consts = require "src.core.consts"
 local utils = require "src.core.utils"
-local settings = require "src.core.settings"
 
 local Card = require "src.items.card"
 -- local Counter = require "src.items.counter"
@@ -28,10 +27,8 @@ M.setup = function()
 
   local board = consts.board
   local handZones = {}
-  local players = utils.shallowCopy(consts.roster)
-  table.insert(players, 1, settings.username)
 
-  assert(#players == 4, "sueca needs 4 players!")
+  local players = consts.board:getPlayers(4, 4)
 
   local zc = Zone:new({
     x = consts.W / 2,

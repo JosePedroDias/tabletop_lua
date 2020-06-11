@@ -156,6 +156,8 @@ M.indexOf = function(tbl, item)
   for i, v in ipairs(tbl) do if v == item then return i end end
 end
 
+M.find = M.indexOf
+
 M.findByAttribute = function(tbl, attrName, attrValue)
   for i, v in ipairs(tbl) do if v[attrName] == attrValue then return v, i end end
   return nil, 0

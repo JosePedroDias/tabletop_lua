@@ -46,7 +46,8 @@ function love.load(arg)
   local sW, sH = screen.getCurrentResolution()
   -- screen.setSize(sW, sH, consts.W, consts.H, true)
   -- screen.setSize(1024, 768, consts.W, consts.H, false)
-  screen.setSize(600, 600, consts.W, consts.H, false)
+  local W = 500
+  screen.setSize(W, W, consts.W, consts.H, false)
 
   stages.setStage("lobby", lobby)
   stages.setStage("game", game)

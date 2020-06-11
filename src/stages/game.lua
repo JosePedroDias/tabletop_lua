@@ -85,18 +85,18 @@ M.load = function()
 
   M.obtainAvatar(settings.username, settings.email)
 
-  local l = 600
+  local l = 500
   love.window.setTitle("tabletop - " .. settings.username)
 
   -- TODO for dev purposes
   if settings.username == "p1" then
-    love.window.setPosition(0, 0)
+    love.window.setPosition(l, l)
   elseif settings.username == "p2" then
     love.window.setPosition(l, 0)
   elseif settings.username == "p3" then
-    love.window.setPosition(0, l)
+    love.window.setPosition(0, l / 2)
   else
-    love.window.setPosition(l, l)
+    love.window.setPosition(l * 2, l / 2)
   end
 
   hub = noobhub.new({server = settings.server, port = settings.port});
