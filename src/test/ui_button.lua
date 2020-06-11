@@ -1,4 +1,4 @@
-local Input = require "src.ui.input"
+local Button = require "src.ui.button"
 local G = love.graphics
 
 local M = {}
@@ -18,33 +18,18 @@ function M:setup()
   canvas = G.newCanvas(W, H)
 end
 
-function M:testUnfocused()
-  local i = Input:new({
+function M:test()
+  local i = Button:new({
     x = 0,
     y = 0,
     width = 200,
     height = 40,
-    value = "starting"
+    label = "click me"
   })
 
   drawAndSaveImage(function()
     i:draw()
-  end, "ui_input_unfocused.png")
-end
-
-function M:testFocused()
-  local i = Input:new({
-    x = 0,
-    y = 0,
-    width = 200,
-    height = 40,
-    focused = true,
-    value = "starting"
-  })
-
-  drawAndSaveImage(function()
-    i:draw()
-  end, "ui_input_focused.png")
+  end, "ui_button.png")
 end
 
 return M
