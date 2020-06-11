@@ -35,6 +35,9 @@ function love.load(arg)
                                     "Tui_internet_image"))
   end
 
+  -- load resources
+  assets.load()
+
   settings.load()
 
   love.keyboard.setKeyRepeat(true)
@@ -44,9 +47,6 @@ function love.load(arg)
   -- screen.setSize(sW, sH, consts.W, consts.H, true)
   -- screen.setSize(1024, 768, consts.W, consts.H, false)
   screen.setSize(600, 600, consts.W, consts.H, false)
-
-  -- load resources
-  assets.load()
 
   stages.setStage("lobby", lobby)
   stages.setStage("game", game)

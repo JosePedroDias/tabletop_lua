@@ -337,6 +337,8 @@ function Board:onEvent(ev)
     end
   elseif action == "playSound" then
     self:playSound(ev.data.soundName, true)
+  elseif action == "resetBoard" then
+    self:reset(true)
   else
     print("unsupported action", action)
     return
@@ -348,6 +350,12 @@ function Board:setRotation(rot)
   assert(type(rot) == "number", "setRotation argument must be a number")
   self.rotation = rot
   self:redraw()
+end
+
+function Board:reset(isRemote)
+  self.items = {}
+  self.zones = {}
+  if not isRemote then SendEvent("resetBoard") end
 end
 
 return Board

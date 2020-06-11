@@ -52,11 +52,17 @@ local function parseHubEvent(ev)
         }
         obtainAvatar(ev.from, ev.data.email)
         -- ui.board:updateAvatars()
-        SendEvent("status", "in")
+        SendEvent("status", {
+          online = true,
+          email = settings.email,
+          color = settings.color
+        })
       end
     else
       ui.console:addLine(os.date("%H:%M ") .. ev.from .. " left")
       table.remove(consts.roster, utils.indexOf(consts.roster))
+      consts.userData[ev.from] = nil
+      consts.avatars[ev.from] = nil
     end
   else
     ui.board:onEvent(ev)
@@ -85,7 +91,8 @@ M.load = function()
   hub = noobhub.new({server = settings.server, port = settings.port});
   hub:subscribe({channel = settings.channel, callback = parseHubEvent}) -- TODO: add server and channel input in lobby
 
-  SendEvent("status", {online = true})
+  SendEvent("status",
+            {online = true, email = settings.email, color = settings.color})
 
   ui.console = Console:new({
     x = consts.W - 300,

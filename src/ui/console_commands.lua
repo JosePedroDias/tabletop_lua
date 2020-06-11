@@ -19,6 +19,7 @@ M.processCommand = function(cmd)
   elseif first == "start" then
     local succeeded, game = pcall(require, gamesModule .. words[1])
     if succeeded then
+      consts.board:reset()
       local didOk, err = pcall(game.setup)
       if didOk then
         return "starting " .. words[1] .. "..."
