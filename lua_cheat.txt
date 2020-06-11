@@ -112,3 +112,34 @@ ok, arg1', arg2'.. = coroutine.resume(co, arg...)
 
 
 if instance attribute not found, check you're not calling the metaclass instead of instance in a function body!
+
+
+
+
+
+http image from internet
+
+local http = require "socket.http"
+local logo = http.request("http://love2d.org/style/logo.png")
+logo = love.filesystem.newFileData(logo, "logo.png")
+logo = love.graphics.newImage(logo)
+
+
+
+https://codea.io/talk/discussion/6344/luasocket-questions
+
+
+
+SERIALIZE IMAGE
+
+local data_ = self.list[self.selectedIndex]:newImageData() -- ImageData
+  local data = data_:encode("png") -- FileData
+  local b64s = b64.enc(data:getString())
+  return b64s
+
+UNSERIALIZE IMAGE
+
+local b64 = require "src.ext.b64"
+local data = b64.dec(ev.data)
+local imageData = love.image.newCompressedData(data)
+local image = love.graphics.newImage(imageData)

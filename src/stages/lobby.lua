@@ -20,7 +20,7 @@ M.load = function()
   ui.si = SelectImage:new({
     x = (consts.W - 200) / 2,
     y = (consts.H - 640) / 2,
-    width = 200,
+    width = 240,
     height = 200,
     list = avatars.avatarImages
   })

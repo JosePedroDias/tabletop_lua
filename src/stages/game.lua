@@ -7,7 +7,6 @@ local utils = require "src.core.utils"
 
 local Console = require "src.ui.console"
 local Board = require "src.ui.board"
-local cc = require "src.ui.console_commands"
 
 consts.roster = {} -- TODO: ugly
 

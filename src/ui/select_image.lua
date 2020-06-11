@@ -1,23 +1,29 @@
 --[[ select image - allow picking one out of several images. currently selected gets previewed, navigation done by buttons ]] --
 local Button = require "src.ui.button"
+local utils = require "src.core.utils"
+local cropper = require "src.ui.cropper"
 
 local G = love.graphics
 
 local SelectImage = {x = 0, y = 0, width = 200, height = 200}
 
 function SelectImage:new(o)
-  assert(o.width == o.height)
   o = o or {}
   setmetatable(o, self)
   self.__index = self
   o.font = o.font or G.getFont()
   o.color = o.color or {0, 0, 0, 1}
-  o.background = o.background or {1, 1, 1, 1}
-  o.canvas = G.newCanvas(o.width, o.height)
+  o.background = o.background or {0, 0, 0, 0}
   o.selectedIndex = 1
+  o.canvas = G.newCanvas(o.width, o.height)
+  print(o.width, o.height)
+
+  o.list = utils.map(o.list, function(img)
+    return cropper(img, 200, 200) -- TODO
+  end)
 
   local buttonW = 20
-  local buttonBg = {1, 0, 1, 0.33}
+  local buttonBg = {0.33, 0.33, 0.33, 1}
 
   o.prev = Button:new({
     x = 0,
@@ -81,20 +87,7 @@ function SelectImage:redraw()
 
   print(self.selectedIndex)
   G.setColor(1, 1, 1, 1)
-  local img = self.list[self.selectedIndex]
-  local w = img:getWidth()
-  local h = img:getHeight()
-  local s = math.min(self.width / w, self.height / h)
-  local x = 0
-  local y = 0
-  if w > h then
-    y = ((w / h) - 1) * self.height / 2
-  elseif h > h then
-    x = ((h / w) - 1) * self.height / 2
-  end
-
-  -- ( drawable, x, y, r, sx, sy, ox, oy, kx, ky )
-  G.draw(img, x, y, 0, s, s)
+  G.draw(self.list[self.selectedIndex], 20, 0)
 
   self.prev:draw()
   self.next:draw()

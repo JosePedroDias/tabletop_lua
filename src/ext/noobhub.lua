@@ -22,7 +22,6 @@ local noobhub = {
     end
     local self = {}
     self.buffer = ""
-
     self.server = params.server
     self.port = params.port
 
@@ -39,8 +38,8 @@ local noobhub = {
       end
       self.sock:setoption("tcp-nodelay", true) -- disable Nagle's algorithm for the connection
       self.sock:settimeout(0)
-      local input, output = socket.select(nil, {self.sock}, 3)
-      for i, v in ipairs(output) do
+      local _, output = socket.select(nil, {self.sock}, 3)
+      for _, v in ipairs(output) do
         v:send("__SUBSCRIBE__" .. self.channel .. "__ENDSUBSCRIBE__");
       end
       return true
@@ -67,22 +66,23 @@ local noobhub = {
         self:reconnect()
         return false;
       end
-      local send_result, message, num_bytes =
-        self.sock:send("__JSON__START__" .. json.encode(message.message) ..
-                         "__JSON__END__")
+      local payload = "__JSON__START__" .. json.encode(message.message) ..
+                        "__JSON__END__"
+
+      local send_result, message2, num_bytes = self.sock:send(payload)
       if (send_result == nil) then
-        print("Noobhub publish error: " .. message .. "  sent " .. num_bytes ..
+        print("Noobhub publish error: " .. message2 .. "  sent " .. num_bytes ..
                 " bytes");
-        if (message == "closed") then self:reconnect() end
+        if (message2 == "closed") then self:reconnect() end
         return false;
       end
       return true
     end
 
     function self:enterFrame()
-      local input, output = socket.select({self.sock}, nil, 0) -- this is a way not to block runtime while reading socket. zero timeout does the trick
+      local input, _ = socket.select({self.sock}, nil, 0) -- this is a way not to block runtime while reading socket. zero timeout does the trick
 
-      for i, v in ipairs(input) do
+      for _, v in ipairs(input) do
 
         local got_something_new = false
         while true do

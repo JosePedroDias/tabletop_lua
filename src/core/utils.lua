@@ -179,6 +179,10 @@ M.explodeString = function(st)
   return arr
 end
 
+M.trim = function(s)
+  return s:gsub("^%s*(.-)%s*$", "%1")
+end
+
 M.deepEqual = function(t1, t2)
   local t = type(t1)
   if t ~= type(t2) then
