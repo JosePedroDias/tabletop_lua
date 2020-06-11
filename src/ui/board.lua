@@ -156,7 +156,9 @@ function Board:draw()
     G.draw(self.canvas, 0, self.height, D2R * -90)
   end
 
+  G.setColor(1, 1, 1, 0.66)
   G.draw(self.canvas2, 0, 0, 0)
+  G.setColor(1, 1, 1, 1)
 
   if self.uiMenu then self.uiMenu:draw() end
 end
@@ -176,11 +178,20 @@ local function getPosFromRelativeRots(myRot, otherRot)
   assert(type(otherRot) == "number", "otherRot must be a number")
 
   -- print(settings.username, myRot, otherRot)
-  local W = 96 + 10
-  if myRot == 0 and otherRot == 0 then
-    return (consts.W - W) / 2, (consts.H - W)
-  else
-    return 0, 0
+  local W = 96 + 20
+  local gap = 300
+
+  local diff = myRot - otherRot
+  if diff < 0 then diff = diff + 360 end
+
+  if diff == 0 then -- down
+    return (consts.W - W) / 2 - gap, (consts.H - W) - 10
+  elseif diff == 180 then -- up
+    return (consts.W - W) / 2 + gap, 0
+  elseif diff == 90 then -- left
+    return 0, (consts.H - W) / 2 - gap
+  else -- right
+    return consts.W - W, (consts.H - W) / 2 + gap
   end
 end
 

@@ -28,13 +28,6 @@ function SendEvent(action, data)
   })
 end
 
-local function obtainAvatar(username, email)
-  if consts.avatars[username] then return end
-  local url = gravatar(email, 96, "monsterid")
-  local avatar = fetchRemoteImage(url)
-  consts.avatars[username] = avatar
-end
-
 local function parseHubEvent(ev)
   -- ignore self messages (for vanilla noobhub servers)
   if ev.from == settings.username then return end
@@ -54,7 +47,7 @@ local function parseHubEvent(ev)
           rotation = 0
         }
 
-        obtainAvatar(ev.from, ev.data.email)
+        M.obtainAvatar(ev.from, ev.data.email)
         -- ui.board:updateAvatars()
         SendEvent("status", {
           online = true,
@@ -76,6 +69,13 @@ local function parseHubEvent(ev)
   end
 end
 
+M.obtainAvatar = function(username, email)
+  if consts.avatars[username] then return end
+  local url = gravatar(email, 96, "monsterid")
+  local avatar = fetchRemoteImage(url)
+  consts.avatars[username] = avatar
+end
+
 M.load = function()
   consts.userData[settings.username] = {
     color = settings.color,
@@ -83,7 +83,7 @@ M.load = function()
     rotation = 0
   }
 
-  obtainAvatar(settings.username, settings.email)
+  M.obtainAvatar(settings.username, settings.email)
 
   local l = 600
   love.window.setTitle("tabletop - " .. settings.username)

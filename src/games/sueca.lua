@@ -24,7 +24,7 @@ M.setup = function()
   local zH = 120
   local pad = 80
 
-  local rotations = {0, 180, -90, 90}
+  local rotations = {0, 180, 270, 90}
 
   local board = consts.board
   local handZones = {}

@@ -30,8 +30,8 @@ function love.load(arg)
 
     -- runner:setOutputType("tap") -- tap text
     love.event.quit(runner:runSuite("Tcore_settings", -- "Tone"
-    "Tcore_utils", "Text_gravatar", "Text_md5", -- "Tstages_game", 
-    "Tstages_lobby", "Tui_arcmenu", "Tui_button", "Tui_input",
+    "Tcore_utils", "Text_gravatar", "Text_md5", "Tstages_game", "Tstages_lobby",
+                                    "Tui_arcmenu", "Tui_button", "Tui_input",
                                     "Tui_internet_image"))
   end
 
