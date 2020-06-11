@@ -7,7 +7,7 @@ local utils = require "src.core.utils"
 
 local function gravatarUrl(email, size)
   local normalizedEmail = utils.trim(email):lower()
-  local hash = md5(normalizedEmail)
+  local hash = md5.sumhexa(normalizedEmail)
   return "https://www.gravatar.com/avatar/" .. hash .. "?s=" .. tostring(size)
 end
 
