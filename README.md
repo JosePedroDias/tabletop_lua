@@ -34,6 +34,10 @@ moving to either:
 
 ## TODO
 
+- confirm checkers layout is ok
+- do chess layout
+- make pieces on game board span into position
+
 - visibility areas
   - zones can count cards or money
 - lobby
@@ -41,7 +45,6 @@ moving to either:
   - allow choosing server settings (host, port, channel)
 - be careful about globals: roster, userData, avatars, board
 
-- create 8x8 grid for checkers and chess
 - create hex grid for abalone (maybe push sideways as well)
 
 - jogo da glória / snakes and ladders - https://www.youtube.com/watch?v=xe9pMUuVwtk

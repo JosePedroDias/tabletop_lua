@@ -7,9 +7,12 @@ local settings = require "src.core.settings"
 local ArcMenu = require "src.ui.arcmenu"
 
 local Card = require "src.items.card"
+local Checkers = require "src.items.checkers"
+local Chess = require "src.items.chess"
 local Chip = require "src.items.chip"
 local Counter = require "src.items.counter"
 local Dice = require "src.items.dice"
+local GameBoard = require "src.items.gameboard"
 local Piece = require "src.items.piece"
 local Zone = require "src.items.zone"
 
@@ -60,7 +63,8 @@ function Board:showCreateMenu(x, y)
     y = y,
     dismissableFirst = true,
     labels = {
-      "cancel", "add card", "add dice", "add piece", "add chip", "add counter"
+      "cancel", "add card", "add dice", "add piece", "add checkers",
+      "add chess", "add chip", "add counter"
     },
     callback = function(idx)
       if idx == 1 then
@@ -74,8 +78,12 @@ function Board:showCreateMenu(x, y)
       elseif idx == 4 then
         it = Piece
       elseif idx == 5 then
-        it = Chip
+        it = Checkers
       elseif idx == 6 then
+        it = Chess
+      elseif idx == 7 then
+        it = Chip
+      elseif idx == 8 then
         it = Counter
       end
       self:showCreateMenu2(x, y, it)
@@ -366,12 +374,19 @@ function Board:onEvent(ev)
       cls = Dice
     elseif action == "new piece" then
       cls = Piece
+    elseif action == "new checkers" then
+      cls = Checkers
+    elseif action == "new chess" then
+      cls = Chess
+    elseif action == "new gameboard" then
+      cls = GameBoard
     elseif action == "new zone" then
       cls = Zone
     else
       print("unsupported action", action)
       return
     end
+    if action == "new chess" then ev.data.rotation = self.rotation end
     local it = cls:new(ev.data)
     table.insert(self.items, it)
     if it.name == "Zone" then table.insert(self.zones, it) end
