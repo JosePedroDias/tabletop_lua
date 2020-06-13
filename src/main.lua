@@ -110,9 +110,16 @@ function love.filedropped(file)
   avatars.onDrop(file)
 end
 
+local function error_printer(msg, layer)
+  print(debug.traceback("Error: " .. tostring(msg), 1 + (layer or 1)):gsub(
+          "\n[^\n]+$", ""))
+end
+
 -- custom error handling to notify server I'm leaving
 function love.errorhandler(msg)
-  print(msg)
+  msg = tostring(msg)
+  error_printer(msg, 2)
+
   pcall(SendEvent, "status", "out")
   love.event.quit()
 end

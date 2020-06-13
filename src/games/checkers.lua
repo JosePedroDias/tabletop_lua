@@ -1,8 +1,7 @@
 --[[ 
-    sets up checkers
+    sets up checkers - https://en.wikipedia.org/wiki/Draughts
  ]] --
 local consts = require "src.core.consts"
-local utils = require "src.core.utils"
 
 local Checkers = require "src.items.checkers"
 local GameBoard = require "src.items.gameboard"
@@ -26,14 +25,11 @@ M.setup = function()
 
   local c
   for y = 1, 8 do
-    local mod = 0
-    if y > 4 then mod = 1 end
-
     local clr = "black"
-    if mod == 1 then clr = "white" end
+    if y > 4 then clr = "white" end
 
     for x = 1, 8 do
-      if (y < 4 or y > 5) and (x + y) % 2 == mod then
+      if (y < 4 or y > 5) and (x + y) % 2 == 1 then
         c = Checkers:new({
           color = clr,
           x = cx + (x - 4.5) * d,

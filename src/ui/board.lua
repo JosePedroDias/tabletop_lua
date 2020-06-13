@@ -267,7 +267,7 @@ function Board:onPointer(x, y)
   for idx = #self.items, 1, -1 do
     local it = self.items[idx]
 
-    if it.name ~= "Zone" then
+    if it.name ~= "Zone" and it.name ~= "GameBoard" then
       local res = it:isHit(x, y)
 
       if res then
@@ -280,7 +280,6 @@ function Board:onPointer(x, y)
         self:redraw()
 
         -- if it.name == "Card" then self:playSound("cards_place1") end
-
         return
       end
     end
@@ -303,6 +302,12 @@ end
 function Board:itemHitsAZone(it)
   for zi, zone in ipairs(self.zones) do
     if zone:isHitByItem(it) then return zone, zi end
+  end
+end
+
+function Board:itemHitsAGameBoard(it)
+  for _, gb in ipairs(self.items) do
+    if gb.name == "GameBoard" and gb:isHitByItem(it) then return gb end
   end
 end
 
@@ -338,6 +343,14 @@ function Board:onPointerUp(x, y)
   if hitZone then
     hitZone:add(it)
     hitZone:doLayout(self)
+  else
+    local gb = self:itemHitsAGameBoard(it)
+    if gb then
+      local cell = gb:nearestCell(x, y)
+      -- print(cell.xl, cell.yl)
+      it:move(cell.x + gb.x, cell.y + gb.y)
+      self:redraw()
+    end
   end
 
   if self.initialZone or hitZone then self:redraw() end

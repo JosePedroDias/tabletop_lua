@@ -256,6 +256,14 @@ M.round = function(n)
   return math.floor(n + 0.5)
 end
 
+M.dist = function(x, y, xx, yy)
+  return math.sqrt(math.pow(x - xx, 2) + math.pow(y - yy, 2))
+end
+
+M.distSquared = function(x, y, xx, yy)
+  return math.pow(x - xx, 2) + math.pow(y - yy, 2)
+end
+
 -- https://gist.github.com/Uradamus/10323382
 function M.shuffle(t)
   local tbl = {}
