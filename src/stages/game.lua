@@ -30,12 +30,18 @@ end
 
 local function parseHubEvent(ev)
   -- ignore self messages (for vanilla noobhub servers)
-  if ev.from == settings.username then return end
+  if ev.from == settings.username or consts.ignoreFrom[ev.from] then return end
 
   if ev.action == "say" then
     ui.console:addLine(os.date("%H:%M ") .. ev.from .. ": " .. ev.data)
   elseif ev.action == "status" then
     if ev.data.online then
+      if ev.data.version ~= consts.version then
+        consts.ignoreFrom[ev.from] = true
+        ui.console:addLine(os.date("%H:%M ") .. ev.from .. " with version " .. ev.data.version .. ' therefore ignored')
+        return
+      end
+
       if not utils.has(consts.roster, ev.from) then
         ui.console:addLine(os.date("%H:%M ") .. ev.from .. " got in")
         table.insert(consts.roster, ev.from)
@@ -44,6 +50,7 @@ local function parseHubEvent(ev)
         consts.userData[ev.from] = {
           email = ev.data.email,
           color = ev.data.color,
+          version = ev.data.version,
           rotation = 0
         }
 
@@ -52,7 +59,8 @@ local function parseHubEvent(ev)
         SendEvent("status", {
           online = true,
           email = settings.email,
-          color = settings.color
+          color = settings.color,
+          version = consts.version
         })
 
         consts.board:redrawOverlays()

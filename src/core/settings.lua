@@ -1,4 +1,6 @@
 -- [[ manages loading/saving of game settings ]] --
+local consts = require "src.core.consts"
+
 require("src.ext.json") -- json.encode / decode
 local LF = love.filesystem
 
@@ -18,6 +20,10 @@ local DEFAULTS = {
 
 local M = {}
 
+M.migrate = function(o)
+  return o
+end
+
 M.load = function()
   -- set defaults
   for k, v in pairs(DEFAULTS) do M[k] = v end
@@ -30,6 +36,9 @@ M.load = function()
   local success, o = pcall(json.decode, data)
   if not success then return false end
 
+  -- migrate data between versions
+  if o.version ~= consts.version then o = M.migrate(o) end
+
   -- assign its pairs to the module itself
   for k, v in pairs(o) do M[k] = v end
   return true
@@ -37,6 +46,7 @@ end
 
 M.save = function()
   local o = M
+  o.version = consts.version
   local success, s = pcall(json.encode, o)
   if not success then return false end
   LF.write(SETTINGS_FILE, s)

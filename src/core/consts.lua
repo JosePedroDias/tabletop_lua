@@ -1,4 +1,6 @@
--- [[ set of constants for the game ]] --
+--[[ set of constants for the game
+I've been using it to attach additional globals such as:
+- board, ]] --
 local M = {}
 
 M.W = 1000
@@ -7,11 +9,11 @@ M.H = 1000
 M.x0 = 0
 M.y0 = 0
 
-M.version = "0.1" -- used for network compatibility
+M.version = "0.0.1" -- used for network and config compatibility
+M.gitHash = '__GITHASH__'
+M.gitDate = '__GITDATE__'
 
 -- https://en.wikipedia.org/wiki/Enhanced_Graphics_Adapter
--- A = 0.66
--- 5 = 0.33
 M.colors = {
   {0, 0, 0}, -- black
   {0, 0, 0.66}, -- blue

@@ -26,9 +26,9 @@ these tests do some assertions and also save images to user dir
 
 tests make use of [luaunit](https://github.com/bluebird75/luaunit) [docs](https://luaunit.readthedocs.io/en/latest/)
 
-## TODO
+    the test suites run are defined on `main.lua`'s `test()` function
 
-- remove unused resources from love file
+## TODO
 
 - document game
 

@@ -31,6 +31,7 @@ dist:
 	@mkdir dist
 	@mkdir build
 	@cp -R src/* build
+	@rm -rf ext/luaunit.lua build/test
 	@find ./build -type f -exec sed -iE 's/src.//g' {} \;
 	@rm -rf ./build/*.luaE
 	@cd build && zip -9 -q -r ../dist/$(gamename) . && cd ..
