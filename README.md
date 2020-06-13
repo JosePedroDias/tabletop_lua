@@ -28,7 +28,7 @@ tests make use of [luaunit](https://github.com/bluebird75/luaunit) [docs](https:
 
 ## TODO
 
-- bundle binaries windows, mac
+- remove unused resources from love file
 
 - document game
 

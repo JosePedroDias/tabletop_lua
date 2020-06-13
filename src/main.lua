@@ -1,6 +1,4 @@
 -- [[ main file! ]] --
-local lu = require "src.ext.luaunit"
-
 local assets = require "src.core.assets"
 local avatars = require "src.core.avatars"
 local consts = require "src.core.consts"
@@ -11,30 +9,37 @@ local settings = require "src.core.settings"
 local lobby = require "src.stages.lobby"
 local game = require "src.stages.game"
 
+local function test()
+  local lu = require "src.ext.luaunit"
+  local runner = lu.LuaUnit.new()
+  for _, filename in ipairs(love.filesystem.getDirectoryItems("test")) do
+    filename = filename:gsub(".lua", "")
+    _G["T" .. filename] = require("src.test." .. filename)
+  end
+  -- runner:setOutputType("tap") -- tap text
+  love.event.quit(runner:runSuite( --
+  "Tcore_settings", --
+  "Tcore_utils", --
+  "Text_gravatar", --
+  "Text_md5", --
+  "Tstages_game", --
+  "Tstages_lobby", --
+  "Tui_arcmenu", --
+  "Tui_button", --
+  "Tui_input", --
+  "Tui_internet_image", --
+  "Tboard_menus" -- TODO does not work as 1st test
+  ))
+end
+
 function love.load(arg)
-  -- stores command line arguments to consts.arg. TODO
+  -- stores command line arguments to consts.arg.
   -- 1=username
-  -- 2=host
+  -- 2=email
+  -- 3=color
   consts.arg = arg
 
-  if arg[1] == "test" then
-    local suite = {}
-    local runner = lu.LuaUnit.new()
-    for _, filename in ipairs(love.filesystem.getDirectoryItems("test")) do
-      filename = filename:gsub(".lua", "")
-      _G["T" .. filename] = require("src.test." .. filename)
-      table.insert(suite, "T" .. filename)
-    end
-
-    -- local success, result = pcall(runner.runSuite, suite)
-
-    -- runner:setOutputType("tap") -- tap text
-    love.event.quit(runner:runSuite("Tcore_settings", "Tcore_utils",
-                                    "Text_gravatar", "Text_md5", "Tstages_game",
-                                    "Tstages_lobby", "Tboard_menus",
-                                    "Tui_arcmenu", "Tui_button", "Tui_input",
-                                    "Tui_internet_image"))
-  end
+  if arg[1] == "test" then test() end
 
   -- load resources
   assets.load()
