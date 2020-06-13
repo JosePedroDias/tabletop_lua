@@ -1,5 +1,4 @@
---[[ set of constants for the game
-I've been using it to attach additional globals too]] --
+-- [[ set of constants for the game. I've been using it to attach additional globals too]] --
 local M = {}
 
 M.W = 1000

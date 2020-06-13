@@ -38,7 +38,8 @@ local function parseHubEvent(ev)
     if ev.data.online then
       if ev.data.version ~= consts.version then
         consts.ignoreFrom[ev.from] = true
-        ui.console:addLine(os.date("%H:%M ") .. ev.from .. " with version " .. ev.data.version .. ' therefore ignored')
+        print(ev.from .. " with version " .. (ev.data.version or "") .. " therefore ignored")
+        ui.console:addLine(os.date("%H:%M ") .. ev.from .. " with version " .. (ev.data.version or "???") .. " therefore ignored")
         return
       end
 
@@ -50,7 +51,6 @@ local function parseHubEvent(ev)
         consts.userData[ev.from] = {
           email = ev.data.email,
           color = ev.data.color,
-          version = ev.data.version,
           rotation = 0
         }
 
@@ -110,8 +110,12 @@ M.load = function()
   hub = noobhub.new({server = settings.server, port = settings.port});
   hub:subscribe({channel = settings.channel, callback = parseHubEvent}) -- TODO: add server and channel input in lobby
 
-  SendEvent("status",
-            {online = true, email = settings.email, color = settings.color})
+  SendEvent("status", {
+    online = true,
+    email = settings.email,
+    color = settings.color,
+    version = consts.version
+  })
 
   ui.console = Console:new({
     x = consts.W - 300,
