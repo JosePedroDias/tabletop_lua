@@ -1,3 +1,5 @@
+local aux = require "src.test._aux"
+
 local ArcMenu = require "src.ui.arcmenu"
 local G = love.graphics
 
@@ -6,13 +8,6 @@ local M = {}
 local canvas
 local W = 320
 local H = 320
-
-local function drawAndSaveImage(fnToDraw, name)
-  G.setCanvas(canvas)
-  fnToDraw()
-  G.setCanvas()
-  canvas:newImageData():encode("png", name)
-end
 
 function M:setup()
   canvas = G.newCanvas(W, H)
@@ -26,7 +21,7 @@ function M:test3WCancel()
     labels = {"one", "two", "three"}
   })
 
-  drawAndSaveImage(function()
+  aux.drawAndSaveImage(canvas, function()
     i:draw()
   end, "ui_arcmenu_3_w_cancel.png")
 end
@@ -39,7 +34,7 @@ function M:test3WoCancel()
     labels = {"one", "two", "three"}
   })
 
-  drawAndSaveImage(function()
+  aux.drawAndSaveImage(canvas, function()
     i:draw()
   end, "ui_arcmenu_3_wo_cancel.png")
 end
@@ -55,7 +50,7 @@ function M:test12WoCancel()
     }
   })
 
-  drawAndSaveImage(function()
+  aux.drawAndSaveImage(canvas, function()
     i:draw()
   end, "ui_arcmenu_12_wo_cancel.png")
 end

@@ -24,19 +24,13 @@ these tests do some assertions and also save images to user dir
 
     make test
 
-for now using [lunatest](https://github.com/silentbicycle/lunatest) which is very simple.
-[docs](https://htmlpreview.github.io/?https://raw.githubusercontent.com)
-
-moving to either:
-
-- [luaunit](https://github.com/bluebird75/luaunit) [docs](https://luaunit.readthedocs.io/en/latest/)
-- [lunit](https://github.com/mrothNET/lunit) [docs](https://mroth.net/lunit/documentation-0.4.txt)
+tests make use of [luaunit](https://github.com/bluebird75/luaunit) [docs](https://luaunit.readthedocs.io/en/latest/)
 
 ## TODO
 
-- confirm checkers layout is ok
-- do chess layout
-- make pieces on game board span into position
+- bundle binaries windows, mac
+
+- document game
 
 - visibility areas
   - zones can count cards or money
@@ -49,11 +43,14 @@ moving to either:
 
 - jogo da glória / snakes and ladders - https://www.youtube.com/watch?v=xe9pMUuVwtk
 - game setup for
-  - sueca?
   - poker texas hold'em?
   - pictionary - https://randomwordgenerator.com/pictionary.php https://hobbylark.com/party-games/pictionary-words
-  - checkers
-  - chess?
+  - 4 in a row
+  - tic-tac-toe
+  - roulette
+  - blackjack
+  - monopoly
+  - bingo
 - game judge for
   - snakes and ladders
   - go fish

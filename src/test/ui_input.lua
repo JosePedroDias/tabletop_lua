@@ -1,3 +1,5 @@
+local aux = require "src.test._aux"
+
 local Input = require "src.ui.input"
 local G = love.graphics
 
@@ -6,13 +8,6 @@ local M = {}
 local canvas
 local W = 200
 local H = 40
-
-local function drawAndSaveImage(fnToDraw, name)
-  G.setCanvas(canvas)
-  fnToDraw()
-  G.setCanvas()
-  canvas:newImageData():encode("png", name)
-end
 
 function M:setup()
   canvas = G.newCanvas(W, H)
@@ -27,7 +22,7 @@ function M:testUnfocused()
     value = "starting"
   })
 
-  drawAndSaveImage(function()
+  aux.drawAndSaveImage(canvas, function()
     i:draw()
   end, "ui_input_unfocused.png")
 end
@@ -42,7 +37,7 @@ function M:testFocused()
     value = "starting"
   })
 
-  drawAndSaveImage(function()
+  aux.drawAndSaveImage(canvas, function()
     i:draw()
   end, "ui_input_focused.png")
 end

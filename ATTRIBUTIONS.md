@@ -10,3 +10,5 @@ checkers https://opengameart.org/content/checkers
 cards 2 https://opengameart.org/content/playing-cards-vector-png
 dominos https://opengameart.org/content/dominos
 uno https://opengameart.org/content/uno-playing-cards-2d
+
+monopoly https://monopoly.cdbpdx.com/No7/
