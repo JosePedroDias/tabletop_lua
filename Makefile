@@ -4,6 +4,7 @@ os := $(shell uname)
 
 codehash := $(shell git rev-parse --verify --short HEAD)
 codedate := $(shell git show -s --format="%cI" HEAD)
+gameversion := 0_0_1
 
 ifeq ($(os),Darwin)
 	love = /Applications/love.app/Contents/MacOS/love
@@ -47,24 +48,30 @@ dist:
 # https://love2d.org/wiki/Game_Distribution
 # https://github.com/MisterDA/love-release
 binaries:	dist
-	@rm -rf game-binaries
-	@mkdir -p game-binaries/win32 game-binaries/win64 game-binaries/mac64 game-binaries/any
+	@rm -rf binaries
+	@mkdir -p binaries/win32 binaries/win64 binaries/mac64
 # windows
-	@cp -R binaries/win32 game-binaries
-	@cp -R binaries/win64 game-binaries
-	@cat binaries/win32/love.exe dist/$(gamename) > binaries/win32/$(gamenamenoext).exe
-	@cat binaries/win64/love.exe dist/$(gamename) > binaries/win64/$(gamenamenoext).exe
+	@cp -R love-binaries/win32 binaries
+	@cp -R love-binaries/win64 binaries
+	@rm binaries/win32/love.exe
+	@rm binaries/win64/love.exe
+	@cat love-binaries/win32/love.exe dist/$(gamename) > binaries/win32/$(gamenamenoext).exe
+	@cat love-binaries/win64/love.exe dist/$(gamename) > binaries/win64/$(gamenamenoext).exe
+	@zip -9 -q -r binaries/$(gamenamenoext)_win32_$(gameversion).zip binaries/win32
+	@zip -9 -q -r binaries/$(gamenamenoext)_win64_$(gameversion).zip binaries/win64
 # mac
-	@cp -R binaries/mac64/love.app game-binaries/mac64/${gamenamenoext}.app
-	@cp dist/$(gamename) game-binaries/mac64/${gamenamenoext}.app/Contents/Resources
+	@cp -R love-binaries/mac64/love.app binaries/mac64/${gamenamenoext}.app
+	@cp dist/$(gamename) binaries/mac64/${gamenamenoext}.app/Contents/Resources
 # mac - replaces CFBundleIdentifier
-	@sed -i -e 's/<string>org.love2d.love<\/string>/<string>com.josepedrodias.tabletop<\/string>/g' game-binaries/mac64/${gamenamenoext}.app/Contents/Info.plist
+	@sed -i -e 's/<string>org.love2d.love<\/string>/<string>com.josepedrodias.tabletop<\/string>/g' binaries/mac64/${gamenamenoext}.app/Contents/Info.plist
 # mac - replaces CFBundleName
-	@sed -i -e 's/<string>LÖVE<\/string>/<string>tabletop<\/string>/g' game-binaries/mac64/${gamenamenoext}.app/Contents/Info.plist
+	@sed -i -e 's/<string>LÖVE<\/string>/<string>tabletop<\/string>/g' binaries/mac64/${gamenamenoext}.app/Contents/Info.plist
 # mac - removes UTExportedTypeDeclarations
-	@sed -i.bak -e '104,132d' game-binaries/mac64/${gamenamenoext}.app/Contents/Info.plist
+	@sed -i.bak -e '104,132d' binaries/mac64/${gamenamenoext}.app/Contents/Info.plist
+	@zip -9 -q -r binaries/$(gamenamenoext)_mac64_$(gameversion).zip binaries/mac64
 # any
-	@cp dist/$(gamename) game-binaries/any
+	@cp dist/$(gamename) binaries
+	@mv binaries/$(gamename) binaries/$(gamenamenoext)_$(gameversion).love
 
 run-dist:	dist
 	@$(love) dist/$(gamename)
