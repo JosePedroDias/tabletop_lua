@@ -2,6 +2,9 @@
 
 os := $(shell uname)
 
+codehash := $(shell git rev-parse --verify --short HEAD)
+codedate := $(shell git show -s --format="%cI" HEAD)
+
 ifeq ($(os),Darwin)
 	love = /Applications/love.app/Contents/MacOS/love
 else ifeq ($(os),Linux)
@@ -34,6 +37,9 @@ dist:
 	@rm -rf ext/luaunit.lua build/test
 	@find ./build -type f -exec sed -iE 's/src.//g' {} \;
 	@rm -rf ./build/*.luaE
+	@echo "code hash: $(codehash), date: $(codedate) C"
+	@sed -i -e 's/__GITHASH__/$(codehash)/g' build/core/consts.lua
+	@sed -i -e 's/__GITDATE__/$(codedate)/g' build/core/consts.lua
 	@cd build && zip -9 -q -r ../dist/$(gamename) . && cd ..
 	@cd assets && zip -9 -q -r ../dist/$(gamename) . && cd ..
 	@rm -rf build
