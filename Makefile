@@ -13,6 +13,7 @@ endif
 args=`arg="$(filter-out $@,$(MAKECMDGOALS))" && echo $${arg:-${1}}`
 rootd = `pwd`
 srcd = "$(rootd)/src"
+gamenamenoext = tabletop
 gamename = tabletop.love
 
 run-src:
@@ -36,7 +37,29 @@ dist:
 	@cd assets && zip -9 -q -r ../dist/$(gamename) . && cd ..
 	@rm -rf build
 
-run-dist: dist
+# https://love2d.org/wiki/Game_Distribution
+# https://github.com/MisterDA/love-release
+binaries:	dist
+	@rm -rf game-binaries
+	@mkdir -p game-binaries/win32 game-binaries/win64 game-binaries/mac64 game-binaries/any
+# windows
+	@cp -R binaries/win32 game-binaries
+	@cp -R binaries/win64 game-binaries
+	@cat binaries/win32/love.exe dist/$(gamename) > binaries/win32/$(gamenamenoext).exe
+	@cat binaries/win64/love.exe dist/$(gamename) > binaries/win64/$(gamenamenoext).exe
+# mac
+	@cp -R binaries/mac64/love.app game-binaries/mac64/${gamenamenoext}.app
+	@cp dist/$(gamename) game-binaries/mac64/${gamenamenoext}.app/Contents/Resources
+# mac - replaces CFBundleIdentifier
+	@sed -i -e 's/<string>org.love2d.love<\/string>/<string>com.josepedrodias.tabletop<\/string>/g' game-binaries/mac64/${gamenamenoext}.app/Contents/Info.plist
+# mac - replaces CFBundleName
+	@sed -i -e 's/<string>LÖVE<\/string>/<string>tabletop<\/string>/g' game-binaries/mac64/${gamenamenoext}.app/Contents/Info.plist
+# mac - removes UTExportedTypeDeclarations
+	@sed -i.bak -e '104,132d' game-binaries/mac64/${gamenamenoext}.app/Contents/Info.plist
+# any
+	@cp dist/$(gamename) game-binaries/any
+
+run-dist:	dist
 	@$(love) dist/$(gamename)
 
 test:
