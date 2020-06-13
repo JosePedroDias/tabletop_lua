@@ -4,12 +4,15 @@ local settings = require "src.core.settings"
 local stages = require "src.core.stages"
 
 local Button = require "src.ui.button"
+local ColorPicker = require "src.ui.color_picker"
 local Input = require "src.ui.input"
 
 local gravatar = require "src.ext.gravatar"
 local fetchRemoteImage = require "src.ui.internet_image"
 
 -- local Whiteboard = require "src.ui.whiteboard"
+
+local G = love.graphics
 
 local M = {}
 
@@ -18,6 +21,7 @@ local ui = {}
 M.next = function()
   settings.username = ui.iusername.value
   settings.email = ui.iemail.value
+  settings.color = ui.colorPicker.value
   settings.save()
   stages.toStage("game")
 end
@@ -60,6 +64,17 @@ M.load = function()
     onClick = M.next
   })
 
+  ui.colorPicker = ColorPicker:new({
+    x = (consts.W - 300) / 2,
+    y = (consts.H + 240) / 2,
+    cols = 8,
+    rows = 2,
+    cellwidth = 34,
+    cellheight = 34,
+    colors = consts.colors,
+    value = settings.color
+  })
+
   M.updateAvatar(settings.email)
 
   -- ui.whiteboard = Whiteboard:new({width = 600, height = 400})
@@ -85,6 +100,11 @@ M.draw = function()
   ui.iusername:draw()
   ui.iemail:draw()
   ui.bContinue:draw()
+  ui.colorPicker:draw()
+
+  G.setColor(0.33, 0.33, 0.33, 1)
+  G.print("tabletop   " .. consts.version .. "   " .. consts.gitHash .. "   " .. consts.gitDate, 15, consts.H - 30)
+  G.setColor(1, 1, 1, 1)
 
   -- ui.whiteboard:draw()
 end
@@ -104,6 +124,7 @@ M.onPointer = function(x, y)
   ui.iusername:onPointer(x, y)
   ui.iemail:onPointer(x, y)
   ui.bContinue:onPointer(x, y)
+  ui.colorPicker:onPointer(x, y)
 
   -- ui.whiteboard:onPointer(x, y)
 end
