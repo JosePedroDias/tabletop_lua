@@ -143,7 +143,7 @@ function Board:affectItem(x, y, item)
         self:delete(item)
       else
         item[value](item)
-        if value == "roll" then self:playSound("dies_shuffle") end
+        if value == "roll" then self:playSound("dice_shuffle") end
         if value == "turn" then self:playSound("cards_slide1") end
       end
       self:redraw()

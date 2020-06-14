@@ -258,9 +258,19 @@ M.load = function()
   M.sfx["chips_collide3"] = LA.newSource(sfxDir .. "/chips/collide3.ogg",
                                          "static")
 
-  M.sfx["dies_shuffle"] = LA.newSource(sfxDir .. "/dies/shuffle.ogg", "static")
-  M.sfx["dies_throw1"] = LA.newSource(sfxDir .. "/dies/throw1.ogg", "static")
-  M.sfx["dies_throw2"] = LA.newSource(sfxDir .. "/dies/throw2.ogg", "static")
+  M.sfx["dice_shuffle"] = LA.newSource(sfxDir .. "/dice/shuffle.ogg", "static")
+  M.sfx["dice_throw1"] = LA.newSource(sfxDir .. "/dice/throw1.ogg", "static")
+  M.sfx["dice_throw2"] = LA.newSource(sfxDir .. "/dice/throw2.ogg", "static")
+
+  M.sfx["ui_confirmation"] = LA.newSource(sfxDir .. "/ui/confirmation.ogg", "static")
+  M.sfx["ui_error1"] = LA.newSource(sfxDir .. "/ui/error1.ogg", "static")
+  M.sfx["ui_error2"] = LA.newSource(sfxDir .. "/ui/error2.ogg", "static")
+  M.sfx["ui_question1"] = LA.newSource(sfxDir .. "/ui/question1.ogg", "static")
+  M.sfx["ui_question2"] = LA.newSource(sfxDir .. "/ui/question1.ogg", "static")
+  M.sfx["ui_sign_in"] = LA.newSource(sfxDir .. "/ui/signIn.ogg", "static")
+  M.sfx["ui_sign_out"] = LA.newSource(sfxDir .. "/ui/signOut.ogg", "static")
+  M.sfx["ui_switch"] = LA.newSource(sfxDir .. "/ui/switch.ogg", "static")
+  M.sfx["ui_tick"] = LA.newSource(sfxDir .. "/ui/tick.ogg", "static")
 
   -- local swingjedingMusic = love.audio.newSource("sounds/swingjeding.ogg", "stream")
   -- M.music["swingjeding"] = swingjedingMusic

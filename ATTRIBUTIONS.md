@@ -13,6 +13,12 @@ uno https://opengameart.org/content/uno-playing-cards-2d
 
 monopoly https://monopoly.cdbpdx.com/No7/
 
+AUDIO
+
+https://www.kenney.nl/assets/interface-sounds
+https://www.kenney.nl/assets/ui-audio
+https://www.kenney.nl/assets/digital-audio
+
 ---
 
 https://www.flickr.com/search/?media=photos&license=4%2C5%2C6%2C9%2C10&advanced=1&text=dice%20card

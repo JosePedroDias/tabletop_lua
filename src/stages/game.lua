@@ -1,6 +1,7 @@
 -- [[ game screen handling ]] --
 local noobhub = require("src.ext.noobhub")
 
+local assets = require "src.core.assets"
 local consts = require "src.core.consts"
 local settings = require "src.core.settings"
 local utils = require "src.core.utils"
@@ -47,6 +48,7 @@ local function parseHubEvent(ev)
   if ev.from == settings.username or consts.ignoreFrom[ev.from] then return end
 
   if ev.action == "say" then
+    love.audio.play(assets.sfx.ui_tick)
     ui.console:addLine(os.date("%H:%M ") .. ev.from .. ": " .. ev.data)
   elseif ev.action == "status" then
     if ev.data.online then
@@ -58,9 +60,10 @@ local function parseHubEvent(ev)
       end
 
       if not utils.has(consts.roster, ev.from) then
+        love.audio.play(assets.sfx.ui_sign_in)
         ui.console:addLine(os.date("%H:%M ") .. ev.from .. " got in")
         table.insert(consts.roster, ev.from)
-
+        
         -- print(settings.username .. " got info about " .. ev.from .. " - " .. ev.data.email .. ", " .. ev.data.color)
         consts.userData[ev.from] = {
           email = ev.data.email,
@@ -76,10 +79,10 @@ local function parseHubEvent(ev)
           color = settings.color,
           version = consts.version
         })
-
         consts.board:redrawOverlays()
       end
     else
+      love.audio.play(assets.sfx.ui_sign_out)
       ui.console:addLine(os.date("%H:%M ") .. ev.from .. " left")
       table.remove(consts.roster, utils.indexOf(consts.roster))
       consts.userData[ev.from] = nil
