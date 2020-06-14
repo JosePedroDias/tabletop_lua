@@ -97,14 +97,16 @@ M.load = function()
   love.window.setTitle("tabletop - " .. settings.username)
 
   -- TODO for dev purposes
-  if settings.username == "p1" then
-    love.window.setPosition(l, l)
-  elseif settings.username == "p2" then
-    love.window.setPosition(l, 0)
-  elseif settings.username == "p3" then
-    love.window.setPosition(0, l / 2)
-  else
-    love.window.setPosition(l * 2, l / 2)
+  if consts.devMode then
+    if settings.username == "p1" then
+      love.window.setPosition(l, l)
+    elseif settings.username == "p2" then
+      love.window.setPosition(l, 0)
+    elseif settings.username == "p3" then
+      love.window.setPosition(0, l / 2)
+    elseif settings.username == "p4" then
+      love.window.setPosition(0, l / 2)
+    end
   end
 
   hub = noobhub.new({server = settings.server, port = settings.port});

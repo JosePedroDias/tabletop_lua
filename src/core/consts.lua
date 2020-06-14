@@ -7,7 +7,7 @@ M.H = 1000
 M.x0 = 0
 M.y0 = 0
 
-M.version = "0.0.2" -- used for network and config compatibility
+M.version = "0.0.3" -- used for network and config compatibility
 M.gitHash = "__GITHASH__"
 M.gitDate = "__GITDATE__"
 

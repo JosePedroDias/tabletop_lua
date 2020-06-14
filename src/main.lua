@@ -39,6 +39,9 @@ function love.load(arg)
   -- 3=color
   consts.arg = arg
 
+  consts.devMode = consts.gitHash == "__GITHASH__" and consts.arg[1] and
+                     consts.arg[1]:sub(1, 4) ~= "prod"
+
   if arg[1] == "test" then test() end
 
   -- load resources
@@ -49,11 +52,14 @@ function love.load(arg)
   love.keyboard.setKeyRepeat(true)
 
   -- image resolution fix
-  local sW, sH = screen.getCurrentResolution()
-  -- screen.setSize(sW, sH, consts.W, consts.H, true)
-  -- screen.setSize(1024, 768, consts.W, consts.H, false)
-  local W = 500
-  screen.setSize(W, W, consts.W, consts.H, false)
+  if consts.devMode then
+    -- screen.setSize(1024, 768, consts.W, consts.H, false)
+    local W = 500
+    screen.setSize(W, W, consts.W, consts.H, false)
+  else
+    local sW, sH = screen.getCurrentResolution()
+    screen.setSize(sW, sH, consts.W, consts.H, true)
+  end
 
   stages.setStage("lobby", lobby)
   stages.setStage("game", game)
@@ -62,7 +68,6 @@ function love.load(arg)
     settings.username = consts.arg[1]
     if consts.arg[2] then settings.email = consts.arg[2] end
     if consts.arg[3] then settings.color = tonumber(consts.arg[3]) end
-
     -- settings.save()
     stages.toStage("game")
   else

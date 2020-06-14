@@ -468,12 +468,11 @@ function Board:getPlayers(minAttendance, maxAttendance)
   local players = utils.shallowCopy(consts.roster)
   table.insert(players, 1, settings.username)
 
-  local randomOrder = false
+  local randomOrder = not consts.devMode
   if not randomOrder then
     -- to enforce an order
     table.sort(players, function(l, r)
-      return utils.find(REFERENCE_PLAYER_ORDER, l) <
-               utils.find(REFERENCE_PLAYER_ORDER, r)
+      return (utils.find(REFERENCE_PLAYER_ORDER, l) or 0) < (utils.find(REFERENCE_PLAYER_ORDER, r) or 0)
     end)
   else
     -- ..or shuffle
