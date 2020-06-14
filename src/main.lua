@@ -40,8 +40,8 @@ function love.load(arg)
   -- 3=color
   consts.arg = arg
 
-  consts.devMode = consts.gitHash == "__GITHASH__" and consts.arg[1] and
-                     consts.arg[1]:sub(1, 4) ~= "prod"
+  consts.devMode = not (consts.gitHash ~= "__GITHASH__" or
+                     (consts.arg[1] and consts.arg[1]:sub(1, 4) == "prod"))
 
   if arg[1] == "test" then test() end
 
@@ -54,6 +54,7 @@ function love.load(arg)
 
   -- image resolution fix
   if consts.devMode then
+    print("in dev mode")
     -- screen.setSize(1024, 768, consts.W, consts.H, false)
     local W = 500
     screen.setSize(W, W, consts.W, consts.H, false)

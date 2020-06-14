@@ -23,12 +23,24 @@ local hub
 local ui = {}
 
 function SendEvent(action, data)
+  if action == 'lsRequest' then
+    hub:publish({
+      message = {action = action}
+    })
+  else
   hub:publish({
     message = {from = settings.username, action = action, data = data}
   })
 end
+end
 
 local function parseHubEvent(ev)
+  if ev.action == 'lsResponse' then
+    -- print(utils.tableToString(ev.data))
+    -- TODO
+    return
+  end
+  
   -- ignore self messages (for vanilla noobhub servers)
   if ev.from == settings.username or consts.ignoreFrom[ev.from] then return end
 
@@ -118,6 +130,8 @@ M.load = function()
     color = settings.color,
     version = consts.version
   })
+
+  -- SendEvent('lsRequest')
 
   ui.console = Console:new({
     x = consts.W - 400,

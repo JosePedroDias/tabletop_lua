@@ -18,6 +18,12 @@ local M = {}
 
 local ui = {}
 
+local state = {
+  t=0
+}
+
+local FETCH_DEBOUNCE_SECS = 0.5
+
 M.next = function()
   settings.username = ui.iusername.value
   settings.email = ui.iemail.value
@@ -49,7 +55,9 @@ M.load = function()
     width = 300,
     height = 40,
     value = settings.email,
-    onChange = M.updateAvatar,
+    onChange = function()
+      state.nextUpdateAvatarT = state.t + FETCH_DEBOUNCE_SECS
+    end,
     onSubmit = M.next
   })
 
@@ -80,19 +88,15 @@ M.load = function()
   -- ui.whiteboard = Whiteboard:new({width = 600, height = 400})
 end
 
+M.update = function(dt)
+  state.t = state.t + dt
+  if state.nextUpdateAvatarT and (state.t > state.nextUpdateAvatarT) then
+    state.nextUpdateAvatarT = nil
+    M.updateAvatar(ui.iemail.value)
+  end
+end
+
 M.draw = function()
-  --[[ local rw = 300
-  local rh = 100
-
-  local x = (consts.W - rw) / 2
-  local y = (consts.H - rh) / 2 - 20
-
-  G.setColor(0.75, 0.75, 0.75, 1)
-  G.rectangle("fill", x, y, rw, rh)
-
-  G.setColor(0, 0, 0, 1)
-  G.print("what is your name?", x + 10, y + 10) ]]
-
   if M.avatar then
     love.graphics.draw(M.avatar, (consts.W - 96) / 2, (consts.H - 400) / 2)
   end
