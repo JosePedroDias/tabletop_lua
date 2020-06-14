@@ -480,9 +480,12 @@ function Board:getPlayers(minAttendance, maxAttendance)
     players = utils.shuffle(players)
   end
 
-  assert(#players >= minAttendance and #players <= maxAttendance,
-         "game requires " .. minAttendance .. " to " .. maxAttendance ..
-           " players!")
+  local numPlayersErr = "game requires " .. minAttendance .. " to " .. maxAttendance .. " players!"
+  if minAttendance == maxAttendance then
+    numPlayersErr = "game requires " .. minAttendance .. " players!"
+  end
+
+  assert(#players >= minAttendance and #players <= maxAttendance, numPlayersErr)
   return players
 end
 

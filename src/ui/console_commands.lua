@@ -3,6 +3,13 @@ local utils = require "src.core.utils"
 
 local gamesModule = "src.games."
 
+local supportedGames = ""
+for _, filename in ipairs(love.filesystem.getDirectoryItems("games")) do
+  filename = filename:gsub(".lua", "")
+  if supportedGames:len() > 0 then supportedGames = supportedGames .. ", " end
+  supportedGames = supportedGames .. filename
+end
+
 local M = {}
 
 M.processCommand = function(cmd)
@@ -26,16 +33,15 @@ M.processCommand = function(cmd)
       if didOk then
         return "starting " .. words[1] .. "..."
       else
-        print(err)
-        return "error preparing game!"
+        return tostring(err)
       end
     else
       return "unknown game:" .. words[1] .. "!"
     end
   elseif first == "games" then
-    return "supported games: go-fish"
+    return "supported games: " .. supportedGames
   elseif first == "help" then
-    return "supported commands: help, roster, start <game>, games"
+    return "supported commands: help, roster, games, start <game>"
   else
     return "unsupported command: " .. first
   end

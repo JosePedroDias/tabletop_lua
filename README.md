@@ -30,13 +30,16 @@ tests make use of [luaunit](https://github.com/bluebird75/luaunit) [docs](https:
 
 ## TODO
 
-- document game
+- update game screenshots from tests?
 
 - visibility areas
   - zones can count cards or money
 - lobby
   - allow choosing server settings (host, port, channel)
 - be careful about globals: roster, userData, avatars, board
+
+- currently if 2 users use the same username they can confuse each other.
+- if server sends each user ip/port or a hash of it, reconnects can be recovered and different signatures ignored
 
 - create hex grid for abalone (maybe push sideways as well)
 

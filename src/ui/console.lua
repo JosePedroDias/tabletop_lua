@@ -66,9 +66,14 @@ function Console:new(o)
   return o
 end
 
-function Console:addLine(line)
-  table.insert(self.lines, line)
-  if #self.lines > self.maxLines then table.remove(self.lines, 1) end
+function Console:addLine(text)
+  local f = self.font
+  local _, lines = f:getWrap(text, self.width)
+
+  for _, line in ipairs(lines) do
+    table.insert(self.lines, line)
+    if #self.lines > self.maxLines then table.remove(self.lines, 1) end
+  end
   self:redraw()
 end
 

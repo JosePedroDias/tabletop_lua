@@ -118,9 +118,9 @@ M.load = function()
   })
 
   ui.console = Console:new({
-    x = consts.W - 300,
+    x = consts.W - 400,
     y = 0,
-    width = 300,
+    width = 400,
     height = consts.H,
     maxLines = 20,
     dismissed = true
