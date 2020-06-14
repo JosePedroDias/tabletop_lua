@@ -7,6 +7,8 @@ codedate := $(shell git show -s --format="%cI" HEAD)
 codedate := $(shell git show -s --format="%cI" HEAD)
 gameversion := $(shell cat src/core/consts.lua|pcregrep -o1 -i 'M.version = "([^"]+)"'|sed 's/\./_/g')
 
+butler = butler
+
 ifeq ($(os),Darwin)
 	love = /Applications/love.app/Contents/MacOS/love
 else ifeq ($(os),Linux)
@@ -39,7 +41,7 @@ dist:
 	@rm -rf ext/luaunit.lua build/test
 	@find ./build -type f -exec sed -iE 's/src.//g' {} \;
 	@rm -rf ./build/*.luaE
-	@echo "code hash: $(codehash), date: $(codedate) C"
+	@echo "code hash: $(codehash), date: $(codedate)"
 	@sed -i -e 's/__GITHASH__/$(codehash)/g' build/core/consts.lua
 	@sed -i -e 's/__GITDATE__/$(codedate)/g' build/core/consts.lua
 	@cd build && zip -9 -q -r ../dist/$(gamename) . && cd ..
@@ -73,6 +75,14 @@ binaries:	dist
 # any
 	@cp dist/$(gamename) binaries
 	@mv binaries/$(gamename) binaries/$(gamenamenoext)_$(gameversion).love
+# remove folders
+	@rm -rf binaries/win32 binaries/win64 binaries/mac64
+
+itchio:	binaries
+	#@butler push --if-changed --userversion=$(gameversion) binaries/$(gamenamenoext)_win32_$(gameversion).zip josepedrodias/tabletop:windows-32
+	@$(butler) push --userversion=$(gameversion) binaries/$(gamenamenoext)_win64_$(gameversion).zip josepedrodias/tabletop:windows-64
+	@$(butler) push --userversion=$(gameversion) binaries/$(gamenamenoext)_mac64_$(gameversion).zip josepedrodias/tabletop:mac-64
+	@$(butler) push --userversion=$(gameversion) binaries/$(gamenamenoext)_$(gameversion).love josepedrodias/tabletop:linux
 
 run-dist:	dist
 	@$(love) dist/$(gamename)
