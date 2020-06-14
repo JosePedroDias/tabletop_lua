@@ -32,10 +32,27 @@ tests make use of [luaunit](https://github.com/bluebird75/luaunit) [docs](https:
 
 - update game screenshots from tests?
 
+- noobhub - payload to get list of users per channel
+
+- counter - set value by keys
+
+- dice other than d6
+
+- settings screen: set fullscreen toggle, resolution
+
+  - checkbox ui
+  - select from list ui
+  - set server? (host, port)
+
+- lobby 2
+
+  - list channels
+  - input to go to new channel
+
 - visibility areas
+
   - zones can count cards or money
-- lobby
-  - allow choosing server settings (host, port, channel)
+
 - be careful about globals: roster, userData, avatars, board
 
 - currently if 2 users use the same username they can confuse each other.
@@ -43,12 +60,11 @@ tests make use of [luaunit](https://github.com/bluebird75/luaunit) [docs](https:
 
 - create hex grid for abalone (maybe push sideways as well)
 
+- 4 in a row
 - jogo da glória / snakes and ladders - https://www.youtube.com/watch?v=xe9pMUuVwtk
 - game setup for
-  - poker texas hold'em?
+  - texas holdem
   - pictionary - https://randomwordgenerator.com/pictionary.php https://hobbylark.com/party-games/pictionary-words
-  - 4 in a row
-  - tic-tac-toe
   - roulette
   - blackjack
   - monopoly

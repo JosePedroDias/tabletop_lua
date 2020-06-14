@@ -42,4 +42,19 @@ function M:testFocused()
   end, "ui_input_focused.png")
 end
 
+function M:testLongValue()
+  local i = Input:new({
+    x = 10, -- to check if it clips
+    y = 0,
+    width = 180,
+    height = 40,
+    focused = true,
+    value = "this is a very long string"
+  })
+
+  aux.drawAndSaveImage(canvas, function()
+    i:draw()
+  end, "ui_input_long_value.png")
+end
+
 return M

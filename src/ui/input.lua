@@ -54,7 +54,12 @@ function Input:redraw()
   local suffix = ""
   if self.focused then suffix = "|" end
   local text = self.value .. suffix
-  G.print(text, self.padding, self.padding)
+  local w = self.font:getWidth(text)
+  local x = self.padding
+  if self.width - w < self.padding then
+    x = self.width - w
+  end
+  G.print(text, x, self.padding)
 
   G.setCanvas()
 end

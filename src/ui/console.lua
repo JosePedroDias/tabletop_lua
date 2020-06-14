@@ -68,7 +68,7 @@ end
 
 function Console:addLine(text)
   local f = self.font
-  local _, lines = f:getWrap(text, self.width)
+  local _, lines = f:getWrap(text, self.width - self.padding*2)
 
   for _, line in ipairs(lines) do
     table.insert(self.lines, line)
@@ -97,7 +97,7 @@ function Console:redraw()
   local f = self.font
   G.setFont(f)
 
-  local dy = math.floor(f:getHeight())
+  local dy = f:getHeight()
 
   for i, line in ipairs(self.lines) do
     G.print(line, self.padding, self.height - self.inputHeight - dy *

@@ -26,6 +26,7 @@ local function test()
   "Tstages_lobby", --
   "Tui_arcmenu", --
   "Tui_button", --
+  "Tui_console", --
   "Tui_input", --
   "Tui_internet_image", --
   "Tboard_menus" -- TODO does not work as 1st test
