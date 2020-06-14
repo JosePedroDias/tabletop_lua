@@ -33,7 +33,11 @@ symbolics:
 clean:
 	@rm -rf build dist src/assets
 
-dist:
+getRidOfDsStores:
+	@echo 'removing .DS_Stores...'
+	@find . -name '.DS_Store' -type f -delete
+
+dist:	getRidOfDsStores
 	@rm -rf dist build
 	@mkdir dist
 	@mkdir build
@@ -78,7 +82,7 @@ binaries:	dist
 # remove folders
 	@rm -rf binaries/win32 binaries/win64 binaries/mac64
 
-itchio:	binaries
+publish:	binaries
 	#@butler push --if-changed --userversion=$(gameversion) binaries/$(gamenamenoext)_win32_$(gameversion).zip josepedrodias/tabletop:windows-32
 	@$(butler) push --userversion=$(gameversion) binaries/$(gamenamenoext)_win64_$(gameversion).zip josepedrodias/tabletop:windows-64
 	@$(butler) push --userversion=$(gameversion) binaries/$(gamenamenoext)_mac64_$(gameversion).zip josepedrodias/tabletop:mac-64
