@@ -26,6 +26,7 @@ function Zone:new(o)
   self.__index = self
 
   o.color = o.color or {1, 1, 1, 0.25}
+  o.textColor = o.textColor or {0, 0, 0, 1}
 
   o.items = {}
 
@@ -38,6 +39,8 @@ function Zone:new(o)
   assert(utils.has(LAYOUTS, o.layout),
          "zone created with unsupported layout: " .. o.layout)
 
+         o.font = o.font or G.getFont()
+
   local isLocal = not o.id
   o.id = "zone_" .. o:genId()
 
@@ -47,21 +50,43 @@ function Zone:new(o)
     SendEvent("new zone", o2)
   end
 
+  o.canvas = G.newCanvas(o.width, o.height)
+  o:redraw()
+
   return o
 end
 
-function Zone:draw()
+function Zone:redraw()
+  G.setCanvas(self.canvas)
+
+  pcall(G.clear, {0, 0, 0, 0})
+
   pcall(G.setColor, self.color)
-  G.rectangle("fill", self.x - self.width / 2, self.y - self.height / 2,
-              self.width, self.height)
+  G.rectangle("fill", 0, 0, self.width, self.height)
+
+  pcall(G.setColor, self.textColor)
+  if self.label then
+    local x = 0
+    local y = self.height - self.font:getHeight()
+    G.print(self.label, x, y)
+  end
+
+  G.setCanvas()
+end
+
+function Zone:draw()
+  G.setColor({1, 1, 1, 1})
+  G.draw(self.canvas, self.x- self.width / 2, self.y - self.height / 2)
 end
 
 function Zone:remove(it)
   for i, v in ipairs(self.items) do
     if v == it then
       table.remove(self.items, i)
-      it.isTurned = true
-      pcall(it.redraw, it)
+      if it.name == 'Card' then
+        it:face_down()
+        pcall(it.redraw, it)
+      end
       return true
     end
   end
@@ -72,13 +97,18 @@ function Zone:add(it)
   for _, v in ipairs(self.items) do if v == it then return false end end
   table.insert(self.items, it)
   local dirty = false
-  if self.owner == settings.username then
-    it.isTurned = false
-    dirty = true
+  if it.name == 'Card' then
+    if self.owner == settings.username then
+      it:face_down()
+      it:face_up(true)
+      dirty = true
+    end
   end
-  if utils.hasKey(self, "rotation") then
-    it.rotation = self.rotation
-    dirty = true
+  if utils.hasKey(self, "rotation") and it.rotation ~= self.rotation then
+    if it.name == 'Card' then
+      it.rotation = self.rotation
+      dirty = true
+    end
   end
   if dirty then pcall(it.redraw, it) end
   return true

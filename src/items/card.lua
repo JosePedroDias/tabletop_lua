@@ -92,7 +92,7 @@ function Card.several(backs, addTwoJokersPerDeck, values, suits)
 end
 
 function Card.affect()
-  return {"turn", "rotate90"}
+  return {"face_up", "face_down"}
 end
 
 -------
@@ -106,7 +106,7 @@ function Card:new(o)
   assert(utils.has(BACKS, o.back),
          "card created with unsupported back: " .. o.back)
 
-  o.isTurned = o.isTurned or false
+  o.isTurned = o.isTurned or true
   o.isJoker = o.isJoker or false
   if not o.isJoker then
     assert(utils.has(VALUES, o.value),
@@ -115,6 +115,8 @@ function Card:new(o)
            "card created with unsupported suit: " .. o.suit)
 
   end
+
+  o.rotation = o.rotation or 0
 
   o.width = W
   o.height = H
@@ -143,21 +145,31 @@ function Card:redraw()
   self.asset = assets.gfx[electAsset(self)]
 end
 
-function Card:turn()
-  self.isTurned = not self.isTurned
+function Card:face_up(isRemote)
+  self.isTurned = false
   self:redraw()
 
-  SendEvent("update", {id = self.id, isTurned = self.isTurned})
+  if not isRemote then
+    SendEvent("update", {id = self.id, isTurned = self.isTurned})
+  end
 end
 
-function Card:rotate90()
-  if self.rotation == 90 then
-    self.rotation = 0
-  else
-    self.rotation = 90
-  end
+function Card:face_down(isRemote)
+  self.isTurned = true
+  self:redraw()
 
-  SendEvent("update", {id = self.id, rotation = self.rotation})
+  if not isRemote then
+    SendEvent("update", {id = self.id, isTurned = self.isTurned})
+  end
+end
+
+function Card:setRotation(rot, isRemote)
+  self.rotation = rot
+  self:redraw()
+
+  if not isRemote then
+    SendEvent("update", {id = self.id, rotation = self.rotation})
+  end
 end
 
 return Card

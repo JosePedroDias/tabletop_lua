@@ -32,6 +32,7 @@ M.setup = function()
     y = consts.H / 2,
     width = zH,
     height = zH,
+    -- label = "deck",
     color = {1, 1, 1, 0.25}
   })
   table.insert(board.items, zc)
@@ -46,6 +47,7 @@ M.setup = function()
     height = zH,
     owner = players[1],
     layout = "x",
+    -- label = players[1] .. "'s hand"
     color = {0, 0, 1, 0.25}
   })
   table.insert(board.items, z1)
@@ -61,6 +63,7 @@ M.setup = function()
     owner = players[2],
     layout = "x",
     direction = -1,
+    -- label = players[2] .. "'s hand",
     color = {1, 0, 0, 0.25}
   })
   table.insert(board.items, z2)
@@ -77,6 +80,7 @@ M.setup = function()
       owner = players[3],
       layout = "y",
       rotation = 90,
+      -- label = players[3] .. "'s hand",
       color = {0, 1, 1, 0.25}
     })
     table.insert(board.items, z3)
@@ -95,6 +99,7 @@ M.setup = function()
       layout = "y",
       direction = -1,
       rotation = 90,
+      -- label = players[4] .. "'s hand"
       color = {1, 1, 0, 0.25}
     })
     table.insert(board.items, z4)
@@ -123,8 +128,7 @@ M.setup = function()
     for _ = 1, cardsPerHand do
       local c = table.remove(cards)
       table.insert(board.items, c)
-      if zi > 2 then c:rotate90() end
-      c:turn()
+      if zi > 2 then c:setRotation(90) end
       c:move(x, y)
     end
 
@@ -135,7 +139,6 @@ M.setup = function()
   -- assign remainer deck to center
   for _, c in ipairs(cards) do
     table.insert(board.items, c)
-    c:turn()
     c:move(zc.x, zc.y)
   end
 
