@@ -1,6 +1,9 @@
 local lu = require "src.ext.luaunit"
-local utils = require "src.core.utils"
+
+local consts = require "src.core.consts"
 local settings = require "src.core.settings"
+local utils = require "src.core.utils"
+
 local LF = love.filesystem
 local FILE = "settings.json"
 
@@ -29,7 +32,8 @@ function M:testLoadWithoutData()
     channel = "ch1",
     username = "john doe",
     email = "john.doe@somewhere.com",
-    color = 1
+    color = 1,
+    version = consts.version
   }), lu.prettystr(settings))
 end
 
@@ -43,7 +47,8 @@ function M:testLoadWithData()
     channel = "ch1",
     username = "john doe",
     email = "john.doe@somewhere.com",
-    color = 2
+    color = 2,
+    version = consts.version
   }))
 end
 
@@ -55,7 +60,8 @@ function M:testSaveWithoutData()
   lu.assertIsTrue(settings.save())
   local raw = LF.read(FILE)
   lu.assertEquals(raw,
-                  "{\"server\":\"acor.sl.pt\",\"channel\":\"ch1\",\"color\":1,\"email\":\"john.doe@somewhere.com\",\"username\":\"robin\",\"port\":1337}")
+                  "{\"server\":\"acor.sl.pt\",\"version\":\"" .. consts.version ..
+                    "\",\"color\":1,\"email\":\"john.doe@somewhere.com\",\"username\":\"robin\",\"channel\":\"ch1\",\"port\":1337}")
 end
 
 function M:testSaveWithData()
@@ -66,7 +72,8 @@ function M:testSaveWithData()
   lu.assertIsTrue(settings.save())
   local raw = LF.read(FILE)
   lu.assertEquals(raw,
-                  "{\"server\":\"localhost\",\"channel\":\"ch1\",\"color\":2,\"email\":\"john.doe@somewhere.com\",\"username\":\"batman\",\"port\":1337}")
+                  "{\"server\":\"localhost\",\"version\":\"" .. consts.version ..
+                    "\",\"color\":2,\"email\":\"john.doe@somewhere.com\",\"username\":\"batman\",\"channel\":\"ch1\",\"port\":1337}")
 end
 
 return M

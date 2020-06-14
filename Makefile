@@ -4,7 +4,8 @@ os := $(shell uname)
 
 codehash := $(shell git rev-parse --verify --short HEAD)
 codedate := $(shell git show -s --format="%cI" HEAD)
-gameversion := 0_0_1
+codedate := $(shell git show -s --format="%cI" HEAD)
+gameversion := $(shell cat src/core/consts.lua|pcregrep -o1 -i 'M.version = "([^"]+)"'|sed 's/\./_/g')
 
 ifeq ($(os),Darwin)
 	love = /Applications/love.app/Contents/MacOS/love

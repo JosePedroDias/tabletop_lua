@@ -35,7 +35,6 @@ tests make use of [luaunit](https://github.com/bluebird75/luaunit) [docs](https:
 - visibility areas
   - zones can count cards or money
 - lobby
-  - support choosing color
   - allow choosing server settings (host, port, channel)
 - be careful about globals: roster, userData, avatars, board
 

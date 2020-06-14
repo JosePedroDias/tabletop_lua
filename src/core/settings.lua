@@ -15,7 +15,8 @@ local DEFAULTS = {
   channel = "ch1",
   username = "john doe",
   email = "john.doe@somewhere.com",
-  color = 1
+  color = 1,
+  version = consts.version
 }
 
 local M = {}
