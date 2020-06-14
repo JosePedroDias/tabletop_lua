@@ -1,8 +1,5 @@
 --[[ console ui component - outputs lines in a translucent overlay ]] --
-local settings = require "src.core.settings"
-
 local Input = require "src.ui.input"
-local cc = require "src.ui.console_commands"
 
 local G = love.graphics
 
@@ -29,7 +26,6 @@ function Console:new(o)
 
   o.inputHeight = 40
 
-  local console = o
   local input
   input = Input:new({
     x = 0 + o.x,
@@ -43,17 +39,8 @@ function Console:new(o)
       end
       if #self.history > 20 then table.remove(self.history, 1) end
 
-      if msg:sub(1, 1) == "/" then
-        console:addLine(msg)
-        local out = cc.processCommand(msg:sub(2))
-        if type(out) == "string" then
-          console:addLine(out)
-        else
-          for _, line in ipairs(out) do console:addLine(line) end
-        end
-      else
-        console:addLine(os.date("%H:%M ") .. settings.username .. ": " .. msg)
-        SendEvent("say", msg)
+      if o.onSubmit then
+        o.onSubmit(msg)
       end
 
       input:clear()

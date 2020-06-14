@@ -31,7 +31,9 @@ M.processCommand = function(cmd)
       consts.board:reset()
       local didOk, err = pcall(game.setup)
       if didOk then
-        return "starting " .. words[1] .. "..."
+        local msg = "starting " .. words[1] .. "..."
+        SendEvent("say", msg)
+        return msg
       else
         return tostring(err)
       end

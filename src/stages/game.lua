@@ -8,6 +8,8 @@ local utils = require "src.core.utils"
 local Console = require "src.ui.console"
 local Board = require "src.ui.board"
 
+local cc = require "src.ui.console_commands"
+
 local gravatar = require "src.ext.gravatar"
 local fetchRemoteImage = require "src.ui.internet_image"
 
@@ -139,7 +141,21 @@ M.load = function()
     width = 400,
     height = consts.H,
     maxLines = 20,
-    dismissed = true
+    dismissed = true,
+    onSubmit = function(msg)
+      if msg:sub(1, 1) == "/" then
+        ui.console:addLine(msg)
+        local out = cc.processCommand(msg:sub(2))
+        if type(out) == "string" then
+          ui.console:addLine(out)
+        else
+          for _, line in ipairs(out) do ui.console:addLine(line) end
+        end
+      else
+        ui.console:addLine(os.date("%H:%M ") .. settings.username .. ": " .. msg)
+        SendEvent("say", msg)
+      end
+    end
   })
 
   ui.board = Board:new({width = consts.W, height = consts.H})
