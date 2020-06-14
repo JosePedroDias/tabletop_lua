@@ -63,8 +63,8 @@ function Board:showCreateMenu(x, y)
     y = y,
     dismissableFirst = true,
     labels = {
-      "cancel", "add card", "add dice", "add piece", "add checkers",
-      "add chess", "add chip", "add counter"
+      "cancel", "add\ncard", "add\ndice", "add\npiece", "add\ncheckers",
+      "add\nchess", "add\nchip", "add\ncounter"
     },
     callback = function(idx)
       if idx == 1 then

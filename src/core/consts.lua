@@ -31,4 +31,24 @@ M.colors = {
   {1, 1, 1} -- white
 }
 
+-- colors to use against the former
+M.fgColors = {
+  M.colors[16],
+  M.colors[16],
+  M.colors[16],
+  M.colors[16],
+  M.colors[16],
+  M.colors[16],
+  M.colors[16],
+  M.colors[16],
+  M.colors[1],
+  M.colors[1],
+  M.colors[1],
+  M.colors[1],
+  M.colors[1],
+  M.colors[1],
+  M.colors[1],
+  M.colors[1]
+}
+
 return M

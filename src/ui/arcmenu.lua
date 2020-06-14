@@ -31,11 +31,15 @@ function ArcMenu:onPointer(x, y)
   return true
 end
 
+local function btw1And16(i)
+  return (i-1) % 16 + 1
+end
+
 function ArcMenu:redraw()
   G.setCanvas(self.canvas)
 
   for i, p in ipairs(self.buttons) do
-    pcall(G.setColor, consts.colors[i + 1])
+    pcall(G.setColor, consts.colors[btw1And16(i)])
 
     if type(p[1]) == "table" then
       for _, t in ipairs(p) do G.polygon("fill", t) end
@@ -45,13 +49,17 @@ function ArcMenu:redraw()
   end
 
   local f = G.getFont()
-  local dy = math.floor(f:getHeight() / 2)
-  G.setColor(consts.colors[16])
+  local fontHeight = f:getHeight()
   for i, p in ipairs(self.buttons2) do
+    G.setColor(consts.fgColors[btw1And16(i)])
     G.polygon("line", p)
-    if self.labels[i] ~= nil then
-      local dx = math.floor(f:getWidth(self.labels[i]) / 2)
-      G.print(self.labels[i], self.centers[i][1] - dx, self.centers[i][2] - dy)
+    local txt = self.labels[i]
+    local ctr = self.centers[i]
+    if txt ~= nil then
+      local maxW, lines = f:getWrap(txt, 1000)
+      local dx = maxW / 2
+      local dy = (fontHeight * #lines) / 2
+      G.print(txt, ctr[1] - dx, ctr[2] - dy)
     end
   end
   G.setCanvas()

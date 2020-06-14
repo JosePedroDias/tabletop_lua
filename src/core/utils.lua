@@ -181,6 +181,14 @@ M.shallowCopy = function(tbl)
   return tbl2
 end
 
+M.countStringOccurrences = function(whereS, whichS)
+  local count = 0
+  for _ in string.gmatch(whereS, whichS) do
+    count = count + 1
+  end
+  return count
+end
+
 M.join = function(tbl, sep)
   sep = sep or ""
   return table.concat(tbl, sep)

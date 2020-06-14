@@ -40,7 +40,7 @@ function Counter:new(o)
   o.height = o.height or 24
   assert(o.height and type(o.height) == "number", "height must be a number")
 
-  o.color = o.color or {1, 1, 1, 1}
+  o.color = o.color or {0, 0, 0, 1}
   assert(o.color and type(o.color) == "table" and #o.color == 4,
          "color must be a table with 4 elements")
 
@@ -71,8 +71,8 @@ function Counter:redraw()
   G.rectangle("line", 0, 0, self.width, self.height)
 
   local txt = tostring(self.value)
-  local x = math.floor((self.width - self.font:getWidth(txt)) / 2)
-  local y = math.floor((self.height - self.font:getHeight()) / 2)
+  local x = (self.width - self.font:getWidth(txt)) / 2
+  local y = (self.height - self.font:getHeight()) / 2
   G.print(txt, x, y)
 
   G.setCanvas()
@@ -80,7 +80,6 @@ end
 
 function Counter:draw()
   G.setColor(1, 1, 1, 1)
-  -- G.draw(self.canvas, self.x, self.y)
   G.draw(self.canvas, self.x, self.y, D2R * self.rotation, 1, 1, self.width / 2,
          self.height / 2)
 end
